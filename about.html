@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title data-i18n="aboutTitle">About AutoFill Pro</title>
+    <link rel="stylesheet" href="options.css" />
+    <style>
+      .about-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .developer-info {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .developer-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .developer-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: #667eea;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .developer-details h2 {
+        margin: 0 0 10px 0;
+        font-size: 28px;
+        font-weight: 600;
+      }
+
+      .developer-title {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 15px;
+      }
+
+      .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      .contact-icon {
+        font-size: 20px;
+      }
+
+      .app-info {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .app-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .app-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #1a73e8, #4285f4);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: white;
+      }
+
+      .app-name {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a73e8;
+        margin: 0;
+      }
+
+      .app-version {
+        color: #666;
+        font-size: 14px;
+        margin: 5px 0;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .feature-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #4285f4;
+      }
+
+      .feature-icon {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #4285f4;
+      }
+
+      .feature-card h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin: 30px 0;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a73e8;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+
+      .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-decoration: none;
+        color: #1a73e8;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+      }
+
+      .back-button:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .about-page {
+          padding: 20px 15px;
+        }
+
+        .developer-header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .contact-info {
+          grid-template-columns: 1fr;
+        }
+
+        .app-header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="options.html" class="back-button">
+      ← <span data-i18n="backToSettings">Back to Settings</span>
+    </a>
+
+    <div class="about-page">
+      <!-- Developer Information -->
+      <div class="developer-info">
+        <div class="developer-header">
+          <div class="developer-avatar">
+            <img src="/developer.png" height="100%" alt="developer" />
+          </div>
+          <div class="developer-details">
+            <h2 data-i18n="developerName">Md. Yusuf Ali</h2>
+            <div class="developer-title" data-i18n="developerTitle">
+              Browser Extension Developer
+            </div>
+            <p data-i18n="developerBio">
+              Passionate about creating useful tools that enhance productivity
+              and simplify everyday tasks.
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <div>
+              <div style="font-weight: 500" data-i18n="addressLabel">
+                Address
+              </div>
+              <div data-i18n="developerAddress">
+                Customs Bond Commissionerate Dhaka(South), Dhaka, 342/1,
+                Segunbagicha, Dhaka-1000, Bangladesh.
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon">📧</span>
+            <div>
+              <div style="font-weight: 500" data-i18n="emailLabel">Email</div>
+              <div data-i18n="developerEmail">mdyusufcbc@gmail.com</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon">🌐</span>
+            <div>
+              <div style="font-weight: 500" data-i18n="websiteLabel">
+                Website
+              </div>
+              <div>
+                <a
+                  href="https://github.com/bdyusuf2016"
+                  style="color: white; text-decoration: underline"
+                  data-i18n="developerWebsite"
+                  target="_blank"
+                  >github</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon">💼</span>
+            <div>
+              <div style="font-weight: 500" data-i18n="companyLabel">
+                Company
+              </div>
+              <div data-i18n="developerCompany">Yusuf Computer & IT.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Information -->
+      <div class="app-info">
+        <div class="app-header">
+          <div class="app-icon">⚡</div>
+          <div>
+            <h1 class="app-name">AutoFill Pro</h1>
+            <div class="app-version" id="appVersion">Version 1.0.0</div>
+            <div class="app-description" data-i18n="extensionDescription">
+              Advanced autofill extension with profile-based hotkeys and URL
+              rules
+            </div>
+          </div>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h4 data-i18n="feature1Title">Smart Form Filling</h4>
+            <p data-i18n="feature1Desc">
+              Fill forms automatically with your saved profiles. Supports all
+              types of form fields.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⌨️</div>
+            <h4 data-i18n="feature2Title">Profile Hotkeys</h4>
+            <p data-i18n="feature2Desc">
+              Assign keyboard shortcuts to each profile for instant form
+              filling.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h4 data-i18n="feature3Title">URL Rules</h4>
+            <p data-i18n="feature3Desc">
+              Auto-switch profiles based on website URLs using powerful pattern
+              matching.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h4 data-i18n="feature4Title">100% Local</h4>
+            <p data-i18n="feature4Desc">
+              All your data stays on your computer. No servers, no tracking,
+              complete privacy.
+            </p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-number" id="profilesCount">0</div>
+            <div class="stat-label" data-i18n="profilesLabel">Profiles</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-number" id="fieldsCount">0</div>
+            <div class="stat-label" data-i18n="fieldsLabel">Fields</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-number" id="hotkeysCount">0</div>
+            <div class="stat-label" data-i18n="hotkeysLabel">Hotkeys</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-number" id="rulesCount">0</div>
+            <div class="stat-label" data-i18n="urlRulesLabel">URL Rules</div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="backToOptions" class="primary" data-i18n="backToOptions">
+            ← Back to Options
+          </button>
+          <button
+            id="viewSourceCode"
+            class="secondary"
+            data-i18n="viewSourceCode"
+          >
+            📁 View Source Code
+          </button>
+          <button id="reportIssue" class="secondary" data-i18n="reportIssue">
+            🐛 Report Issue
+          </button>
+          <button
+            id="suggestFeature"
+            class="secondary"
+            data-i18n="suggestFeature"
+          >
+            💡 Suggest Feature
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        style="
+          text-align: center;
+          color: #666;
+          font-size: 14px;
+          margin-top: 40px;
+          padding-top: 20px;
+          border-top: 1px solid #eee;
+        "
+      >
+        <p data-i18n="copyrightNotice">
+          © 2026 AutoFill Pro. All rights reserved.
+        </p>
+        <p data-i18n="madeWith">Made with ❤️ in Bangladesh</p>
+      </div>
+    </div>
+
+    <script src="about.js"></script>
+  </body>
+</html>

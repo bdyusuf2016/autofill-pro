@@ -1,0 +1,950 @@
+{
+  "extensionName": {
+    "message": "AutoFill Pro",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Advanced autofill extension with profile-based hotkeys and URL rules",
+    "description": "Description of the extension"
+  },
+  "popupTitle": {
+    "message": "AutoFill Pro",
+    "description": "Title in popup"
+  },
+  "activeProfileLabel": {
+    "message": "Active Profile:",
+    "description": "Label for active profile dropdown"
+  },
+  "noProfileSelected": {
+    "message": "No Profile Selected",
+    "description": "Default option in profile dropdown"
+  },
+  "manageProfilesButton": {
+    "message": "Manage",
+    "description": "Button to manage profiles"
+  },
+  "fillFormButton": {
+    "message": "Fill Current Form",
+    "description": "Button to fill current form"
+  },
+  "captureFormButton": {
+    "message": "Capture Form",
+    "description": "Button to capture form fields"
+  },
+  "quickSettingsButton": {
+    "message": "Quick Settings",
+    "description": "Button for quick settings"
+  },
+  "profileHotkeysLabel": {
+    "message": "Profile Hotkeys",
+    "description": "Label for hotkeys section"
+  },
+  "noHotkeysAssigned": {
+    "message": "No hotkeys assigned",
+    "description": "Message when no hotkeys are set"
+  },
+  "settingsButton": {
+    "message": "Settings",
+    "description": "Button to open settings"
+  },
+  "shortcutsHelpButton": {
+    "message": "Shortcuts",
+    "description": "Button for keyboard shortcuts help"
+  },
+  "optionsPageTitle": {
+    "message": "Profile Management",
+    "description": "Title of options page"
+  },
+  "newProfileButton": {
+    "message": "New Profile",
+    "description": "Button to create new profile"
+  },
+  "importButton": {
+    "message": "Import",
+    "description": "Button to import profiles"
+  },
+  "exportButton": {
+    "message": "Export",
+    "description": "Button to export profiles"
+  },
+  "profilesTab": {
+    "message": "Profiles",
+    "description": "Tab label for profiles"
+  },
+  "hotkeysTab": {
+    "message": "Hotkeys",
+    "description": "Tab label for hotkeys"
+  },
+  "settingsTab": {
+    "message": "Settings",
+    "description": "Tab label for settings"
+  },
+  "profileNameLabel": {
+    "message": "Profile Name:",
+    "description": "Label for profile name input"
+  },
+  "profileNamePlaceholder": {
+    "message": "e.g., Personal, Work, Amazon",
+    "description": "Placeholder for profile name"
+  },
+  "colorThemeLabel": {
+    "message": "Color Theme:",
+    "description": "Label for color theme picker"
+  },
+  "formFieldsLabel": {
+    "message": "Form Fields",
+    "description": "Label for form fields section"
+  },
+  "addFieldButton": {
+    "message": "Add Field",
+    "description": "Button to add form field"
+  },
+  "advancedSettingsLabel": {
+    "message": "Advanced Settings",
+    "description": "Label for advanced settings"
+  },
+  "restrictToSiteLabel": {
+    "message": "Restrict to Site (Optional):",
+    "description": "Label for site restriction input"
+  },
+  "sitePlaceholder": {
+    "message": "example.com or leave empty for all sites",
+    "description": "Placeholder for site restriction"
+  },
+  "defaultModeLabel": {
+    "message": "Default Fill Mode:",
+    "description": "Label for default fill mode dropdown"
+  },
+  "overwriteMode": {
+    "message": "Overwrite Existing",
+    "description": "Overwrite mode option"
+  },
+  "appendMode": {
+    "message": "Append to Existing",
+    "description": "Append mode option"
+  },
+  "smartMode": {
+    "message": "Smart Fill",
+    "description": "Smart fill mode option"
+  },
+  "fieldTypeLabel": {
+    "message": "Type",
+    "description": "Label for field type"
+  },
+  "fieldNameLabel": {
+    "message": "Name",
+    "description": "Label for field name"
+  },
+  "fieldValueLabel": {
+    "message": "Value",
+    "description": "Label for field value"
+  },
+  "fieldSiteLabel": {
+    "message": "Site",
+    "description": "Label for field site restriction"
+  },
+  "fieldModeLabel": {
+    "message": "Mode",
+    "description": "Label for field fill mode"
+  },
+  "hotkeyConfigurationTitle": {
+    "message": "Profile Hotkey Configuration",
+    "description": "Title for hotkey configuration"
+  },
+  "hotkeyConfigurationSubtitle": {
+    "message": "Assign keyboard shortcuts to quickly fill specific profiles",
+    "description": "Subtitle for hotkey configuration"
+  },
+  "setHotkeyButton": {
+    "message": "Set Hotkey",
+    "description": "Button to set hotkey"
+  },
+  "clearHotkeyButton": {
+    "message": "Clear",
+    "description": "Button to clear hotkey"
+  },
+  "hotkeyInstructions": {
+    "message": "Click on a profile's \"Set Hotkey\" button, then press your desired key combination (e.g., Ctrl+Shift+1). Hotkeys work globally across all tabs.",
+    "description": "Instructions for setting hotkeys"
+  },
+  "hotkeyWarning": {
+    "message": "Avoid using common browser shortcuts (Ctrl+T, Ctrl+W, etc.)",
+    "description": "Warning about browser shortcuts"
+  },
+  "generalSettingsTitle": {
+    "message": "General Settings",
+    "description": "Title for general settings section"
+  },
+  "enableHotkeysLabel": {
+    "message": "Enable Profile Hotkeys",
+    "description": "Label for enable hotkeys checkbox"
+  },
+  "enableHotkeysDescription": {
+    "message": "Allow profile-specific keyboard shortcuts",
+    "description": "Description for enable hotkeys"
+  },
+  "autoSwitchProfileLabel": {
+    "message": "Auto-switch Profile by URL",
+    "description": "Label for auto-switch profile checkbox"
+  },
+  "autoSwitchProfileDescription": {
+    "message": "Automatically select profile based on URL rules",
+    "description": "Description for auto-switch profile"
+  },
+  "confirmOverwriteLabel": {
+    "message": "Confirm Before Overwriting",
+    "description": "Label for confirm overwrite checkbox"
+  },
+  "confirmOverwriteDescription": {
+    "message": "Show confirmation when overwriting form data",
+    "description": "Description for confirm overwrite"
+  },
+  "backupRestoreTitle": {
+    "message": "Backup & Restore",
+    "description": "Title for backup and restore section"
+  },
+  "backupNowButton": {
+    "message": "Backup Now",
+    "description": "Button to create backup"
+  },
+  "backupDescription": {
+    "message": "Create a backup of all profiles and settings",
+    "description": "Description for backup"
+  },
+  "restoreBackupButton": {
+    "message": "Restore Backup",
+    "description": "Button to restore backup"
+  },
+  "restoreDescription": {
+    "message": "Restore from a previous backup file",
+    "description": "Description for restore"
+  },
+  "resetSettingsButton": {
+    "message": "Reset All Settings",
+    "description": "Button to reset settings"
+  },
+  "resetSettingsWarning": {
+    "message": "This will delete all profiles and settings",
+    "description": "Warning for reset settings"
+  },
+  "saveProfileButton": {
+    "message": "Save Profile",
+    "description": "Button to save profile"
+  },
+  "cancelButton": {
+    "message": "Cancel",
+    "description": "Button to cancel"
+  },
+  "closeButton": {
+    "message": "Close",
+    "description": "Button to close"
+  },
+  "saveButton": {
+    "message": "Save",
+    "description": "Button to save"
+  },
+  "deleteButton": {
+    "message": "Delete",
+    "description": "Button to delete"
+  },
+  "editButton": {
+    "message": "Edit",
+    "description": "Button to edit"
+  },
+  "duplicateButton": {
+    "message": "Duplicate",
+    "description": "Button to duplicate"
+  },
+  "confirmDeleteTitle": {
+    "message": "Confirm Delete",
+    "description": "Title for delete confirmation"
+  },
+  "confirmDeleteMessage": {
+    "message": "Are you sure you want to delete this profile?",
+    "description": "Message for delete confirmation"
+  },
+  "confirmResetTitle": {
+    "message": "Confirm Reset",
+    "description": "Title for reset confirmation"
+  },
+  "confirmResetMessage": {
+    "message": "This will delete ALL profiles and settings. This action cannot be undone.",
+    "description": "Message for reset confirmation"
+  },
+  "successMessage": {
+    "message": "Operation completed successfully",
+    "description": "Generic success message"
+  },
+  "errorMessage": {
+    "message": "An error occurred",
+    "description": "Generic error message"
+  },
+  "noProfilesMessage": {
+    "message": "No profiles yet. Create your first profile to start autofilling forms.",
+    "description": "Message when no profiles exist"
+  },
+  "createFirstProfileButton": {
+    "message": "Create First Profile",
+    "description": "Button to create first profile"
+  },
+  "fieldsCount": {
+    "message": "$1 fields",
+    "description": "Number of fields in profile",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "hotkeySet": {
+    "message": "Hotkey: $1",
+    "description": "Display current hotkey",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Ctrl+Shift+1"
+      }
+    }
+  },
+  "allSites": {
+    "message": "All sites",
+    "description": "Label for profile available on all sites"
+  },
+  "filledCountMessage": {
+    "message": "Filled $1 fields!",
+    "description": "Message after filling form",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "capturedCountMessage": {
+    "message": "Captured $1 form fields!",
+    "description": "Message after capturing form",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "noFieldsFound": {
+    "message": "No form fields found",
+    "description": "Message when no form fields are found"
+  },
+  "profileRequired": {
+    "message": "Please select a profile first",
+    "description": "Error when no profile is selected"
+  },
+  "profileNameRequired": {
+    "message": "Profile name is required",
+    "description": "Error when profile name is empty"
+  },
+  "fieldsRequired": {
+    "message": "Please add at least one field",
+    "description": "Error when no fields are added"
+  },
+  "hotkeyConflictTitle": {
+    "message": "Hotkey Conflict",
+    "description": "Title for hotkey conflict dialog"
+  },
+  "hotkeyConflictMessage": {
+    "message": "This hotkey is already assigned to \"$1\". Do you want to reassign it?",
+    "description": "Message for hotkey conflict",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Work Profile"
+      }
+    }
+  },
+  "hotkeyForbidden": {
+    "message": "This key combination is reserved by the browser. Please use a different combination.",
+    "description": "Error when trying to use browser shortcut"
+  },
+  "shortcutHelpTitle": {
+    "message": "Keyboard Shortcuts Help",
+    "description": "Title for shortcuts help"
+  },
+  "globalShortcuts": {
+    "message": "Global Shortcuts:",
+    "description": "Label for global shortcuts section"
+  },
+  "profileHotkeysList": {
+    "message": "Profile Hotkeys:",
+    "description": "Label for profile hotkeys section"
+  },
+  "shortcutCtrlShiftA": {
+    "message": "Ctrl+Shift+A - Open extension popup",
+    "description": "Description for Ctrl+Shift+A shortcut"
+  },
+  "shortcutCtrlShiftC": {
+    "message": "Ctrl+Shift+C - Capture current form",
+    "description": "Description for Ctrl+Shift+C shortcut"
+  },
+  "shortcutCtrlShiftF": {
+    "message": "Ctrl+Shift+F - Fill active profile",
+    "description": "Description for Ctrl+Shift+F shortcut"
+  },
+  "shortcutCustom": {
+    "message": "Custom - Set custom hotkeys for each profile in Settings",
+    "description": "Description for custom hotkeys"
+  },
+  "versionText": {
+    "message": "Version $1",
+    "description": "Display version number",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "1.0"
+      }
+    }
+  },
+  "createdDate": {
+    "message": "Created: $1",
+    "description": "Display creation date",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "2023-12-15"
+      }
+    }
+  },
+  "textFieldType": {
+    "message": "Text",
+    "description": "Text field type"
+  },
+  "emailFieldType": {
+    "message": "Email",
+    "description": "Email field type"
+  },
+  "telFieldType": {
+    "message": "Phone",
+    "description": "Phone field type"
+  },
+  "urlFieldType": {
+    "message": "URL",
+    "description": "URL field type"
+  },
+  "checkboxFieldType": {
+    "message": "Checkbox",
+    "description": "Checkbox field type"
+  },
+  "radioFieldType": {
+    "message": "Radio",
+    "description": "Radio field type"
+  },
+  "selectFieldType": {
+    "message": "Select",
+    "description": "Select field type"
+  },
+  "overwriteFieldMode": {
+    "message": "Overwrite",
+    "description": "Overwrite field mode"
+  },
+  "appendFieldMode": {
+    "message": "Append",
+    "description": "Append field mode"
+  },
+  "prependFieldMode": {
+    "message": "Prepend",
+    "description": "Prepend field mode"
+  },
+  "urlRulesTitle": {
+    "message": "URL Rules for",
+    "description": "Title for URL rules modal"
+  },
+  "urlRulesDescription": {
+    "message": "Define URL patterns where this profile should be automatically selected:",
+    "description": "Description for URL rules"
+  },
+  "addUrlRuleButton": {
+    "message": "Add URL Rule",
+    "description": "Button to add URL rule"
+  },
+  "testUrlRuleTitle": {
+    "message": "Test URL Rule",
+    "description": "Title for test URL rule section"
+  },
+  "testUrlLabel": {
+    "message": "Test URL:",
+    "description": "Label for test URL input"
+  },
+  "ruleTypeLabel": {
+    "message": "Rule Type:",
+    "description": "Label for rule type select"
+  },
+  "patternLabel": {
+    "message": "Pattern:",
+    "description": "Label for pattern input"
+  },
+  "includePathLabel": {
+    "message": "Include path in matching",
+    "description": "Label for include path checkbox"
+  },
+  "testButton": {
+    "message": "Test Rule",
+    "description": "Button to test URL rule"
+  },
+  "urlRuleExamplesTitle": {
+    "message": "Examples:",
+    "description": "Title for URL rule examples"
+  },
+  "exactMatch": {
+    "message": "Exact Match",
+    "description": "Exact match option"
+  },
+  "containsMatch": {
+    "message": "Contains",
+    "description": "Contains option"
+  },
+  "startsWithMatch": {
+    "message": "Starts With",
+    "description": "Starts with option"
+  },
+  "endsWithMatch": {
+    "message": "Ends With",
+    "description": "Ends with option"
+  },
+  "regexMatch": {
+    "message": "Regex",
+    "description": "Regex option"
+  },
+  "includePath": {
+    "message": "Include path",
+    "description": "Include path option"
+  },
+  "enabled": {
+    "message": "Enabled",
+    "description": "Enabled option"
+  },
+  "urlRulesCount": {
+    "message": "$1 URL rules",
+    "description": "Number of URL rules in profile",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "urlRulesSaved": {
+    "message": "URL rules saved successfully",
+    "description": "Success message for saving URL rules"
+  },
+  "saveUrlRulesButton": {
+    "message": "Save URL Rules",
+    "description": "Button to save URL rules"
+  },
+  "profileInformation": {
+    "message": "Profile Information",
+    "description": "Title for profile information section"
+  },
+  "fieldNamePlaceholder": {
+    "message": "Field name or regex",
+    "description": "Placeholder for field name input"
+  },
+  "fieldValuePlaceholder": {
+    "message": "Value to fill",
+    "description": "Placeholder for field value input"
+  },
+  "fieldSitePlaceholder": {
+    "message": "Site (optional)",
+    "description": "Placeholder for field site input"
+  },
+  "editProfile": {
+    "message": "Edit Profile",
+    "description": "Title for edit profile modal"
+  },
+  "createProfile": {
+    "message": "Create New Profile",
+    "description": "Title for create profile modal"
+  },
+  "pressKeyCombination": {
+    "message": "Press your key combination...",
+    "description": "Placeholder for hotkey recorder"
+  },
+  "notSet": {
+    "message": "Not set",
+    "description": "Text for when something is not set"
+  },
+  "noProfilesForHotkeys": {
+    "message": "No profiles available. Create a profile first to assign hotkeys.",
+    "description": "Message when no profiles available for hotkeys"
+  },
+  "currentAssignments": {
+    "message": "Currently Assigned Hotkeys:",
+    "description": "Title for current hotkey assignments"
+  },
+  "noOtherHotkeys": {
+    "message": "No other hotkeys assigned",
+    "description": "Message when no other hotkeys are assigned"
+  },
+  "profileSaved": {
+    "message": "Profile saved successfully",
+    "description": "Success message for saving profile"
+  },
+  "confirmRemoveHotkey": {
+    "message": "Remove hotkey assignment?",
+    "description": "Confirmation message for removing hotkey"
+  },
+  "hotkeyRemoved": {
+    "message": "Hotkey removed",
+    "description": "Success message for removing hotkey"
+  },
+  "profileDuplicated": {
+    "message": "Profile duplicated",
+    "description": "Success message for duplicating profile"
+  },
+  "profileDeleted": {
+    "message": "Profile deleted",
+    "description": "Success message for deleting profile"
+  },
+  "hotkeySaved": {
+    "message": "Hotkey saved successfully",
+    "description": "Success message for saving hotkey"
+  },
+  "settingsSaved": {
+    "message": "Settings saved successfully",
+    "description": "Success message for saving settings"
+  },
+  "backupCreated": {
+    "message": "Backup created successfully",
+    "description": "Success message for creating backup"
+  },
+  "confirmRestore": {
+    "message": "This will replace all current profiles and settings. Continue?",
+    "description": "Confirmation message for restoring backup"
+  },
+  "backupRestored": {
+    "message": "Backup restored successfully",
+    "description": "Success message for restoring backup"
+  },
+  "settingsReset": {
+    "message": "All settings have been reset",
+    "description": "Success message for resetting settings"
+  },
+  "noHotkey": {
+    "message": "No Hotkey",
+    "description": "Text when no hotkey is set"
+  },
+  "quickActions": {
+    "message": "Quick Actions",
+    "description": "Title for quick actions section"
+  },
+  "urlMatchInfo": {
+    "message": "Auto-selected for this URL",
+    "description": "Message when profile is auto-selected by URL"
+  },
+  "noUrlRules": {
+    "message": "No URL Rules Yet",
+    "description": "Title when no URL rules exist"
+  },
+  "noUrlRulesMessage": {
+    "message": "Create URL rules to automatically switch profiles based on website URLs",
+    "description": "Message when no URL rules exist"
+  },
+  "createProfileFirst": {
+    "message": "Create a profile first, then add URL rules to it",
+    "description": "Hint to create profile first"
+  },
+  "urlRuleRequired": {
+    "message": "Please add at least one URL rule",
+    "description": "Error when no URL rule is added"
+  },
+  "testUrlRuleRequired": {
+    "message": "Please enter both URL and pattern to test",
+    "description": "Error when URL or pattern is missing for testing"
+  },
+  "invalidRegex": {
+    "message": "Invalid regex pattern",
+    "description": "Error for invalid regex pattern"
+  },
+  "urlMatches": {
+    "message": "URL matches the pattern!",
+    "description": "Success message when URL matches pattern"
+  },
+  "urlDoesNotMatch": {
+    "message": "URL does not match the pattern",
+    "description": "Error message when URL doesn't match pattern"
+  },
+  "testedUrl": {
+    "message": "Tested:",
+    "description": "Label for tested URL"
+  },
+  "invalidUrl": {
+    "message": "Invalid URL",
+    "description": "Error for invalid URL"
+  },
+  "disabled": {
+    "message": "Disabled",
+    "description": "Disabled status"
+  },
+  "testUrlPlaceholder": {
+    "message": "https://example.com/path",
+    "description": "Placeholder for test URL input"
+  },
+  "patternPlaceholder": {
+    "message": "Enter pattern",
+    "description": "Placeholder for pattern input"
+  },
+  "removeField": {
+    "message": "Remove field",
+    "description": "Title for remove field button"
+  },
+  "removeRule": {
+    "message": "Remove rule",
+    "description": "Title for remove rule button"
+  },
+  "setHotkeyTitle": {
+    "message": "Set Hotkey",
+    "description": "Title for hotkey modal"
+  },
+  "saveHotkeyButton": {
+    "message": "Save Hotkey",
+    "description": "Button text for saving hotkey"
+  },
+  "clearHotkeyButtonText": {
+    "message": "Clear Hotkey",
+    "description": "Button text for clearing hotkey"
+  },
+  "urlRulesManagement": {
+    "message": "URL Rules Management",
+    "description": "Title for URL rules management"
+  },
+  "urlRulesSubtitle": {
+    "message": "Manage URL patterns for automatic profile switching",
+    "description": "Subtitle for URL rules management"
+  },
+  "howToSetHotkeys": {
+    "message": "How to Set Hotkeys:",
+    "description": "Title for hotkey instructions"
+  },
+  "hotkeyStep1": {
+    "message": "Click on a profile's \"Set Hotkey\" button",
+    "description": "Hotkey step 1"
+  },
+  "hotkeyStep2": {
+    "message": "Press your desired key combination (e.g., Ctrl+Shift+1)",
+    "description": "Hotkey step 2"
+  },
+  "hotkeyStep3": {
+    "message": "Hotkeys work globally across all tabs",
+    "description": "Hotkey step 3"
+  },
+  "hotkeyStep4": {
+    "message": "They won't trigger when typing in input fields",
+    "description": "Hotkey step 4"
+  },
+  "hotkeyStep5": {
+    "message": "Maximum 10 profile hotkeys recommended",
+    "description": "Hotkey step 5"
+  },
+  "hotkeyWarningTitle": {
+    "message": "Note:",
+    "description": "Hotkey warning title"
+  },
+  "hotkeyInstruction1": {
+    "message": "Press any key combination (e.g., Ctrl + Shift + 1)",
+    "description": "Hotkey instruction 1"
+  },
+  "urlRuleTipsTitle": {
+    "message": "Tips:",
+    "description": "Title for URL rule tips"
+  },
+  "urlRuleTip1": {
+    "message": "URL rules are checked in order (top to bottom)",
+    "description": "URL rule tip 1"
+  },
+  "urlRuleTip2": {
+    "message": "Disable rules you don't want to use without deleting them",
+    "description": "URL rule tip 2"
+  },
+  "urlRuleTip3": {
+    "message": "Use \"Include path\" for more specific matching",
+    "description": "URL rule tip 3"
+  },
+  "urlRuleTip4": {
+    "message": "Test your rules using the Test section",
+    "description": "URL rule tip 4"
+  },
+  "exactExampleDesc": {
+    "message": "Matches exactly example.com",
+    "description": "Exact match example description"
+  },
+  "containsExampleDesc": {
+    "message": "Matches any URL containing \"google\"",
+    "description": "Contains example description"
+  },
+  "startsWithExampleDesc": {
+    "message": "Matches URLs starting with https://www.",
+    "description": "Starts with example description"
+  },
+  "endsWithExampleDesc": {
+    "message": "Matches URLs ending with .com",
+    "description": "Ends with example description"
+  },
+  "regexExampleDesc": {
+    "message": "Matches URLs with regex pattern",
+    "description": "Regex example description"
+  },
+  "defaultFillModeLabel": {
+    "message": "Default Fill Mode:",
+    "description": "Label for default fill mode"
+  },
+  "defaultModeDescription": {
+    "message": "Default behavior when filling form fields",
+    "description": "Description for default mode"
+  },
+  "aboutTitle": {
+    "message": "About",
+    "description": "Title for about section"
+  },
+  "storageUsed": {
+    "message": "Storage Used:",
+    "description": "Label for storage used"
+  },
+  "numberFieldType": {
+    "message": "Number",
+    "description": "Number field type"
+  },
+  "aboutDeveloper": {
+    "message": "About Developer",
+    "description": "Link to about developer page"
+  },
+  "checkForUpdates": {
+    "message": "Check for Updates",
+    "description": "Button to check for updates"
+  },
+  "noUpdatesAvailable": {
+    "message": "You have the latest version!",
+    "description": "Message when no updates are available"
+  },
+  "backToSettings": {
+    "message": "Back to Settings",
+    "description": "Back button text"
+  },
+  "developerName": {
+    "message": "Md. Yusuf Ali",
+    "description": "Developer's name"
+  },
+  "developerTitle": {
+    "message": "Browser Extension Developer",
+    "description": "Developer's title"
+  },
+  "developerBio": {
+    "message": "Passionate about creating useful tools that enhance productivity and simplify everyday tasks.",
+    "description": "Developer biography"
+  },
+  "addressLabel": {
+    "message": "Address",
+    "description": "Label for address"
+  },
+  "developerAddress": {
+    "message": "Customs Bond Commissionerate Dhaka(South), Dhaka, 342/1, Segunbagicha, Dhaka-1000, Bangladesh.",
+    "description": "Developer's address"
+  },
+  "emailLabel": {
+    "message": "Email",
+    "description": "Label for email"
+  },
+  "developerEmail": {
+    "message": "mdyusufcbc@gmail.com",
+    "description": "Developer's email"
+  },
+  "websiteLabel": {
+    "message": "Website",
+    "description": "Label for website"
+  },
+  "developerWebsite": {
+    "message": "https://github.com/bdyusuf2016",
+    "description": "Developer's website"
+  },
+  "companyLabel": {
+    "message": "Company",
+    "description": "Label for company"
+  },
+  "developerCompany": {
+    "message": "Yusuf Computer & IT ||+8801933814200, Kalampur Bazar, Dhamrai, Dhaka-1351, Bangladesh.",
+    "description": "Developer's company"
+  },
+  "feature1Title": {
+    "message": "Smart Form Filling",
+    "description": "Feature 1 title"
+  },
+  "feature1Desc": {
+    "message": "Fill forms automatically with your saved profiles. Supports all types of form fields.",
+    "description": "Feature 1 description"
+  },
+  "feature2Title": {
+    "message": "Profile Hotkeys",
+    "description": "Feature 2 title"
+  },
+  "feature2Desc": {
+    "message": "Assign keyboard shortcuts to each profile for instant form filling.",
+    "description": "Feature 2 description"
+  },
+  "feature3Title": {
+    "message": "URL Rules",
+    "description": "Feature 3 title"
+  },
+  "feature3Desc": {
+    "message": "Auto-switch profiles based on website URLs using powerful pattern matching.",
+    "description": "Feature 3 description"
+  },
+  "feature4Title": {
+    "message": "100% Local",
+    "description": "Feature 4 title"
+  },
+  "feature4Desc": {
+    "message": "All your data stays on your computer. No servers, no tracking, complete privacy.",
+    "description": "Feature 4 description"
+  },
+  "profilesLabel": {
+    "message": "Profiles",
+    "description": "Label for profiles count"
+  },
+  "fieldsLabel": {
+    "message": "Fields",
+    "description": "Label for fields count"
+  },
+  "hotkeysLabel": {
+    "message": "Hotkeys",
+    "description": "Label for hotkeys count"
+  },
+  "urlRulesLabel": {
+    "message": "URL Rules",
+    "description": "Label for URL rules count"
+  },
+  "backToOptions": {
+    "message": "← Back to Options",
+    "description": "Back to options button"
+  },
+  "viewSourceCode": {
+    "message": "📁 View Source Code",
+    "description": "View source code button"
+  },
+  "reportIssue": {
+    "message": "🐛 Report Issue",
+    "description": "Report issue button"
+  },
+  "suggestFeature": {
+    "message": "💡 Suggest Feature",
+    "description": "Suggest feature button"
+  },
+  "copyrightNotice": {
+    "message": "© 2024 AutoFill Pro. All rights reserved.",
+    "description": "Copyright notice"
+  },
+  "madeWith": {
+    "message": "Made with ❤️ in Bangladesh",
+    "description": "Made with love text"
+  },
+  "passwordFieldType": {
+    "message": "Password",
+    "description": "Password field type"
+  }
+}

@@ -1,0 +1,643 @@
+{
+  "extensionName": {
+    "message": "অটোফিল প্রো",
+    "description": "এক্সটেনশনের নাম"
+  },
+  "extensionDescription": {
+    "message": "প্রোফাইল-ভিত্তিক হটকি এবং ইউআরএল নিয়ম সহ উন্নত অটোফিল এক্সটেনশন",
+    "description": "এক্সটেনশনের বর্ণনা"
+  },
+  "popupTitle": {
+    "message": "অটোফিল প্রো",
+    "description": "পপআপে শিরোনাম"
+  },
+  "activeProfileLabel": {
+    "message": "সক্রিয় প্রোফাইল:",
+    "description": "সক্রিয় প্রোফাইল ড্রপডাউনের লেবেল"
+  },
+  "noProfileSelected": {
+    "message": "কোন প্রোফাইল নির্বাচন করা হয়নি",
+    "description": "প্রোফাইল ড্রপডাউনে ডিফল্ট অপশন"
+  },
+  "manageProfilesButton": {
+    "message": "ম্যানেজ",
+    "description": "প্রোফাইল ম্যানেজ করার বাটন"
+  },
+  "fillFormButton": {
+    "message": "বর্তমান ফর্ম পূরণ করুন",
+    "description": "বর্তমান ফর্ম পূরণ করার বাটন"
+  },
+  "captureFormButton": {
+    "message": "ফর্ম ক্যাপচার করুন",
+    "description": "ফর্ম ফিল্ড ক্যাপচার করার বাটন"
+  },
+  "quickSettingsButton": {
+    "message": "দ্রুত সেটিংস",
+    "description": "দ্রুত সেটিংসের বাটন"
+  },
+  "profileHotkeysLabel": {
+    "message": "প্রোফাইল হটকি",
+    "description": "হটকি সেকশনের লেবেল"
+  },
+  "noHotkeysAssigned": {
+    "message": "কোন হটকি সেট করা নেই",
+    "description": "যখন কোন হটকি সেট করা নেই তখন মেসেজ"
+  },
+  "settingsButton": {
+    "message": "সেটিংস",
+    "description": "সেটিংস খোলার বাটন"
+  },
+  "shortcutsHelpButton": {
+    "message": "শর্টকাট",
+    "description": "কিবোর্ড শর্টকাট সাহায্যের বাটন"
+  },
+  "optionsPageTitle": {
+    "message": "প্রোফাইল ম্যানেজমেন্ট",
+    "description": "অপশন পেজের শিরোনাম"
+  },
+  "newProfileButton": {
+    "message": "নতুন প্রোফাইল",
+    "description": "নতুন প্রোফাইল তৈরির বাটন"
+  },
+  "importButton": {
+    "message": "ইমপোর্ট",
+    "description": "প্রোফাইল ইমপোর্ট করার বাটন"
+  },
+  "exportButton": {
+    "message": "এক্সপোর্ট",
+    "description": "প্রোফাইল এক্সপোর্ট করার বাটন"
+  },
+  "profilesTab": {
+    "message": "প্রোফাইলসমূহ",
+    "description": "প্রোফাইল ট্যাবের লেবেল"
+  },
+  "hotkeysTab": {
+    "message": "হটকি",
+    "description": "হটকি ট্যাবের লেবেল"
+  },
+  "settingsTab": {
+    "message": "সেটিংস",
+    "description": "সেটিংস ট্যাবের লেবেল"
+  },
+  "profileNameLabel": {
+    "message": "প্রোফাইলের নাম:",
+    "description": "প্রোফাইল নাম ইনপুটের লেবেল"
+  },
+  "profileNamePlaceholder": {
+    "message": "যেমন: ব্যক্তিগত, অফিস, আমাজন",
+    "description": "প্রোফাইল নামের প্লেসহোল্ডার"
+  },
+  "colorThemeLabel": {
+    "message": "রং থিম:",
+    "description": "রং থিম পিকার লেবেল"
+  },
+  "formFieldsLabel": {
+    "message": "ফর্ম ফিল্ডসমূহ",
+    "description": "ফর্ম ফিল্ড সেকশনের লেবেল"
+  },
+  "addFieldButton": {
+    "message": "ফিল্ড যোগ করুন",
+    "description": "ফর্ম ফিল্ড যোগ করার বাটন"
+  },
+  "advancedSettingsLabel": {
+    "message": "অ্যাডভান্সড সেটিংস",
+    "description": "অ্যাডভান্সড সেটিংস লেবেল"
+  },
+  "restrictToSiteLabel": {
+    "message": "সাইট সীমিত করুন (ঐচ্ছিক):",
+    "description": "সাইট সীমাবদ্ধতা ইনপুট লেবেল"
+  },
+  "sitePlaceholder": {
+    "message": "example.com অথবা সব সাইটের জন্য খালি রাখুন",
+    "description": "সাইট সীমাবদ্ধতার প্লেসহোল্ডার"
+  },
+  "defaultModeLabel": {
+    "message": "ডিফল্ট ফিল মোড:",
+    "description": "ডিফল্ট ফিল মোড ড্রপডাউন লেবেল"
+  },
+  "overwriteMode": {
+    "message": "বিদ্যমান প্রতিস্থাপন",
+    "description": "প্রতিস্থাপন মোড অপশন"
+  },
+  "appendMode": {
+    "message": "বিদ্যমান সাথে যুক্ত করুন",
+    "description": "যুক্ত মোড অপশন"
+  },
+  "smartMode": {
+    "message": "স্মার্ট ফিল",
+    "description": "স্মার্ট ফিল মোড অপশন"
+  },
+  "fieldTypeLabel": {
+    "message": "টাইপ",
+    "description": "ফিল্ড টাইপ লেবেল"
+  },
+  "fieldNameLabel": {
+    "message": "নাম",
+    "description": "ফিল্ড নাম লেবেল"
+  },
+  "fieldValueLabel": {
+    "message": "মান",
+    "description": "ফিল্ড মান লেবেল"
+  },
+  "fieldSiteLabel": {
+    "message": "সাইট",
+    "description": "ফিল্ড সাইট সীমাবদ্ধতা লেবেল"
+  },
+  "fieldModeLabel": {
+    "message": "মোড",
+    "description": "ফিল্ড ফিল মোড লেবেল"
+  },
+  "hotkeyConfigurationTitle": {
+    "message": "প্রোফাইল হটকি কনফিগারেশন",
+    "description": "হটকি কনফিগারেশনের শিরোনাম"
+  },
+  "hotkeyConfigurationSubtitle": {
+    "message": "দ্রুত নির্দিষ্ট প্রোফাইল পূরণ করতে কিবোর্ড শর্টকাট নির্ধারণ করুন",
+    "description": "হটকি কনফিগারেশনের সাবটাইটেল"
+  },
+  "setHotkeyButton": {
+    "message": "হটকি সেট করুন",
+    "description": "হটকি সেট করার বাটন"
+  },
+  "clearHotkeyButton": {
+    "message": "পরিষ্কার",
+    "description": "হটকি পরিষ্কার করার বাটন"
+  },
+  "hotkeyInstructions": {
+    "message": "একটি প্রোফাইলের \"হটকি সেট করুন\" বাটনে ক্লিক করুন, তারপর আপনার কাঙ্খিত কী কম্বিনেশন টিপুন (যেমন: Ctrl+Shift+1)। হটকি সব ট্যাবে কাজ করবে।",
+    "description": "হটকি সেট করার নির্দেশনা"
+  },
+  "hotkeyWarning": {
+    "message": "সাধারণ ব্রাউজার শর্টকাট ব্যবহার করা এড়িয়ে চলুন (Ctrl+T, Ctrl+W, ইত্যাদি)",
+    "description": "ব্রাউজার শর্টকাট সম্পর্কে সতর্কতা"
+  },
+  "generalSettingsTitle": {
+    "message": "সাধারণ সেটিংস",
+    "description": "সাধারণ সেটিংস সেকশনের শিরোনাম"
+  },
+  "enableHotkeysLabel": {
+    "message": "প্রোফাইল হটকি সক্রিয় করুন",
+    "description": "হটকি সক্রিয় করার চেকবক্স লেবেল"
+  },
+  "enableHotkeysDescription": {
+    "message": "প্রোফাইল-নির্দিষ্ট কিবোর্ড শর্টকাট অনুমতি দিন",
+    "description": "হটকি সক্রিয় করার বর্ণনা"
+  },
+  "autoSwitchProfileLabel": {
+    "message": "ইউআরএল অনুযায়ী প্রোফাইল স্বয়ংক্রিয় স্যুইচ করুন",
+    "description": "স্বয়ংক্রিয় প্রোফাইল স্যুইচ চেকবক্স লেবেল"
+  },
+  "autoSwitchProfileDescription": {
+    "message": "ইউআরএল নিয়ম ভিত্তিতে স্বয়ংক্রিয়ভাবে প্রোফাইল নির্বাচন করুন",
+    "description": "স্বয়ংক্রিয় প্রোফাইল স্যুইচ বর্ণনা"
+  },
+  "confirmOverwriteLabel": {
+    "message": "প্রতিস্থাপনের আগে নিশ্চিত করুন",
+    "description": "প্রতিস্থাপন নিশ্চিতকরণ চেকবক্স লেবেল"
+  },
+  "confirmOverwriteDescription": {
+    "message": "ফর্ম ডেটা প্রতিস্থাপনের সময় নিশ্চিতকরণ দেখান",
+    "description": "প্রতিস্থাপন নিশ্চিতকরণ বর্ণনা"
+  },
+  "backupRestoreTitle": {
+    "message": "ব্যাকআপ ও পুনরুদ্ধার",
+    "description": "ব্যাকআপ ও পুনরুদ্ধার সেকশনের শিরোনাম"
+  },
+  "backupNowButton": {
+    "message": "এখনই ব্যাকআপ করুন",
+    "description": "ব্যাকআপ তৈরি করার বাটন"
+  },
+  "backupDescription": {
+    "message": "সমস্ত প্রোফাইল ও সেটিংসের ব্যাকআপ তৈরি করুন",
+    "description": "ব্যাকআপের বর্ণনা"
+  },
+  "restoreBackupButton": {
+    "message": "ব্যাকআপ পুনরুদ্ধার করুন",
+    "description": "ব্যাকআপ পুনরুদ্ধার করার বাটন"
+  },
+  "restoreDescription": {
+    "message": "পূর্ববর্তী ব্যাকআপ ফাইল থেকে পুনরুদ্ধার করুন",
+    "description": "পুনরুদ্ধারের বর্ণনা"
+  },
+  "resetSettingsButton": {
+    "message": "সমস্ত সেটিংস রিসেট করুন",
+    "description": "সেটিংস রিসেট করার বাটন"
+  },
+  "resetSettingsWarning": {
+    "message": "এটি সমস্ত প্রোফাইল ও সেটিংস মুছে ফেলবে",
+    "description": "সেটিংস রিসেট করার সতর্কতা"
+  },
+  "saveProfileButton": {
+    "message": "প্রোফাইল সেভ করুন",
+    "description": "প্রোফাইল সেভ করার বাটন"
+  },
+  "cancelButton": {
+    "message": "বাতিল",
+    "description": "বাতিল বাটন"
+  },
+  "closeButton": {
+    "message": "বন্ধ",
+    "description": "বন্ধ বাটন"
+  },
+  "saveButton": {
+    "message": "সেভ",
+    "description": "সেভ বাটন"
+  },
+  "deleteButton": {
+    "message": "মুছুন",
+    "description": "মুছুন বাটন"
+  },
+  "editButton": {
+    "message": "এডিট",
+    "description": "এডিট বাটন"
+  },
+  "duplicateButton": {
+    "message": "ডুপ্লিকেট",
+    "description": "ডুপ্লিকেট বাটন"
+  },
+  "confirmDeleteTitle": {
+    "message": "মুছে ফেলার নিশ্চিতকরণ",
+    "description": "মুছে ফেলার নিশ্চিতকরণ শিরোনাম"
+  },
+  "confirmDeleteMessage": {
+    "message": "আপনি কি এই প্রোফাইল মুছে ফেলতে চান?",
+    "description": "মুছে ফেলার নিশ্চিতকরণ মেসেজ"
+  },
+  "confirmResetTitle": {
+    "message": "রিসেট নিশ্চিতকরণ",
+    "description": "রিসেট নিশ্চিতকরণ শিরোনাম"
+  },
+  "confirmResetMessage": {
+    "message": "এটি সমস্ত প্রোফাইল ও সেটিংস মুছে ফেলবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "description": "রিসেট নিশ্চিতকরণ মেসেজ"
+  },
+  "successMessage": {
+    "message": "কার্যক্রম সফলভাবে সম্পন্ন হয়েছে",
+    "description": "সাধারণ সাফল্য মেসেজ"
+  },
+  "errorMessage": {
+    "message": "একটি ত্রুটি ঘটেছে",
+    "description": "সাধারণ ত্রুটি মেসেজ"
+  },
+  "noProfilesMessage": {
+    "message": "এখনও কোন প্রোফাইল নেই। ফর্ম অটোফিল শুরু করতে আপনার প্রথম প্রোফাইল তৈরি করুন।",
+    "description": "যখন কোন প্রোফাইল নেই তখন মেসেজ"
+  },
+  "createFirstProfileButton": {
+    "message": "প্রথম প্রোফাইল তৈরি করুন",
+    "description": "প্রথম প্রোফাইল তৈরির বাটন"
+  },
+  "fieldsCount": {
+    "message": "$1টি ফিল্ড",
+    "description": "প্রোফাইলে ফিল্ডের সংখ্যা",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "৫"
+      }
+    }
+  },
+  "hotkeySet": {
+    "message": "হটকি: $1",
+    "description": "বর্তমান হটকি প্রদর্শন",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Ctrl+Shift+1"
+      }
+    }
+  },
+  "allSites": {
+    "message": "সব সাইট",
+    "description": "সব সাইটে প্রোফাইল লেবেল"
+  },
+  "filledCountMessage": {
+    "message": "$1টি ফিল্ড পূরণ হয়েছে!",
+    "description": "ফর্ম পূরণ করার পর মেসেজ",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "১০"
+      }
+    }
+  },
+  "capturedCountMessage": {
+    "message": "$1টি ফর্ম ফিল্ড ক্যাপচার হয়েছে!",
+    "description": "ফর্ম ক্যাপচার করার পর মেসেজ",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "৮"
+      }
+    }
+  },
+  "noFieldsFound": {
+    "message": "কোন ফর্ম ফিল্ড পাওয়া যায়নি",
+    "description": "যখন কোন ফর্ম ফিল্ড পাওয়া যায় না তখন মেসেজ"
+  },
+  "profileRequired": {
+    "message": "প্রথমে একটি প্রোফাইল নির্বাচন করুন",
+    "description": "যখন কোন প্রোফাইল নির্বাচন করা হয়নি তখন ত্রুটি"
+  },
+  "profileNameRequired": {
+    "message": "প্রোফাইলের নাম আবশ্যক",
+    "description": "যখন প্রোফাইল নাম খালি তখন ত্রুটি"
+  },
+  "fieldsRequired": {
+    "message": "অন্তত একটি ফিল্ড যোগ করুন",
+    "description": "যখন কোন ফিল্ড যোগ করা হয়নি তখন ত্রুটি"
+  },
+  "hotkeyConflictTitle": {
+    "message": "হটকি কনফ্লিক্ট",
+    "description": "হটকি কনফ্লিক্ট ডায়ালগ শিরোনাম"
+  },
+  "hotkeyConflictMessage": {
+    "message": "এই হটকি ইতিমধ্যে \"$1\" এর জন্য নির্ধারণ করা আছে। আপনি কি এটি পুনরায় নির্ধারণ করতে চান?",
+    "description": "হটকি কনফ্লিক্ট মেসেজ",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "অফিস প্রোফাইল"
+      }
+    }
+  },
+  "hotkeyForbidden": {
+    "message": "এই কী কম্বিনেশন ব্রাউজারের জন্য সংরক্ষিত। দয়া করে ভিন্ন কম্বিনেশন ব্যবহার করুন।",
+    "description": "ব্রাউজার শর্টকাট ব্যবহার করার চেষ্টা করলে ত্রুটি"
+  },
+  "shortcutHelpTitle": {
+    "message": "কিবোর্ড শর্টকাট সাহায্য",
+    "description": "শর্টকাট সাহায্যের শিরোনাম"
+  },
+  "globalShortcuts": {
+    "message": "গ্লোবাল শর্টকাট:",
+    "description": "গ্লোবাল শর্টকাট সেকশন লেবেল"
+  },
+  "profileHotkeysList": {
+    "message": "প্রোফাইল হটকি:",
+    "description": "প্রোফাইল হটকি সেকশন লেবেল"
+  },
+  "shortcutCtrlShiftA": {
+    "message": "Ctrl+Shift+A - এক্সটেনশন পপআপ খুলুন",
+    "description": "Ctrl+Shift+A শর্টকাট বর্ণনা"
+  },
+  "shortcutCtrlShiftC": {
+    "message": "Ctrl+Shift+C - বর্তমান ফর্ম ক্যাপচার করুন",
+    "description": "Ctrl+Shift+C শর্টকাট বর্ণনা"
+  },
+  "shortcutCtrlShiftF": {
+    "message": "Ctrl+Shift+F - সক্রিয় প্রোফাইল পূরণ করুন",
+    "description": "Ctrl+Shift+F শর্টকাট বর্ণনা"
+  },
+  "shortcutCustom": {
+    "message": "কাস্টম - প্রতিটি প্রোফাইলের জন্য কাস্টম হটকি সেট করুন",
+    "description": "কাস্টম হটকি বর্ণনা"
+  },
+  "versionText": {
+    "message": "সংস্করণ $1",
+    "description": "সংস্করণ নম্বর প্রদর্শন",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "১.০"
+      }
+    }
+  },
+  "createdDate": {
+    "message": "তৈরি: $1",
+    "description": "তৈরির তারিখ প্রদর্শন",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "২০২৩-১২-১৫"
+      }
+    }
+  },
+  "textFieldType": {
+    "message": "টেক্সট",
+    "description": "টেক্সট ফিল্ড টাইপ"
+  },
+  "emailFieldType": {
+    "message": "ইমেল",
+    "description": "ইমেল ফিল্ড টাইপ"
+  },
+  "telFieldType": {
+    "message": "ফোন",
+    "description": "ফোন ফিল্ড টাইপ"
+  },
+  "urlFieldType": {
+    "message": "ইউআরএল",
+    "description": "ইউআরএল ফিল্ড টাইপ"
+  },
+  "checkboxFieldType": {
+    "message": "চেকবক্স",
+    "description": "চেকবক্স ফিল্ড টাইপ"
+  },
+  "radioFieldType": {
+    "message": "রেডিও",
+    "description": "রেডিও ফিল্ড টাইপ"
+  },
+  "selectFieldType": {
+    "message": "সিলেক্ট",
+    "description": "সিলেক্ট ফিল্ড টাইপ"
+  },
+  "overwriteFieldMode": {
+    "message": "প্রতিস্থাপন",
+    "description": "প্রতিস্থাপন ফিল্ড মোড"
+  },
+  "appendFieldMode": {
+    "message": "যুক্ত",
+    "description": "যুক্ত ফিল্ড মোড"
+  },
+  "prependFieldMode": {
+    "message": "পূর্বে যুক্ত",
+    "description": "পূর্বে যুক্ত ফিল্ড মোড"
+  },
+  "urlRulesTitle": {
+    "message": "ইউআরএল নিয়ম",
+    "description": "ইউআরএল নিয়ম মডাল শিরোনাম"
+  },
+  "urlRulesDescription": {
+    "message": "সংজ্ঞায়িত করুন ইউআরএল প্যাটার্ন যেখানে এই প্রোফাইলটি স্বয়ংক্রিয়ভাবে নির্বাচিত হওয়া উচিত:",
+    "description": "ইউআরএল নিয়ম বর্ণনা"
+  },
+  "addUrlRuleButton": {
+    "message": "ইউআরএল নিয়ম যোগ করুন",
+    "description": "ইউআরএল নিয়ম যোগ বাটন"
+  },
+  "testUrlRuleTitle": {
+    "message": "ইউআরএল নিয়ম পরীক্ষা করুন",
+    "description": "ইউআরএল নিয়ম পরীক্ষার শিরোনাম"
+  },
+  "testUrlLabel": {
+    "message": "পরীক্ষার ইউআরএল:",
+    "description": "পরীক্ষার ইউআরএল লেবেল"
+  },
+  "ruleTypeLabel": {
+    "message": "নিয়মের ধরন:",
+    "description": "নিয়মের ধরন লেবেল"
+  },
+  "patternLabel": {
+    "message": "প্যাটার্ন:",
+    "description": "প্যাটার্ন লেবেল"
+  },
+  "includePathLabel": {
+    "message": "পাথ অন্তর্ভুক্ত করুন",
+    "description": "পাথ অন্তর্ভুক্ত চেকবক্স লেবেল"
+  },
+  "testButton": {
+    "message": "নিয়ম পরীক্ষা করুন",
+    "description": "নিয়ম পরীক্ষা বাটন"
+  },
+  "urlRuleExamplesTitle": {
+    "message": "উদাহরণ:",
+    "description": "ইউআরএল নিয়ম উদাহরণ শিরোনাম"
+  },
+  "exactMatch": {
+    "message": "সঠিক মিল",
+    "description": "সঠিক মিল অপশন"
+  },
+  "containsMatch": {
+    "message": "অন্তর্ভুক্ত",
+    "description": "অন্তর্ভুক্ত অপশন"
+  },
+  "startsWithMatch": {
+    "message": "দিয়ে শুরু হয়",
+    "description": "দিয়ে শুরু হয় অপশন"
+  },
+  "endsWithMatch": {
+    "message": "দিয়ে শেষ হয়",
+    "description": "দিয়ে শেষ হয় অপশন"
+  },
+  "regexMatch": {
+    "message": "রেগেক্স",
+    "description": "রেগেক্স অপশন"
+  },
+  "includePath": {
+    "message": "পাথ অন্তর্ভুক্ত",
+    "description": "পাথ অন্তর্ভুক্ত অপশন"
+  },
+  "enabled": {
+    "message": "সক্রিয়",
+    "description": "সক্রিয় অপশন"
+  },
+  "urlRulesCount": {
+    "message": "$1টি ইউআরএল নিয়ম",
+    "description": "প্রোফাইলে ইউআরএল নিয়মের সংখ্যা",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "৩"
+      }
+    }
+  },
+  "urlRulesSaved": {
+    "message": "ইউআরএল নিয়ম সফলভাবে সংরক্ষিত হয়েছে",
+    "description": "ইউআরএল নিয়ম সংরক্ষণের সাফল্য মেসেজ"
+  },
+  "saveUrlRulesButton": {
+    "message": "ইউআরএল নিয়ম সংরক্ষণ করুন",
+    "description": "ইউআরএল নিয়ম সংরক্ষণ বাটন"
+  },
+  "profileInformation": {
+    "message": "প্রোফাইল তথ্য",
+    "description": "প্রোফাইল তথ্য সেকশন শিরোনাম"
+  },
+  "fieldNamePlaceholder": {
+    "message": "ফিল্ড নাম বা রেগেক্স",
+    "description": "ফিল্ড নাম ইনপুটের প্লেসহোল্ডার"
+  },
+  "fieldValuePlaceholder": {
+    "message": "পূরণ করার মান",
+    "description": "ফিল্ড মান ইনপুটের প্লেসহোল্ডার"
+  },
+  "fieldSitePlaceholder": {
+    "message": "সাইট (ঐচ্ছিক)",
+    "description": "ফিল্ড সাইট ইনপুটের প্লেসহোল্ডার"
+  },
+  "editProfile": {
+    "message": "প্রোফাইল এডিট করুন",
+    "description": "প্রোফাইল এডিট মডাল শিরোনাম"
+  },
+  "createProfile": {
+    "message": "নতুন প্রোফাইল তৈরি করুন",
+    "description": "নতুন প্রোফাইল তৈরি মডাল শিরোনাম"
+  },
+  "pressKeyCombination": {
+    "message": "আপনার কী কম্বিনেশন টিপুন...",
+    "description": "হটকি রেকর্ডারের প্লেসহোল্ডার"
+  },
+  "notSet": {
+    "message": "সেট করা নেই",
+    "description": "যখন কিছু সেট করা নেই তখন টেক্সট"
+  },
+  "noProfilesForHotkeys": {
+    "message": "কোন প্রোফাইল নেই। প্রথমে একটি প্রোফাইল তৈরি করুন হটকি নির্ধারণ করার জন্য।",
+    "description": "যখন হটকির জন্য কোন প্রোফাইল নেই তখন মেসেজ"
+  },
+  "currentAssignments": {
+    "message": "বর্তমানে নির্ধারিত হটকি:",
+    "description": "বর্তমান হটকি নির্ধারণের শিরোনাম"
+  },
+  "noOtherHotkeys": {
+    "message": "অন্য কোন হটকি নির্ধারণ করা নেই",
+    "description": "যখন অন্য কোন হটকি নির্ধারণ করা নেই তখন মেসেজ"
+  },
+  "profileSaved": {
+    "message": "প্রোফাইল সফলভাবে সংরক্ষিত হয়েছে",
+    "description": "প্রোফাইল সংরক্ষণের সাফল্য মেসেজ"
+  },
+  "confirmRemoveHotkey": {
+    "message": "হটকি নির্ধারণ মুছে ফেলবেন?",
+    "description": "হটকি মুছে ফেলার নিশ্চিতকরণ মেসেজ"
+  },
+  "hotkeyRemoved": {
+    "message": "হটকি মুছে ফেলা হয়েছে",
+    "description": "হটকি মুছে ফেলার সাফল্য মেসেজ"
+  },
+  "profileDuplicated": {
+    "message": "প্রোফাইল ডুপ্লিকেট করা হয়েছে",
+    "description": "প্রোফাইল ডুপ্লিকেটের সাফল্য মেসেজ"
+  },
+  "profileDeleted": {
+    "message": "প্রোফাইল মুছে ফেলা হয়েছে",
+    "description": "প্রোফাইল মুছে ফেলার সাফল্য মেসেজ"
+  },
+  "hotkeySaved": {
+    "message": "হটকি সফলভাবে সংরক্ষিত হয়েছে",
+    "description": "হটকি সংরক্ষণের সাফল্য মেসেজ"
+  },
+  "settingsSaved": {
+    "message": "সেটিংস সফলভাবে সংরক্ষিত হয়েছে",
+    "description": "সেটিংস সংরক্ষণের সাফল্য মেসেজ"
+  },
+  "backupCreated": {
+    "message": "ব্যাকআপ সফলভাবে তৈরি হয়েছে",
+    "description": "ব্যাকআপ তৈরি সাফল্য মেসেজ"
+  },
+  "confirmRestore": {
+    "message": "এটি সমস্ত বর্তমান প্রোফাইল ও সেটিংস প্রতিস্থাপন করবে। চালিয়ে যাবেন?",
+    "description": "ব্যাকআপ পুনরুদ্ধারের নিশ্চিতকরণ মেসেজ"
+  },
+  "backupRestored": {
+    "message": "ব্যাকআপ সফলভাবে পুনরুদ্ধার করা হয়েছে",
+    "description": "ব্যাকআপ পুনরুদ্ধার সাফল্য মেসেজ"
+  },
+  "settingsReset": {
+    "message": "সমস্ত সেটিংস রিসেট করা হয়েছে",
+    "description": "সেটিংস রিসেট সাফল্য মেসেজ"
+  },
+  "noHotkey": {
+    "message": "কোন হটকি নেই",
+    "description": "যখন কোন হটকি সেট করা নেই তখন টেক্সট"
+  },
+  "quickActions": {
+    "message": "দ্রুত ক্রিয়াকলাপ",
+    "description": "দ্রুত ক্রিয়াকলাপ সেকশন শিরোনাম"
+  },
+
+  "urlMatchInfo": {
+    "message": "এই ইউআরএলের জন্য স্বয়ংক্রিয়ভাবে নির্বাচিত",
+    "description": "যখন প্রোফাইল ইউআরএল দ্বারা স্বয়ংক্রিয়ভাবে নির্বাচিত হয় তখন মেসেজ"
+  }
+}

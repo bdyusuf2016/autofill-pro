@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title data-i18n="optionsPageTitle">Profile Management</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-main">
+          <h1 data-i18n="optionsPageTitle">Profile Management</h1>
+          <div class="header-actions">
+            <button
+              id="newProfile"
+              class="primary"
+              data-i18n="newProfileButton"
+            >
+              <span class="icon">+</span>
+              <span data-i18n="newProfileButton">New Profile</span>
+            </button>
+            <button id="importBtn" class="secondary" data-i18n="importButton">
+              <span class="icon">📥</span>
+              <span data-i18n="importButton">Import</span>
+            </button>
+            <button id="exportAll" class="secondary" data-i18n="exportButton">
+              <span class="icon">📤</span>
+              <span data-i18n="exportButton">Export</span>
+            </button>
+          </div>
+        </div>
+        <div class="tabs" id="mainTabs">
+          <button
+            class="tab active"
+            data-tab="profiles"
+            data-i18n="profilesTab"
+          >
+            Profiles
+          </button>
+          <button class="tab" data-tab="hotkeys" data-i18n="hotkeysTab">
+            Hotkeys
+          </button>
+          <button class="tab" data-tab="urlRules" data-i18n="urlRulesTitle">
+            URL Rules
+          </button>
+          <button class="tab" data-tab="settings" data-i18n="settingsTab">
+            Settings
+          </button>
+        </div>
+      </header>
+
+      <!-- Profiles Tab -->
+      <div class="tab-content active" id="profilesTab">
+        <div class="profiles-list" id="profilesList">
+          <!-- Profiles will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Hotkeys Tab -->
+      <div class="tab-content" id="hotkeysTab">
+        <div class="hotkey-config">
+          <div class="hotkey-header">
+            <h3 data-i18n="hotkeyConfigurationTitle">
+              Profile Hotkey Configuration
+            </h3>
+            <p class="subtitle" data-i18n="hotkeyConfigurationSubtitle">
+              Assign keyboard shortcuts to quickly fill specific profiles
+            </p>
+          </div>
+
+          <div class="hotkey-list" id="hotkeyConfigList">
+            <!-- Hotkey configuration will be loaded here -->
+          </div>
+
+          <div class="hotkey-help">
+            <h4 data-i18n="howToSetHotkeys">📝 How to Set Hotkeys:</h4>
+            <ul>
+              <li data-i18n="hotkeyStep1">
+                Click on a profile's "Set Hotkey" button
+              </li>
+              <li data-i18n="hotkeyStep2">
+                Press your desired key combination (e.g., Ctrl+Shift+1)
+              </li>
+              <li data-i18n="hotkeyStep3">
+                Hotkeys work globally across all tabs
+              </li>
+              <li data-i18n="hotkeyStep4">
+                They won't trigger when typing in input fields
+              </li>
+              <li data-i18n="hotkeyStep5">
+                Maximum 10 profile hotkeys recommended
+              </li>
+            </ul>
+            <div class="warning">
+              ⚠️ <strong data-i18n="hotkeyWarningTitle">Note:</strong>
+              <span data-i18n="hotkeyWarningText"
+                >Avoid using common browser shortcuts (Ctrl+T, Ctrl+W,
+                etc.)</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL Rules Tab -->
+      <div class="tab-content" id="urlRulesTab">
+        <div class="url-rules-overview">
+          <div class="overview-header">
+            <h3 data-i18n="urlRulesManagement">URL Rules Management</h3>
+            <p class="subtitle" data-i18n="urlRulesSubtitle">
+              Manage URL patterns for automatic profile switching
+            </p>
+          </div>
+
+          <div class="url-rules-list" id="urlRulesOverviewList">
+            <!-- URL rules overview will be loaded here -->
+          </div>
+
+          <div class="url-rules-test">
+            <h4 data-i18n="testUrlRuleTitle">Test URL Rule</h4>
+            <div class="test-container">
+              <div class="test-inputs">
+                <div class="form-group">
+                  <label data-i18n="testUrlLabel">Test URL:</label>
+                  <input
+                    type="text"
+                    id="testUrlInput"
+                    placeholder="https://example.com/path"
+                    data-i18n-placeholder="testUrlPlaceholder"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label data-i18n="ruleTypeLabel">Rule Type:</label>
+                    <select id="testRuleType">
+                      <option value="exact" data-i18n="exactMatch">
+                        Exact Match
+                      </option>
+                      <option value="contains" data-i18n="containsMatch">
+                        Contains
+                      </option>
+                      <option value="startsWith" data-i18n="startsWithMatch">
+                        Starts With
+                      </option>
+                      <option value="endsWith" data-i18n="endsWithMatch">
+                        Ends With
+                      </option>
+                      <option value="regex" data-i18n="regexMatch">
+                        Regex
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label data-i18n="patternLabel">Pattern:</label>
+                    <input
+                      type="text"
+                      id="testRulePattern"
+                      placeholder="Enter pattern"
+                      data-i18n-placeholder="patternPlaceholder"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" id="testIncludePath" checked />
+                    <span data-i18n="includePathLabel"
+                      >Include path in matching</span
+                    >
+                  </label>
+                </div>
+
+                <button
+                  id="testUrlRuleBtn"
+                  class="secondary"
+                  data-i18n="testButton"
+                >
+                  Test Rule
+                </button>
+              </div>
+
+              <div id="testResult" class="test-result"></div>
+            </div>
+          </div>
+
+          <div class="url-rules-examples">
+            <h4 data-i18n="urlRuleExamplesTitle">Examples:</h4>
+            <div class="examples-grid">
+              <div class="example-card">
+                <div class="example-type" data-i18n="exactMatch">
+                  Exact Match
+                </div>
+                <code>example.com</code>
+                <p data-i18n="exactExampleDesc">Matches exactly example.com</p>
+              </div>
+              <div class="example-card">
+                <div class="example-type" data-i18n="containsMatch">
+                  Contains
+                </div>
+                <code>google</code>
+                <p data-i18n="containsExampleDesc">
+                  Matches any URL containing "google"
+                </p>
+              </div>
+              <div class="example-card">
+                <div class="example-type" data-i18n="startsWithMatch">
+                  Starts With
+                </div>
+                <code>https://www.</code>
+                <p data-i18n="startsWithExampleDesc">
+                  Matches URLs starting with https://www.
+                </p>
+              </div>
+              <div class="example-card">
+                <div class="example-type" data-i18n="endsWithMatch">
+                  Ends With
+                </div>
+                <code>.com</code>
+                <p data-i18n="endsWithExampleDesc">
+                  Matches URLs ending with .com
+                </p>
+              </div>
+              <div class="example-card">
+                <div class="example-type" data-i18n="regexMatch">Regex</div>
+                <code>^https://.*\.com$</code>
+                <p data-i18n="regexExampleDesc">
+                  Matches URLs with regex pattern
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-content" id="settingsTab">
+        <div class="settings-sections">
+          <div class="settings-section">
+            <h3 data-i18n="generalSettingsTitle">General Settings</h3>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="enableHotkeys" checked />
+                <span class="label-text" data-i18n="enableHotkeysLabel"
+                  >Enable Profile Hotkeys</span
+                >
+              </label>
+              <span
+                class="setting-description"
+                data-i18n="enableHotkeysDescription"
+                >Allow profile-specific keyboard shortcuts</span
+              >
+            </div>
+
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="autoSwitchProfile" checked />
+                <span class="label-text" data-i18n="autoSwitchProfileLabel"
+                  >Auto-switch Profile by URL</span
+                >
+              </label>
+              <span
+                class="setting-description"
+                data-i18n="autoSwitchProfileDescription"
+                >Automatically select profile based on URL rules</span
+              >
+            </div>
+
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="confirmOverwrite" checked />
+                <span class="label-text" data-i18n="confirmOverwriteLabel"
+                  >Confirm Before Overwriting</span
+                >
+              </label>
+              <span
+                class="setting-description"
+                data-i18n="confirmOverwriteDescription"
+                >Show confirmation when overwriting form data</span
+              >
+            </div>
+
+            <div class="setting-item">
+              <label for="defaultMode" data-i18n="defaultFillModeLabel"
+                >Default Fill Mode:</label
+              >
+              <select id="defaultMode">
+                <option value="overwrite" data-i18n="overwriteMode">
+                  Overwrite Existing
+                </option>
+                <option value="append" data-i18n="appendMode">
+                  Append to Existing
+                </option>
+                <option value="smart" data-i18n="smartMode">Smart Fill</option>
+              </select>
+              <span
+                class="setting-description"
+                data-i18n="defaultModeDescription"
+                >Default behavior when filling form fields</span
+              >
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3 data-i18n="backupRestoreTitle">Backup & Restore</h3>
+            <div class="setting-item">
+              <button
+                id="backupNow"
+                class="secondary"
+                data-i18n="backupNowButton"
+              >
+                Backup Now
+              </button>
+              <span class="setting-description" data-i18n="backupDescription"
+                >Create a backup of all profiles and settings</span
+              >
+            </div>
+
+            <div class="setting-item">
+              <button
+                id="restoreBackup"
+                class="secondary"
+                data-i18n="restoreBackupButton"
+              >
+                Restore Backup
+              </button>
+              <span class="setting-description" data-i18n="restoreDescription"
+                >Restore from a previous backup file</span
+              >
+            </div>
+
+            <div class="setting-item">
+              <button
+                id="resetSettings"
+                class="danger"
+                data-i18n="resetSettingsButton"
+              >
+                Reset All Settings
+              </button>
+              <span
+                class="setting-description warning"
+                data-i18n="resetSettingsWarning"
+                >This will delete all profiles and settings</span
+              >
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3 data-i18n="aboutTitle">About</h3>
+            <div class="about-info">
+              <div class="app-name">AutoFill Pro</div>
+              <div class="app-version" id="appVersion">Version 1.0</div>
+              <div class="app-description" data-i18n="extensionDescription">
+                Advanced autofill extension with profile-based hotkeys and URL
+                rules
+              </div>
+              <div class="app-storage">
+                <span data-i18n="storageUsed">Storage Used:</span>
+                <span id="storageUsed">Calculating...</span>
+              </div>
+              <div
+                class="app-links"
+                style="
+                  margin-top: 15px;
+                  display: flex;
+                  gap: 10px;
+                  flex-wrap: wrap;
+                "
+              >
+                <a
+                  href="about.html"
+                  class="secondary"
+                  style="text-decoration: none"
+                >
+                  <span data-i18n="aboutDeveloper">About Developer</span>
+                </a>
+                <button
+                  id="checkForUpdates"
+                  class="secondary"
+                  data-i18n="checkForUpdates"
+                >
+                  Check for Updates
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Modal -->
+      <div class="modal-overlay" id="profileModal" style="display: none">
+        <div class="modal">
+          <div class="modal-header">
+            <h2 id="modalTitle" data-i18n="editProfile">Edit Profile</h2>
+            <button class="close-modal" id="closeProfileModal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-section">
+              <h4 data-i18n="profileInformation">Profile Information</h4>
+              <div class="form-group">
+                <label for="profileName" data-i18n="profileNameLabel"
+                  >Profile Name:</label
+                >
+                <input
+                  type="text"
+                  id="profileName"
+                  data-i18n-placeholder="profileNamePlaceholder"
+                  placeholder="e.g., Personal, Work, Amazon"
+                />
+              </div>
+
+              <div class="form-group">
+                <label data-i18n="colorThemeLabel">Color Theme:</label>
+                <div class="color-picker" id="colorPicker">
+                  <div
+                    class="color-option"
+                    data-color="#4285f4"
+                    style="background-color: #4285f4"
+                  ></div>
+                  <div
+                    class="color-option"
+                    data-color="#ea4335"
+                    style="background-color: #ea4335"
+                  ></div>
+                  <div
+                    class="color-option"
+                    data-color="#34a853"
+                    style="background-color: #34a853"
+                  ></div>
+                  <div
+                    class="color-option"
+                    data-color="#fbbc04"
+                    style="background-color: #fbbc04"
+                  ></div>
+                  <div
+                    class="color-option"
+                    data-color="#8e44ad"
+                    style="background-color: #8e44ad"
+                  ></div>
+                  <div
+                    class="color-option"
+                    data-color="#00acc1"
+                    style="background-color: #00acc1"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4 data-i18n="formFieldsLabel">Form Fields</h4>
+              <div class="fields-container" id="fieldsContainer">
+                <!-- Fields will be added here -->
+              </div>
+              <button id="addField" class="secondary">
+                <span class="icon">+</span>
+                <span data-i18n="addFieldButton">Add Field</span>
+              </button>
+            </div>
+
+            <div class="form-section">
+              <h4 data-i18n="advancedSettingsLabel">Advanced Settings</h4>
+              <div class="form-group">
+                <label for="defaultMode" data-i18n="defaultFillModeLabel"
+                  >Default Fill Mode:</label
+                >
+                <select id="profileDefaultMode">
+                  <option value="overwrite" data-i18n="overwriteMode">
+                    Overwrite Existing
+                  </option>
+                  <option value="append" data-i18n="appendMode">
+                    Append to Existing
+                  </option>
+                  <option value="smart" data-i18n="smartMode">
+                    Smart Fill
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="cancelProfileBtn"
+              class="secondary"
+              data-i18n="cancelButton"
+            >
+              Cancel
+            </button>
+            <button
+              id="saveProfile"
+              class="primary"
+              data-i18n="saveProfileButton"
+            >
+              Save Profile
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL Rules Modal -->
+      <div class="modal-overlay" id="urlRulesModal" style="display: none">
+        <div class="modal large">
+          <div class="modal-header">
+            <h2>
+              <span data-i18n="urlRulesTitle">URL Rules for</span>
+              <span id="urlRulesProfileName" style="color: #4285f4"></span>
+            </h2>
+            <button class="close-modal" id="closeUrlRulesModal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-section">
+              <p data-i18n="urlRulesDescription">
+                Define URL patterns where this profile should be automatically
+                selected:
+              </p>
+
+              <div class="url-rules-container">
+                <div class="url-rules-list" id="urlRulesContainer">
+                  <!-- URL rules will be added here -->
+                </div>
+
+                <button id="addUrlRule" class="secondary">
+                  <span class="icon">+</span>
+                  <span data-i18n="addUrlRuleButton">Add URL Rule</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="url-rules-hint">
+                <h4 data-i18n="urlRuleTipsTitle">Tips:</h4>
+                <ul>
+                  <li data-i18n="urlRuleTip1">
+                    URL rules are checked in order (top to bottom)
+                  </li>
+                  <li data-i18n="urlRuleTip2">
+                    Disable rules you don't want to use without deleting them
+                  </li>
+                  <li data-i18n="urlRuleTip3">
+                    Use "Include path" for more specific matching
+                  </li>
+                  <li data-i18n="urlRuleTip4">
+                    Test your rules using the Test section
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="cancelUrlRulesBtn"
+              class="secondary"
+              data-i18n="cancelButton"
+            >
+              Cancel
+            </button>
+            <button
+              id="saveUrlRules"
+              class="primary"
+              data-i18n="saveUrlRulesButton"
+            >
+              Save URL Rules
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotkey Modal -->
+      <div class="modal-overlay" id="hotkeyModal" style="display: none">
+        <div class="modal">
+          <div class="modal-header">
+            <h2 data-i18n="setHotkeyTitle">Set Hotkey</h2>
+            <button class="close-modal" id="closeHotkeyModal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="hotkey-recorder">
+              <div class="recorder-display" id="hotkeyDisplay">
+                <span data-i18n="pressKeyCombination"
+                  >Press your key combination...</span
+                >
+              </div>
+              <div class="recorder-instructions">
+                <p data-i18n="hotkeyInstruction1">
+                  Press any key combination (e.g., Ctrl + Shift + 1)
+                </p>
+                <p class="warning" data-i18n="hotkeyWarningText">
+                  Avoid using browser shortcuts like Ctrl+W, Ctrl+T, etc.
+                </p>
+              </div>
+              <div class="recorder-keys" id="pressedKeys">
+                <!-- Keys will be shown here -->
+              </div>
+            </div>
+
+            <div class="current-assignments" id="currentAssignments">
+              <!-- Current hotkey assignments will be shown here -->
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="clearHotkey"
+              class="secondary"
+              data-i18n="clearHotkeyButton"
+            >
+              Clear Hotkey
+            </button>
+            <button
+              id="saveHotkey"
+              class="primary"
+              disabled
+              data-i18n="saveHotkeyButton"
+            >
+              Save Hotkey
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Templates -->
+      <template id="profileTemplate">
+        <div class="profile-card" data-id="">
+          <div class="profile-header">
+            <div class="profile-color"></div>
+            <div class="profile-info">
+              <h3 class="profile-title">Profile Name</h3>
+              <div class="profile-meta">
+                <span class="field-count">0 fields</span>
+                <span class="url-rules-count">0 URL rules</span>
+                <span class="hotkey-indicator" data-hotkey="">No hotkey</span>
+              </div>
+            </div>
+            <div class="profile-actions">
+              <button
+                class="profile-action edit-profile"
+                title="Edit"
+                data-i18n-title="editButton"
+              >
+                <span class="icon">✏️</span>
+              </button>
+              <button
+                class="profile-action url-rules-btn"
+                title="URL Rules"
+                data-i18n-title="urlRulesTitle"
+              >
+                <span class="icon">🌐</span>
+              </button>
+              <button
+                class="profile-action set-hotkey"
+                title="Set Hotkey"
+                data-i18n-title="setHotkeyButton"
+              >
+                <span class="icon">⌨️</span>
+              </button>
+              <button
+                class="profile-action duplicate-profile"
+                title="Duplicate"
+                data-i18n-title="duplicateButton"
+              >
+                <span class="icon">📋</span>
+              </button>
+              <button
+                class="profile-action delete-profile"
+                title="Delete"
+                data-i18n-title="deleteButton"
+              >
+                <span class="icon">🗑️</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template id="fieldTemplate">
+        <div class="field-row">
+          <select class="field-type">
+            <option value="text" data-i18n="textFieldType">Text</option>
+            <option value="email" data-i18n="emailFieldType">Email</option>
+            <option value="tel" data-i18n="telFieldType">Phone</option>
+            <option value="url" data-i18n="urlFieldType">URL</option>
+            <option value="number" data-i18n="numberFieldType">Number</option>
+            <option value="password" data-i18n="passwordFieldType">
+              Password
+            </option>
+            <option value="checkbox" data-i18n="checkboxFieldType">
+              Checkbox
+            </option>
+            <option value="radio" data-i18n="radioFieldType">Radio</option>
+            <option value="select" data-i18n="selectFieldType">Select</option>
+          </select>
+          <input
+            type="text"
+            class="field-name"
+            data-i18n-placeholder="fieldNamePlaceholder"
+            placeholder="Field name or regex"
+          />
+          <input
+            type="text"
+            class="field-value"
+            data-i18n-placeholder="fieldValuePlaceholder"
+            placeholder="Value to fill"
+          />
+          <input
+            type="text"
+            class="field-site"
+            data-i18n-placeholder="fieldSitePlaceholder"
+            placeholder="Site (optional)"
+          />
+          <select class="field-mode">
+            <option value="overwrite" data-i18n="overwriteFieldMode">
+              Overwrite
+            </option>
+            <option value="append" data-i18n="appendFieldMode">Append</option>
+            <option value="prepend" data-i18n="prependFieldMode">
+              Prepend
+            </option>
+          </select>
+          <button
+            class="remove-field"
+            title="Remove field"
+            data-i18n-title="removeField"
+          >
+            ×
+          </button>
+        </div>
+      </template>
+
+      <template id="hotkeyConfigTemplate">
+        <div class="hotkey-config-item" data-profile-id="">
+          <div class="hotkey-profile-info">
+            <div class="profile-color-small"></div>
+            <span class="profile-name">Profile Name</span>
+          </div>
+          <div class="hotkey-display">
+            <span class="hotkey-value" data-i18n="notSet">Not set</span>
+          </div>
+          <div class="hotkey-actions">
+            <button class="set-hotkey-btn" data-i18n="setHotkeyButton">
+              Set Hotkey
+            </button>
+            <button
+              class="clear-hotkey-btn"
+              disabled
+              data-i18n="clearHotkeyButton"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <template id="urlRuleTemplate">
+        <div class="url-rule-row">
+          <select class="url-rule-type">
+            <option value="exact" data-i18n="exactMatch">Exact Match</option>
+            <option value="contains" data-i18n="containsMatch">Contains</option>
+            <option value="startsWith" data-i18n="startsWithMatch">
+              Starts With
+            </option>
+            <option value="endsWith" data-i18n="endsWithMatch">
+              Ends With
+            </option>
+            <option value="regex" data-i18n="regexMatch">Regex</option>
+          </select>
+          <input
+            type="text"
+            class="url-rule-pattern"
+            data-i18n-placeholder="patternPlaceholder"
+            placeholder="Enter pattern"
+          />
+          <div class="url-rule-options">
+            <label>
+              <input type="checkbox" class="url-rule-include-path" checked />
+              <span data-i18n="includePath">Include path</span>
+            </label>
+            <label>
+              <input type="checkbox" class="url-rule-enabled" checked />
+              <span data-i18n="enabled">Enabled</span>
+            </label>
+          </div>
+          <button
+            class="remove-url-rule"
+            title="Remove rule"
+            data-i18n-title="removeRule"
+          >
+            ×
+          </button>
+        </div>
+      </template>
+
+      <template id="urlRuleOverviewTemplate">
+        <div class="url-rule-overview-item" data-profile-id="">
+          <div class="overview-profile">
+            <div class="profile-color-small"></div>
+            <div class="profile-details">
+              <h4 class="profile-name">Profile Name</h4>
+              <div class="profile-rules-count">
+                <span class="count">0</span>
+                <span data-i18n="urlRulesCount">URL rules</span>
+              </div>
+            </div>
+          </div>
+          <div class="overview-rules">
+            <div class="rules-list">
+              <!-- Rules will be added dynamically -->
+            </div>
+          </div>
+          <div class="overview-actions">
+            <button class="edit-url-rules-btn" data-i18n="editButton">
+              Edit
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <template id="urlRuleItemTemplate">
+        <div class="url-rule-item" data-type="" data-pattern="">
+          <div class="rule-type-badge"></div>
+          <div class="rule-pattern"></div>
+          <div class="rule-options">
+            <span class="include-path-badge" data-i18n="includePath"
+              >Include path</span
+            >
+            <span class="status-badge enabled" data-i18n="enabled"
+              >Enabled</span
+            >
+            <span
+              class="status-badge disabled"
+              style="display: none"
+              data-i18n="disabled"
+              >Disabled</span
+            >
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>

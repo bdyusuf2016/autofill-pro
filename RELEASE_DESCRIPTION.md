@@ -7,7 +7,7 @@
 
 ---
 
-## ⚡ What's New in Version 2.2
+## ⚡ What's New in Version 2.4
 
 ### 1. 🔄 Existing Profile Overwrite & Merge Options
 - **Profile Selector**: When capturing fields from web forms, you can now choose to save them as a new profile or apply them directly to an existing profile.

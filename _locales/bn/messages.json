@@ -385,9 +385,17 @@
     "message": "Ctrl+Shift+C - বর্তমান ফর্ম ক্যাপচার করুন",
     "description": "Ctrl+Shift+C শর্টকাট বর্ণনা"
   },
-  "shortcutCtrlShiftF": {
-    "message": "Ctrl+Shift+F - সক্রিয় প্রোফাইল পূরণ করুন",
-    "description": "Ctrl+Shift+F শর্টকাট বর্ণনা"
+  "shortcutOpenAutofillList": {
+    "message": "Ctrl+Shift+F - স্বয়ংক্রিয় ফিল তালিকা খুলুন",
+    "description": "স্বয়ংক্রিয় ফিল তালিকা খোলার জন্য Ctrl+Shift+F শর্টকাট বর্ণনা"
+  },
+  "shortcutCtrlAltF": {
+    "message": "Ctrl+Shift+Y - সক্রিয় প্রোফাইল দিয়ে ফর্ম পূরণ করুন",
+    "description": "Ctrl+Shift+Y শর্টকাট বর্ণনা"
+  },
+  "commandSelectProfileToFill": {
+    "message": "পূরণ করার জন্য একটি প্রোফাইল নির্বাচন করুন",
+    "description": "পূরণ করার জন্য একটি প্রোফাইল নির্বাচন করার জন্য কমান্ডের বর্ণনা"
   },
   "shortcutCustom": {
     "message": "কাস্টম - প্রতিটি প্রোফাইলের জন্য কাস্টম হটকি সেট করুন",
@@ -440,6 +448,10 @@
   "selectFieldType": {
     "message": "সিলেক্ট",
     "description": "সিলেক্ট ফিল্ড টাইপ"
+  },
+  "dateFieldType": {
+    "message": "তারিখ",
+    "description": "তারিখ ফিল্ড টাইপ"
   },
   "overwriteFieldMode": {
     "message": "প্রতিস্থাপন",
@@ -639,5 +651,17 @@
   "urlMatchInfo": {
     "message": "এই ইউআরএলের জন্য স্বয়ংক্রিয়ভাবে নির্বাচিত",
     "description": "যখন প্রোফাইল ইউআরএল দ্বারা স্বয়ংক্রিয়ভাবে নির্বাচিত হয় তখন মেসেজ"
+  },
+  "languageLabel": {
+    "message": "ভাষা",
+    "description": "ভাষা নির্বাচনের জন্য লেবেল"
+  },
+  "languageEnglish": {
+    "message": "ইংরেজি",
+    "description": "ইংরেজি ভাষা অপশন"
+  },
+  "languageBengali": {
+    "message": "বাংলা",
+    "description": "বাংলা ভাষা অপশন"
   }
 }

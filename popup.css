@@ -198,6 +198,91 @@ button:hover {
   border: 1px solid #f5c6cb;
 }
 
+.status.info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f0fe;
+  color: #1a73e8;
+  border: 1px solid #cfe0ff;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(26, 115, 232, 0.2);
+  border-top-color: #1a73e8;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cloud Login Banner */
+.cloud-login-banner {
+  background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.banner-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.banner-text h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.banner-text p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.banner-btn {
+  background: white;
+  color: #1a73e8;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.banner-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.banner-btn:active {
+  transform: translateY(0);
+}
+
 .footer {
   display: flex;
   justify-content: center;
@@ -243,4 +328,126 @@ button:hover {
 
 .hotkey-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+.profile-item.selected {
+  background: #e8f0fe;
+}
+
+.profile-item mark {
+  background: transparent;
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.profile-item:hover {
+  background: #f1f7ff;
+  cursor: pointer;
+}
+
+.no-results button.secondary {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  background: #f1f3f4;
+  color: #333;
+}
+
+.autofill-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(135deg, #1a73e8, #4285f4);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.autofill-btn:hover {
+  filter: brightness(0.95);
+}
+
+.modal-response {
+  background: #f6f8ff;
+  border-top: 1px solid #e6eeff;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+}
+
+.modal-response-header {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1a73e8;
+}
+
+.modal-response pre {
+  max-height: 200px;
+  overflow: auto;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #e8eefc;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Modal overlay and modal box styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 9999;
+}
+
+.modal-overlay .modal {
+  background: #fff;
+  border-radius: 8px;
+  width: calc(100% - 40px);
+  max-width: 700px; /* was 520px */
+  min-width: 400px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 28px 28px 20px 28px; /* more spacious */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.modal-body {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Utility classes */
+.hidden {
+  display: none !important;
+}
+
+/* Small helper to remove link underline when needed */
+.no-underline {
+  text-decoration: none !important;
+}
+
+/* Disabled button styles */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button:disabled:hover {
+  box-shadow: none;
 }

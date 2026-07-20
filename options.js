@@ -8,6 +8,8 @@ class OptionsManager {
     this.currentHotkeyProfileId = null;
     this.capturedHotkey = null;
     this.hotkeyCaptureHandler = null;
+    this.profileModalHotkey = null;
+    this.profileHotkeyCaptureHandler = null;
 
     // Bind methods to maintain context
     this.init = this.init.bind(this);
@@ -34,6 +36,8 @@ class OptionsManager {
     this.closeModal = this.closeModal.bind(this);
     this.setupHotkeyCapture = this.setupHotkeyCapture.bind(this);
     this.cleanupHotkeyCapture = this.cleanupHotkeyCapture.bind(this);
+    this.setupProfileHotkeyCapture = this.setupProfileHotkeyCapture.bind(this);
+    this.cleanupProfileHotkeyCapture = this.cleanupProfileHotkeyCapture.bind(this);
     this.duplicateProfile = this.duplicateProfile.bind(this);
     this.deleteProfile = this.deleteProfile.bind(this);
     this.clearHotkey = this.clearHotkey.bind(this);
@@ -41,6 +45,17 @@ class OptionsManager {
     this.restoreBackup = this.restoreBackup.bind(this);
     this.resetSettings = this.resetSettings.bind(this);
     this.testUrlRule = this.testUrlRule.bind(this);
+    this.setupCloudSyncUI = this.setupCloudSyncUI.bind(this);
+    this.updateSyncStatus = this.updateSyncStatus.bind(this);
+    this.handleSyncLogin = this.handleSyncLogin.bind(this);
+    this.handleSyncLogout = this.handleSyncLogout.bind(this);
+    this.handleSyncNow = this.handleSyncNow.bind(this);
+    this.handlePullFromCloud = this.handlePullFromCloud.bind(this);
+    this.setupCloudSyncEventListeners = this.setupCloudSyncEventListeners.bind(this);
+    this.loadTeletalkPropertyDefinitions = this.loadTeletalkPropertyDefinitions.bind(this);
+    this.handleCreateDssTemplateProfile = this.handleCreateDssTemplateProfile.bind(this);
+    this.handleLoadOcrSourceFile = this.handleLoadOcrSourceFile.bind(this);
+    this.handleCreateProfileFromOcr = this.handleCreateProfileFromOcr.bind(this);
 
     // Initialize
     this.init();
@@ -57,6 +72,7 @@ class OptionsManager {
       this.renderUrlRulesOverview();
       this.loadSettings();
       this.setupEventListeners();
+      await this.setupCloudSyncUI();
       this.checkForCapturedFields();
       this.calculateStorage();
       console.log("OptionsManager init completed");
@@ -77,12 +93,10 @@ class OptionsManager {
 
       this.profiles = data.profiles || {};
       this.hotkeys = data.hotkeys || {};
-      this.settings = data.settings || {
-        enableHotkeys: true,
-        autoSwitchProfile: true,
-        confirmOverwrite: true,
-        defaultMode: "overwrite",
-      };
+      this.settings = data.settings || {};
+      if (!this.settings.language) {
+        this.settings.language = "en";
+      }
 
       console.log("Loaded profiles:", Object.keys(this.profiles).length);
       console.log("Loaded hotkeys:", Object.keys(this.hotkeys).length);
@@ -302,12 +316,12 @@ class OptionsManager {
     if (Object.keys(this.profiles).length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <div style="text-align: center; padding: 40px; color: #666;">
-            <div style="font-size: 48px; margin-bottom: 20px;">📝</div>
-            <h3 style="margin-bottom: 10px;">${
+          <div class="empty-center">
+            <div class="empty-emoji">📝</div>
+            <h3 class="empty-title">${
               chrome.i18n.getMessage("noProfilesMessage") || "No Profiles Yet"
             }</h3>
-            <p style="margin-bottom: 20px;">${
+            <p class="empty-desc">${
               chrome.i18n.getMessage("noProfilesMessage") ||
               "Create your first profile to start autofilling forms"
             }</p>
@@ -318,13 +332,12 @@ class OptionsManager {
           </div>
         </div>
       `;
-
-      const createBtn = document.getElementById("createFirstProfile");
-      if (createBtn) {
-        createBtn.addEventListener("click", () => {
-          this.openProfileModal();
-        });
-      }
+    }
+    const createBtn = document.getElementById("createFirstProfile");
+    if (createBtn) {
+      createBtn.addEventListener("click", () => {
+        this.openProfileModal();
+      });
     }
   }
 
@@ -385,12 +398,10 @@ class OptionsManager {
     if (Object.keys(this.profiles).length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <p style="text-align: center; color: #666; padding: 40px;">
-            ${
-              chrome.i18n.getMessage("noProfilesForHotkeys") ||
-              "No profiles available. Create a profile first to assign hotkeys."
-            }
-          </p>
+          <p class="empty-center">${
+            chrome.i18n.getMessage("noProfilesForHotkeys") ||
+            "No profiles available. Create a profile first to assign hotkeys."
+          }</p>
         </div>
       `;
     }
@@ -450,17 +461,17 @@ class OptionsManager {
           );
 
           if (rule.includePath) {
-            includePathBadge.style.display = "inline-block";
+            includePathBadge.classList.remove("hidden");
           } else {
-            includePathBadge.style.display = "none";
+            includePathBadge.classList.add("hidden");
           }
 
           if (rule.enabled !== false) {
-            enabledBadge.style.display = "inline-block";
-            disabledBadge.style.display = "none";
+            enabledBadge.classList.remove("hidden");
+            disabledBadge.classList.add("hidden");
           } else {
-            enabledBadge.style.display = "none";
-            disabledBadge.style.display = "inline-block";
+            enabledBadge.classList.add("hidden");
+            disabledBadge.classList.remove("hidden");
           }
 
           rulesList.appendChild(ruleClone);
@@ -482,16 +493,16 @@ class OptionsManager {
     if (container.children.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <div style="text-align: center; padding: 40px; color: #666;">
-            <div style="font-size: 48px; margin-bottom: 20px;">🌐</div>
-            <h3 style="margin-bottom: 10px;">${
+          <div class="empty-center">
+            <div class="empty-emoji">🌐</div>
+            <h3 class="empty-title">${
               chrome.i18n.getMessage("noUrlRules") || "No URL Rules Yet"
             }</h3>
-            <p style="margin-bottom: 20px;">${
+            <p class="empty-desc">${
               chrome.i18n.getMessage("noUrlRulesMessage") ||
               "Create URL rules to automatically switch profiles based on website URLs"
             }</p>
-            <p style="font-size: 12px; color: #999;">${
+            <p class="muted-small">${
               chrome.i18n.getMessage("createProfileFirst") ||
               "Create a profile first, then add URL rules to it"
             }</p>
@@ -541,6 +552,22 @@ class OptionsManager {
     }
 
     fieldsContainer.innerHTML = "";
+    this.profileModalHotkey = null; // Reset hotkey
+
+    const hotkeyDisplay = document.getElementById("profileHotkeyDisplay");
+    const setHotkeyBtn = document.getElementById("profileSetHotkeyBtn");
+    const clearHotkeyBtn = document.getElementById("profileClearHotkeyBtn");
+
+    const updateHotkeyDisplay = () => {
+      if (this.profileModalHotkey) {
+        hotkeyDisplay.textContent = this.formatHotkey(this.profileModalHotkey);
+        hotkeyDisplay.classList.remove("recording");
+      } else {
+        hotkeyDisplay.textContent =
+          chrome.i18n.getMessage("notSet") || "Not set";
+        hotkeyDisplay.classList.remove("recording");
+      }
+    };
 
     if (profileId && this.profiles[profileId]) {
       // Edit existing profile
@@ -561,6 +588,12 @@ class OptionsManager {
           option.classList.add("selected");
         }
       });
+
+      // Set hotkey
+      if (this.hotkeys[profileId]) {
+        this.profileModalHotkey = { ...this.hotkeys[profileId] };
+      }
+      updateHotkeyDisplay();
 
       // Add fields
       if (profile.fields && profile.fields.length > 0) {
@@ -587,11 +620,30 @@ class OptionsManager {
         firstColor.classList.add("selected");
       }
 
+      // Reset hotkey display
+      updateHotkeyDisplay();
+
       // Add one empty field
       this.addFieldRow();
     }
 
-    modal.style.display = "flex";
+    // Hotkey button listeners
+    setHotkeyBtn.onclick = () => {
+      this.setupProfileHotkeyCapture();
+      hotkeyDisplay.textContent = "Press keys...";
+      hotkeyDisplay.classList.add("recording");
+    };
+
+    clearHotkeyBtn.onclick = () => {
+      this.profileModalHotkey = null;
+      this.cleanupProfileHotkeyCapture();
+      updateHotkeyDisplay();
+    };
+
+    // Show modal by removing the hidden utility class
+    modal.classList.remove("hidden");
+    // Enable focus trap for accessibility and keyboard users
+    this.enableModalFocus(modal);
   }
 
   addFieldRow(fieldData = {}) {
@@ -620,6 +672,14 @@ class OptionsManager {
     }
     if (fieldData.mode) {
       row.querySelector(".field-mode").value = fieldData.mode;
+    }
+    if (fieldData.cssSelector) {
+      const cssInput = row.querySelector(".field-css");
+      if (cssInput) cssInput.value = fieldData.cssSelector;
+    }
+    if (fieldData.xpath) {
+      const xpathInput = row.querySelector(".field-xpath");
+      if (xpathInput) xpathInput.value = fieldData.xpath;
     }
 
     const removeBtn = row.querySelector(".remove-field");
@@ -661,7 +721,10 @@ class OptionsManager {
       this.addUrlRuleRow();
     }
 
-    modal.style.display = "flex";
+    // Show modal by removing the hidden utility class
+    modal.classList.remove("hidden");
+    // Enable focus trap for accessibility and keyboard users
+    this.enableModalFocus(modal);
   }
 
   addUrlRuleRow(ruleData = {}) {
@@ -764,7 +827,8 @@ class OptionsManager {
       saveBtn.disabled = !this.capturedHotkey;
     }
 
-    modal.style.display = "flex";
+    // Show modal by removing the hidden utility class
+    modal.classList.remove("hidden");
 
     // Setup hotkey capture
     this.setupHotkeyCapture();
@@ -879,11 +943,11 @@ class OptionsManager {
           chrome.i18n.getMessage("currentAssignments") ||
           "Currently Assigned Hotkeys:"
         }</h4>
-        <ul style="list-style: none; padding: 0; margin-top: 10px;">
+        <ul class="simple-list">
           ${currentHotkeys
             .map(
               (hk) => `
-            <li style="padding: 5px 0; border-bottom: 1px solid #eee;">
+            <li class="simple-list-item">
               <strong>${hk.name}:</strong> <code>${hk.hotkey}</code>
             </li>
           `
@@ -892,7 +956,7 @@ class OptionsManager {
         </ul>
       `;
     } else {
-      container.innerHTML = `<p style="color: #666; text-align: center;">${
+      container.innerHTML = `<p class="empty-center">${
         chrome.i18n.getMessage("noOtherHotkeys") || "No other hotkeys assigned"
       }</p>`;
     }
@@ -924,12 +988,17 @@ class OptionsManager {
     const fields = [];
 
     fieldRows.forEach((row) => {
+      const cssEl = row.querySelector(".field-css");
+      const xpathEl = row.querySelector(".field-xpath");
+      
       const field = {
         type: row.querySelector(".field-type").value,
         name: row.querySelector(".field-name").value.trim(),
         value: row.querySelector(".field-value").value.trim(),
         site: row.querySelector(".field-site").value.trim(),
         mode: row.querySelector(".field-mode").value,
+        cssSelector: cssEl ? cssEl.value.trim() : "",
+        xpath: xpathEl ? xpathEl.value.trim() : ""
       };
 
       if (field.name && field.value) {
@@ -947,6 +1016,37 @@ class OptionsManager {
     }
 
     const profileId = this.currentProfileId || `profile_${Date.now()}`;
+
+    // Handle hotkey
+    if (this.profileModalHotkey) {
+      const duplicate = Object.entries(this.hotkeys).find(([id, hk]) => {
+        return (
+          id !== profileId &&
+          hk.ctrlKey === this.profileModalHotkey.ctrlKey &&
+          hk.shiftKey === this.profileModalHotkey.shiftKey &&
+          hk.altKey === this.profileModalHotkey.altKey &&
+          hk.key === this.profileModalHotkey.key
+        );
+      });
+
+      if (duplicate) {
+        const profile = this.profiles[duplicate[0]];
+        const message =
+          chrome.i18n.getMessage("hotkeyConflictMessage", [profile.name]) ||
+          `This hotkey is already assigned to "${profile.name}". Do you want to reassign it?`;
+
+        if (confirm(message)) {
+          delete this.hotkeys[duplicate[0]];
+        } else {
+          // Do not save the hotkey
+          this.profileModalHotkey = this.hotkeys[profileId] || null;
+        }
+      }
+      this.hotkeys[profileId] = this.profileModalHotkey;
+    } else {
+      // If hotkey was cleared
+      delete this.hotkeys[profileId];
+    }
 
     this.profiles[profileId] = {
       id: profileId,
@@ -983,7 +1083,7 @@ class OptionsManager {
     const ruleRows = document.querySelectorAll(".url-rule-row");
     const urlRules = [];
 
-    ruleRows.forEach((row) => {
+    for (const row of ruleRows) {
       const rule = {
         type: row.querySelector(".url-rule-type").value,
         pattern: row.querySelector(".url-rule-pattern").value.trim(),
@@ -991,18 +1091,24 @@ class OptionsManager {
         enabled: row.querySelector(".url-rule-enabled").checked,
       };
 
-      if (rule.pattern) {
-        urlRules.push(rule);
+      if (!rule.pattern) {
+        continue;
       }
-    });
 
-    if (urlRules.length === 0) {
-      this.showMessage(
-        chrome.i18n.getMessage("urlRuleRequired") ||
-          "Please add at least one URL rule",
-        "error"
-      );
-      return;
+      const validation = UrlRuleMatcher.validateRule(rule);
+      if (!validation.valid) {
+        this.showMessage(
+          validation.reason === "regex"
+            ? chrome.i18n.getMessage("invalidRegex") ||
+                "Invalid regex pattern: " + validation.error.message
+            : chrome.i18n.getMessage("urlRuleRequired") ||
+                "Please enter a valid URL rule",
+          "error"
+        );
+        return;
+      }
+
+      urlRules.push(rule);
     }
 
     this.profiles[this.currentProfileId].urlRules = urlRules;
@@ -1013,7 +1119,9 @@ class OptionsManager {
     this.renderUrlRulesOverview();
 
     this.showMessage(
-      chrome.i18n.getMessage("urlRulesSaved") || "URL rules saved successfully"
+      urlRules.length > 0
+        ? chrome.i18n.getMessage("urlRulesSaved") || "URL rules saved successfully"
+        : chrome.i18n.getMessage("noUrlRules") || "URL rules cleared"
     );
   }
 
@@ -1087,6 +1195,49 @@ class OptionsManager {
     }
   }
 
+  setupProfileHotkeyCapture() {
+    console.log("Setting up profile hotkey capture");
+    this.cleanupProfileHotkeyCapture(); // Clean up any existing listener
+
+    const hotkeyDisplay = document.getElementById("profileHotkeyDisplay");
+
+    this.profileHotkeyCaptureHandler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      this.profileModalHotkey = {
+        ctrlKey: e.ctrlKey,
+        shiftKey: e.shiftKey,
+        altKey: e.altKey,
+        key: e.key.toLowerCase(),
+      };
+
+      hotkeyDisplay.textContent = this.formatHotkey(this.profileModalHotkey);
+      hotkeyDisplay.classList.remove("recording");
+      this.cleanupProfileHotkeyCapture();
+    };
+
+    document.addEventListener("keydown", this.profileHotkeyCaptureHandler, {
+      capture: true,
+    });
+  }
+
+  cleanupProfileHotkeyCapture() {
+    console.log("Cleaning up profile hotkey capture");
+    if (this.profileHotkeyCaptureHandler) {
+      document.removeEventListener(
+        "keydown",
+        this.profileHotkeyCaptureHandler,
+        { capture: true }
+      );
+      this.profileHotkeyCaptureHandler = null;
+    }
+  }
+
   async duplicateProfile(profileId) {
     console.log("Duplicating profile:", profileId);
     const original = this.profiles[profileId];
@@ -1143,11 +1294,18 @@ class OptionsManager {
     console.log("Closing modal:", modalId);
     const modal = document.getElementById(modalId);
     if (modal) {
-      modal.style.display = "none";
+      // remove focus trap and restore focus
+      this.disableModalFocus(modal);
+
+      // Use the hidden utility class instead of inline styles so CSS !important rules are respected
+      modal.classList.add("hidden");
     }
 
     if (modalId === "hotkeyModal") {
       this.cleanupHotkeyCapture();
+    }
+    if (modalId === "profileModal") {
+      this.cleanupProfileHotkeyCapture();
     }
   }
 
@@ -1157,6 +1315,7 @@ class OptionsManager {
     const autoSwitchProfile = document.getElementById("autoSwitchProfile");
     const confirmOverwrite = document.getElementById("confirmOverwrite");
     const defaultMode = document.getElementById("defaultMode");
+    const language = document.getElementById("language");
 
     if (enableHotkeys)
       enableHotkeys.checked = this.settings.enableHotkeys !== false;
@@ -1166,6 +1325,24 @@ class OptionsManager {
       confirmOverwrite.checked = this.settings.confirmOverwrite !== false;
     if (defaultMode)
       defaultMode.value = this.settings.defaultMode || "overwrite";
+    if (language) language.value = this.settings.language || "en";
+
+    // Load E2EE Settings
+    chrome.storage.local.get(['encryptionEnabled', 'masterPassword'], (res) => {
+      const encryptionEnabled = document.getElementById("encryptionEnabled");
+      const masterPassword = document.getElementById("masterPassword");
+      const masterPasswordItem = document.getElementById("masterPasswordItem");
+      
+      if (encryptionEnabled) {
+        encryptionEnabled.checked = !!res.encryptionEnabled;
+        if (masterPasswordItem) {
+          masterPasswordItem.style.display = res.encryptionEnabled ? "block" : "none";
+        }
+      }
+      if (masterPassword && res.masterPassword) {
+        masterPassword.value = res.masterPassword;
+      }
+    });
   }
 
   async saveSettings() {
@@ -1175,7 +1352,25 @@ class OptionsManager {
       autoSwitchProfile: document.getElementById("autoSwitchProfile").checked,
       confirmOverwrite: document.getElementById("confirmOverwrite").checked,
       defaultMode: document.getElementById("defaultMode").value,
+      language: document.getElementById("language").value,
     };
+
+    const encryptEnabledCheckbox = document.getElementById("encryptionEnabled");
+    const masterPasswordInput = document.getElementById("masterPassword");
+    
+    const encryptEnabledVal = encryptEnabledCheckbox ? encryptEnabledCheckbox.checked : false;
+    const masterPasswordVal = masterPasswordInput ? masterPasswordInput.value.trim() : "";
+    
+    if (encryptEnabledVal && !masterPasswordVal) {
+      this.showMessage("Please set a Master Password to enable Encryption", "error");
+      if (encryptEnabledCheckbox) encryptEnabledCheckbox.checked = false;
+      return;
+    }
+
+    await chrome.storage.local.set({
+      encryptionEnabled: encryptEnabledVal,
+      masterPassword: masterPasswordVal
+    });
 
     await this.saveAllData();
     this.showMessage(
@@ -1227,13 +1422,12 @@ class OptionsManager {
         }
 
         const confirmMessage =
-          chrome.i18n.getMessage("confirmRestore") ||
-          "This will replace all current profiles and settings. Continue?";
+          "This will merge the profiles from the backup with your current profiles. Existing profiles with the same ID will be overwritten. Continue?";
 
         if (confirm(confirmMessage)) {
-          this.profiles = backupData.profiles;
-          this.hotkeys = backupData.hotkeys || {};
-          this.settings = backupData.settings || {};
+          this.profiles = { ...this.profiles, ...backupData.profiles };
+          this.hotkeys = { ...this.hotkeys, ...(backupData.hotkeys || {}) };
+          this.settings = backupData.settings || {}; // Overwrite settings from backup
 
           await this.saveAllData();
           this.renderProfiles();
@@ -1302,67 +1496,58 @@ class OptionsManager {
     }
 
     try {
-      const urlObj = new URL(testUrl);
-      const urlToTest = includePath
-        ? urlObj.hostname + urlObj.pathname
-        : urlObj.hostname;
-
-      let matches = false;
-      switch (ruleType) {
-        case "exact":
-          matches = urlToTest === rulePattern;
-          break;
-        case "contains":
-          matches = urlToTest.includes(rulePattern);
-          break;
-        case "startsWith":
-          matches = urlToTest.startsWith(rulePattern);
-          break;
-        case "endsWith":
-          matches = urlToTest.endsWith(rulePattern);
-          break;
-        case "regex":
-          try {
-            const regex = new RegExp(rulePattern);
-            matches = regex.test(urlToTest);
-          } catch (e) {
-            this.showMessage(
-              chrome.i18n.getMessage("invalidRegex") ||
-                "Invalid regex pattern: " + e.message,
-              "error"
-            );
-            return;
-          }
-          break;
+      const validation = UrlRuleMatcher.validateRule({
+        type: ruleType,
+        pattern: rulePattern,
+      });
+      if (!validation.valid && validation.reason === "regex") {
+        this.showMessage(
+          chrome.i18n.getMessage("invalidRegex") ||
+            "Invalid regex pattern: " + validation.error.message,
+          "error"
+        );
+        return;
       }
+
+      const evaluation = UrlRuleMatcher.matchRule(testUrl, {
+        type: ruleType,
+        pattern: rulePattern,
+        includePath,
+        enabled: true,
+      });
+      const testedValue =
+        evaluation.matchedValue || evaluation.candidates[0] || testUrl;
+      const candidatesText = evaluation.candidates.join(" | ");
 
       const resultDiv = document.getElementById("testResult");
       if (resultDiv) {
-        if (matches) {
+        if (evaluation.matches) {
           resultDiv.innerHTML = `
             <div class="test-result success">
-              <div style="font-size: 24px; margin-bottom: 10px;">✅</div>
-              <div style="font-weight: 500; margin-bottom: 5px;">${
-                chrome.i18n.getMessage("urlMatches") ||
-                "URL matches the pattern!"
-              }</div>
+                  <div class="test-emoji">✅</div>
+                  <div class="test-title">${
+                    chrome.i18n.getMessage("urlMatches") ||
+                    "URL matches the pattern!"
+                  }</div>
               <div class="test-details">${
                 chrome.i18n.getMessage("testedUrl") || "Tested:"
-              } ${urlToTest}</div>
+              } ${testedValue}</div>
+              <div class="test-details">Candidates: ${candidatesText}</div>
             </div>
           `;
           resultDiv.className = "test-result success";
         } else {
           resultDiv.innerHTML = `
             <div class="test-result error">
-              <div style="font-size: 24px; margin-bottom: 10px;">❌</div>
-              <div style="font-weight: 500; margin-bottom: 5px;">${
+              <div class="test-emoji">❌</div>
+              <div class="test-title">${
                 chrome.i18n.getMessage("urlDoesNotMatch") ||
                 "URL does not match the pattern"
               }</div>
               <div class="test-details">${
                 chrome.i18n.getMessage("testedUrl") || "Tested:"
-              } ${urlToTest}</div>
+              } ${testedValue}</div>
+              <div class="test-details">Candidates: ${candidatesText}</div>
             </div>
           `;
           resultDiv.className = "test-result error";
@@ -1463,6 +1648,71 @@ class OptionsManager {
 
   showError(message) {
     this.showMessage(message, "error", 5000);
+  }
+
+  // Focus trap helpers for modals
+  enableModalFocus(modal) {
+    if (!modal) return;
+    // cleanup if already attached
+    this.disableModalFocus(modal);
+
+    modal._previouslyFocused = document.activeElement;
+
+    const selector =
+      'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusables = Array.from(modal.querySelectorAll(selector)).filter(
+      (el) => el.offsetParent !== null
+    );
+    modal._focusables = focusables;
+
+    if (focusables.length > 0) {
+      try {
+        focusables[0].focus();
+      } catch (e) {
+        /* ignore */
+      }
+    }
+
+    modal._focusHandler = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        this.closeModal(modal.id);
+        return;
+      }
+
+      if (e.key !== "Tab") return;
+
+      const curr = document.activeElement;
+      const idx = modal._focusables.indexOf(curr);
+      if (e.shiftKey) {
+        if (idx === 0 || curr === modal) {
+          modal._focusables[modal._focusables.length - 1].focus();
+          e.preventDefault();
+        }
+      } else {
+        if (idx === modal._focusables.length - 1) {
+          modal._focusables[0].focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", modal._focusHandler, true);
+  }
+
+  disableModalFocus(modal) {
+    if (!modal) return;
+    if (modal._focusHandler) {
+      document.removeEventListener("keydown", modal._focusHandler, true);
+      modal._focusHandler = null;
+    }
+    if (modal._previouslyFocused && modal._previouslyFocused.focus) {
+      try {
+        modal._previouslyFocused.focus();
+      } catch (e) {}
+    }
+    modal._previouslyFocused = null;
+    modal._focusables = null;
   }
 
   checkForCapturedFields() {
@@ -1672,6 +1922,14 @@ class OptionsManager {
       });
     }
 
+    const language = document.getElementById("language");
+    if (language) {
+      language.addEventListener("change", () => {
+        this.saveSettings();
+        chrome.runtime.sendMessage({ action: "reloadExtension" });
+      });
+    }
+
     // Backup/Restore buttons
     const backupNowBtn = document.getElementById("backupNow");
     if (backupNowBtn) {
@@ -1704,15 +1962,6 @@ class OptionsManager {
       });
     });
 
-    // Close modals on outside click
-    document.querySelectorAll(".modal-overlay").forEach((modal) => {
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          this.closeModal(modal.id);
-        }
-      });
-    });
-
     // Check for updates button
     const checkForUpdatesBtn = document.getElementById("checkForUpdates");
     if (checkForUpdatesBtn) {
@@ -1725,7 +1974,629 @@ class OptionsManager {
       });
     }
 
+    const aboutDeveloperBtn = document.getElementById("aboutDeveloperBtn");
+    if (aboutDeveloperBtn) {
+      aboutDeveloperBtn.addEventListener("click", () => {
+        window.location.href = "about.html";
+      });
+    }
+
+    // PDF Import listeners
+    const uploadPdfBtn = document.getElementById("uploadPdfBtn");
+    const pdfFileInput = document.getElementById("pdfFileInput");
+    const importProfileBtn = document.getElementById("importProfileBtn");
+    const createDssTemplateBtn = document.getElementById("createDssTemplateBtn");
+    const ocrSourceFileInput = document.getElementById("ocrSourceFileInput");
+    const loadOcrSourceBtn = document.getElementById("loadOcrSourceBtn");
+    const createFromOcrBtn = document.getElementById("createFromOcrBtn");
+
+    if (uploadPdfBtn) {
+      uploadPdfBtn.addEventListener("click", () => {
+        this.handlePdfUpload();
+      });
+    }
+
+    if (pdfFileInput) {
+      pdfFileInput.addEventListener("change", (e) => {
+        // Optional: auto-trigger on file select
+        if (e.target.files.length > 0) {
+          this.handlePdfUpload();
+        }
+      });
+    }
+
+    if (importProfileBtn) {
+      importProfileBtn.addEventListener("click", () => {
+        this.handleCreateProfileFromPdf();
+      });
+    }
+
+    if (createDssTemplateBtn) {
+      createDssTemplateBtn.addEventListener("click", () => {
+        this.handleCreateDssTemplateProfile();
+      });
+    }
+
+    if (loadOcrSourceBtn) {
+      loadOcrSourceBtn.addEventListener("click", () => {
+        this.handleLoadOcrSourceFile();
+      });
+    }
+
+    if (ocrSourceFileInput) {
+      ocrSourceFileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          this.handleLoadOcrSourceFile();
+        }
+      });
+    }
+
+    if (createFromOcrBtn) {
+      createFromOcrBtn.addEventListener("click", () => {
+        this.handleCreateProfileFromOcr();
+      });
+    }
+
+    // E2EE settings checkbox listener
+    const encryptionEnabled = document.getElementById("encryptionEnabled");
+    if (encryptionEnabled) {
+      encryptionEnabled.addEventListener("change", function() {
+        const item = document.getElementById("masterPasswordItem");
+        if (item) {
+          item.style.display = this.checked ? "block" : "none";
+        }
+      });
+    }
+
+    // Master Password save listener (blur)
+    const masterPasswordInput = document.getElementById("masterPassword");
+    if (masterPasswordInput) {
+      masterPasswordInput.addEventListener("blur", () => {
+        this.saveSettings();
+      });
+    }
+
+    // Visual Capture button trigger
+    const visualCaptureBtn = document.getElementById("visualCaptureBtn");
+    if (visualCaptureBtn) {
+      visualCaptureBtn.addEventListener("click", async () => {
+        try {
+          const tabs = await chrome.tabs.query({ lastFocusedWindow: true });
+          const targetTab = tabs.find(t => t.url && t.url.startsWith("http") && !t.url.includes(chrome.runtime.id));
+          if (targetTab) {
+            await chrome.tabs.update(targetTab.id, { active: true });
+            await chrome.tabs.sendMessage(targetTab.id, { action: "startVisualCapture" });
+            window.close();
+          } else {
+            this.showMessage("Please open a webpage tab first.", "error");
+          }
+        } catch (e) {
+          this.showMessage("Failed to trigger visual capture: " + e.message, "error");
+        }
+      });
+    }
+
     console.log("Event listeners setup completed");
+  }
+
+  // ============ PDF Import Methods ============
+
+  async handlePdfUpload() {
+    console.log("PDF upload handler triggered");
+
+    const pdfFileInput = document.getElementById("pdfFileInput");
+    const file = pdfFileInput.files[0];
+
+    if (!file) {
+      this.showError("Please select a PDF file");
+      return;
+    }
+
+    // Validate file
+    if (!pdfParser.isValidPDF(file)) {
+      this.showError("Please select a valid PDF file");
+      return;
+    }
+
+    const fileSizeMB = pdfParser.getFileSizeMB(file);
+    if (fileSizeMB > 10) {
+      this.showError(`File size too large (${fileSizeMB}MB). Maximum: 10MB`);
+      return;
+    }
+
+    // Show loading state
+    const uploadBtn = document.getElementById("uploadPdfBtn");
+    const originalText = uploadBtn.textContent;
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = "⏳ Processing...";
+
+    try {
+      // Parse PDF
+      const parseResult = await pdfParser.parsePDF(file);
+
+      if (!parseResult.success) {
+        throw new Error(parseResult.error || "Failed to parse PDF");
+      }
+
+      if (!Array.isArray(parseResult.fields) || parseResult.fields.length === 0) {
+        throw new Error(
+          "No fillable values were found in this PDF. Try a saved applicant copy, another filled Teletalk PDF, or use Create Teletalk Template."
+        );
+      }
+
+      console.log("PDF parsed successfully:", parseResult);
+
+      // Map fields
+      const mappedData = teleTalkMapper.mapFields(parseResult.fields);
+      console.log("Fields mapped:", mappedData);
+
+      // Store for later use
+      this.currentPdfData = mappedData;
+
+      // Display preview
+      this.displayPdfPreview(parseResult.fields, mappedData);
+
+      // Show success message
+      this.showMessage(
+        `✅ PDF processed successfully! Found ${parseResult.fields.length} fields.`,
+        "success"
+      );
+    } catch (error) {
+      console.error("PDF processing error:", error);
+      this.showError(`Error processing PDF: ${error.message}`);
+    } finally {
+      uploadBtn.disabled = false;
+      uploadBtn.textContent = originalText;
+    }
+  }
+
+  displayPdfPreview(extractedFields, mappedData) {
+    const previewDiv = document.getElementById("pdfPreview");
+    const tbody = document.querySelector("#extractedFieldsTable tbody");
+    const statsDiv = document.getElementById("extractionStats");
+    const importBtn = document.getElementById("importProfileBtn");
+
+    // Clear previous rows
+    tbody.innerHTML = "";
+
+    // Add field rows
+    for (const field of extractedFields) {
+      const row = document.createElement("tr");
+      row.style.borderBottom = "1px solid #e0e0e0";
+      row.innerHTML = `
+        <td style="padding: 8px; word-break: break-word;">${this.escapeHtml(field.name)}</td>
+        <td style="padding: 8px; word-break: break-word;">${this.escapeHtml(field.value.substring(0, 50))}</td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Update stats
+    const matchedCount = mappedData.matchedCount;
+    const unmappedCount = mappedData.unmapped.length;
+    statsDiv.innerHTML = `
+      <strong>Extraction Results:</strong><br>
+      ✅ Matched fields: ${matchedCount}<br>
+      ⚠️ Unmapped fields: ${unmappedCount}<br>
+      📊 Total fields: ${extractedFields.length}
+    `;
+
+    // Show preview and button
+    previewDiv.style.display = "block";
+    importBtn.style.display = "block";
+  }
+
+  async loadTeletalkPropertyDefinitions() {
+    const response = await fetch(chrome.runtime.getURL("teletalk-dss-properties.json"));
+    if (!response.ok) {
+      throw new Error("Could not load Teletalk property definitions");
+    }
+
+    const data = await response.json();
+    return Array.isArray(data.fields) ? data.fields : [];
+  }
+
+  async handleLoadOcrSourceFile() {
+    const input = document.getElementById("ocrSourceFileInput");
+    const textarea = document.getElementById("ocrTextInput");
+    const file = input && input.files ? input.files[0] : null;
+
+    if (!file) {
+      this.showError("Please choose a TXT or HTML file first");
+      return;
+    }
+
+    try {
+      const extractedText = await ocrParser.extractTextFromFile(file);
+      textarea.value = extractedText.trim();
+      this.showMessage(`Loaded OCR/text source from "${file.name}"`, "success");
+    } catch (error) {
+      console.error("Error loading OCR source file:", error);
+      this.showError(`Error loading OCR source: ${error.message}`);
+    }
+  }
+
+  async handleCreateProfileFromPdf() {
+    if (!this.currentPdfData) {
+      this.showError("Please upload a PDF first");
+      return;
+    }
+
+    try {
+      // Create profile from mapped data
+      const profile = teleTalkMapper.createProfile(this.currentPdfData);
+
+      // Get existing profiles
+      const data = await chrome.storage.local.get("profiles");
+      const profiles = data.profiles || {};
+
+      // Add new profile
+      profiles[profile.id] = profile;
+
+      // Save to storage
+      await chrome.storage.local.set({ profiles });
+
+      console.log("Profile created from PDF:", profile);
+
+      // Clear input
+      document.getElementById("pdfFileInput").value = "";
+      document.getElementById("pdfPreview").style.display = "none";
+      document.getElementById("importProfileBtn").style.display = "none";
+      this.currentPdfData = null;
+
+      // Show success
+      this.showMessage(
+        `✅ Profile "${profile.name}" created successfully from PDF!`,
+        "success"
+      );
+
+      // Reload profiles
+      this.loadAllData();
+    } catch (error) {
+      console.error("Error creating profile from PDF:", error);
+      this.showError(`Error creating profile: ${error.message}`);
+    }
+  }
+
+  async handleCreateDssTemplateProfile() {
+    try {
+      const propertyDefinitions = await this.loadTeletalkPropertyDefinitions();
+      if (propertyDefinitions.length === 0) {
+        throw new Error("No Teletalk field properties were found");
+      }
+
+      const profile = teleTalkMapper.createTemplateProfile(
+        propertyDefinitions,
+        "Teletalk Template"
+      );
+
+      const data = await chrome.storage.local.get("profiles");
+      const profiles = data.profiles || {};
+      profiles[profile.id] = profile;
+
+      await chrome.storage.local.set({ profiles });
+      await this.loadAllData();
+      this.renderProfiles();
+      this.renderHotkeyConfig();
+      this.renderUrlRulesOverview();
+
+      this.showMessage(
+        'Template profile "Teletalk Template" created. Edit the field values before using autofill.',
+        "success",
+        5000
+      );
+    } catch (error) {
+      console.error("Error creating DSS template profile:", error);
+      this.showError(`Error creating Teletalk template: ${error.message}`);
+    }
+  }
+
+  async handleCreateProfileFromOcr() {
+    const textarea = document.getElementById("ocrTextInput");
+    const sourceText = textarea ? textarea.value : "";
+
+    if (!sourceText || !sourceText.trim()) {
+      this.showError("Please paste OCR text or load a TXT/HTML source first");
+      return;
+    }
+
+    try {
+      const propertyDefinitions = await this.loadTeletalkPropertyDefinitions();
+      const ocrResult = ocrParser.parseText(
+        sourceText,
+        teleTalkMapper,
+        propertyDefinitions
+      );
+
+      if (!ocrResult.success || !ocrResult.fields.length) {
+        throw new Error(
+          ocrResult.error ||
+            "Could not detect Teletalk fields from the OCR text"
+        );
+      }
+
+      const mappedData = teleTalkMapper.mapFields(ocrResult.fields);
+      const profile = teleTalkMapper.createProfile(mappedData);
+
+      const data = await chrome.storage.local.get("profiles");
+      const profiles = data.profiles || {};
+      profiles[profile.id] = profile;
+
+      await chrome.storage.local.set({ profiles });
+      await this.loadAllData();
+      this.renderProfiles();
+      this.renderHotkeyConfig();
+      this.renderUrlRulesOverview();
+
+      this.showMessage(
+        `OCR/Text profile created with ${ocrResult.fields.length} detected values.`,
+        "success",
+        5000
+      );
+    } catch (error) {
+      console.error("Error creating OCR/text profile:", error);
+      this.showError(`Error creating OCR/Text profile: ${error.message}`);
+    }
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ============ Cloud Sync Methods ============
+
+  async setupCloudSyncUI() {
+    console.log("Setting up cloud sync UI...");
+
+    const syncSettings = await new Promise((resolve) => {
+      chrome.storage.local.get(['syncEnabled', 'autoSyncEnabled'], (result) => resolve(result));
+    });
+
+    const enableCloudSyncCheckbox = document.getElementById('enableCloudSync');
+    const autoSyncCheckbox = document.getElementById('autoSyncOnChange');
+
+    if (enableCloudSyncCheckbox && syncSettings.syncEnabled !== undefined) {
+      enableCloudSyncCheckbox.checked = syncSettings.syncEnabled;
+    }
+    if (autoSyncCheckbox && syncSettings.autoSyncEnabled !== undefined) {
+      autoSyncCheckbox.checked = syncSettings.autoSyncEnabled;
+    }
+
+    if (typeof firebaseAuth !== 'undefined') {
+      // Listen for auth state changes
+      firebaseAuth.onAuthStateChange(() => {
+        this.updateSyncStatus();
+      });
+
+      // Listen for storage changes so the UI updates when login happens in another tab
+      chrome.storage.onChanged.addListener((changes, areaName) => {
+        if (areaName === 'local' && changes.user) {
+          this.updateSyncStatus();
+        }
+      });
+
+      // Refresh status when the page becomes active again
+      window.addEventListener('focus', () => {
+        this.updateSyncStatus();
+      });
+      
+      // Update status on load
+      this.updateSyncStatus();
+      
+      // Set up event listeners
+      this.setupCloudSyncEventListeners();
+    } else {
+      console.warn("Firebase not available for cloud sync");
+    }
+  }
+
+  async updateSyncStatus() {
+    console.log("Updating sync status...");
+    const storageData = await new Promise((resolve) => {
+      chrome.storage.local.get(['user'], (result) => resolve(result));
+    });
+    const user = storageData?.user || firebaseAuth?.getCurrentUser();
+    const userInfoDiv = document.getElementById('syncUserInfo');
+    const notLoggedInDiv = document.getElementById('syncNotLoggedIn');
+    const loginBtn = document.getElementById('syncLoginBtn');
+    const logoutBtn = document.getElementById('syncLogoutBtn');
+    const settingsBox = document.getElementById('syncSettingsBox');
+    const userEmailSpan = document.getElementById('syncUserEmail');
+
+    const enableCloudSyncCheckbox = document.getElementById('enableCloudSync');
+    const autoSyncCheckbox = document.getElementById('autoSyncOnChange');
+
+    if (user) {
+      // User is logged in
+      if (userInfoDiv) userInfoDiv.style.display = 'block';
+      if (notLoggedInDiv) notLoggedInDiv.style.display = 'none';
+      if (userEmailSpan) userEmailSpan.textContent = user.email || '';
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      if (settingsBox) settingsBox.style.display = 'block';
+      if (enableCloudSyncCheckbox && firebaseSync) {
+        enableCloudSyncCheckbox.checked = firebaseSync.isSyncEnabled;
+      }
+      if (autoSyncCheckbox && firebaseSync) {
+        autoSyncCheckbox.checked = firebaseSync.getAutoSyncEnabled();
+      }
+
+      // Update last sync time
+      if (firebaseSync && typeof firebaseSync !== 'undefined') {
+        const lastSyncTime = firebaseSync.getLastSyncTime();
+        const lastSyncDiv = document.getElementById('lastSyncTime');
+        if (lastSyncDiv) {
+          if (lastSyncTime) {
+            const syncDate = new Date(lastSyncTime);
+            lastSyncDiv.textContent = `Last sync: ${syncDate.toLocaleString()}`;
+          } else {
+            lastSyncDiv.textContent = 'Last sync: Never';
+          }
+        }
+      }
+    } else {
+      // User is not logged in
+      if (userInfoDiv) userInfoDiv.style.display = 'none';
+      if (notLoggedInDiv) notLoggedInDiv.style.display = 'block';
+      if (loginBtn) loginBtn.style.display = 'inline-block';
+      if (logoutBtn) logoutBtn.style.display = 'none';
+      if (settingsBox) settingsBox.style.display = 'none';
+      if (enableCloudSyncCheckbox && firebaseSync) {
+        enableCloudSyncCheckbox.checked = firebaseSync.isSyncEnabled;
+      }
+    }
+  }
+
+  setupCloudSyncEventListeners() {
+    console.log("Setting up cloud sync event listeners...");
+    
+    const loginBtn = document.getElementById('syncLoginBtn');
+    const logoutBtn = document.getElementById('syncLogoutBtn');
+    const syncNowBtn = document.getElementById('syncNowBtn');
+    const syncPullBtn = document.getElementById('syncPullBtn');
+    const enableCloudSyncCheckbox = document.getElementById('enableCloudSync');
+    const autoSyncCheckbox = document.getElementById('autoSyncOnChange');
+
+    if (loginBtn) {
+      loginBtn.addEventListener('click', () => this.handleSyncLogin());
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => this.handleSyncLogout());
+    }
+
+    if (syncNowBtn) {
+      syncNowBtn.addEventListener('click', () => this.handleSyncNow());
+    }
+
+    if (syncPullBtn) {
+      syncPullBtn.addEventListener('click', () => this.handlePullFromCloud());
+    }
+
+    if (enableCloudSyncCheckbox) {
+      enableCloudSyncCheckbox.addEventListener('change', async (e) => {
+        if (e.target.checked) {
+          if (firebaseSync) {
+            await firebaseSync.enableSync();
+            this.showMessage('Cloud sync enabled');
+          }
+        } else {
+          if (firebaseSync) {
+            await firebaseSync.disableSync();
+            this.showMessage('Cloud sync disabled');
+          }
+        }
+      });
+    }
+
+    if (autoSyncCheckbox) {
+      autoSyncCheckbox.addEventListener('change', async (e) => {
+        const enabled = e.target.checked;
+        if (firebaseSync) {
+          await firebaseSync.setAutoSyncEnabled(enabled);
+        }
+        this.showMessage(enabled ? 'Auto-sync enabled' : 'Auto-sync disabled');
+      });
+    }
+  }
+
+  handleSyncLogin() {
+    console.log("Opening login page...");
+    if (!firebaseAuth) {
+      this.showMessage('Firebase not configured. Please setup Firebase first.', 'error');
+      return;
+    }
+    
+    // Open login page in a new tab
+    chrome.tabs.create({
+      url: chrome.runtime.getURL('login.html'),
+      active: true
+    });
+  }
+
+  handleSyncLogout() {
+    console.log("Logging out...");
+    if (!firebaseAuth) return;
+    
+    if (confirm('Are you sure you want to logout from cloud sync?')) {
+      firebaseAuth.logout();
+      if (firebaseSync) {
+        firebaseSync.disableSync();
+        firebaseSync.stopAutoSync();
+      }
+      this.updateSyncStatus();
+      this.showMessage('Logged out from cloud sync');
+    }
+  }
+
+  async handleSyncNow() {
+    console.log("Manual sync triggered...");
+    if (!firebaseSync) {
+      this.showMessage('Cloud sync not available', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('syncNowBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '🔄 Syncing...';
+    }
+
+    try {
+      const result = await firebaseSync.syncToCloud();
+      if (result.success) {
+        this.showMessage('✅ Data synced successfully to cloud');
+        this.updateSyncStatus();
+      } else {
+        this.showMessage('❌ Sync failed: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (error) {
+      this.showMessage('❌ Sync error: ' + error.message, 'error');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '🔄 Sync Now';
+      }
+    }
+  }
+
+  async handlePullFromCloud() {
+    console.log("Pulling data from cloud...");
+    if (!firebaseSync) {
+      this.showMessage('Cloud sync not available', 'error');
+      return;
+    }
+
+    if (!confirm('This will download profiles from cloud and overwrite local data. Continue?')) {
+      return;
+    }
+
+    const btn = document.getElementById('syncPullBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '⬇️ Downloading...';
+    }
+
+    try {
+      const result = await firebaseSync.syncFromCloud();
+      if (result.success) {
+        this.showMessage('✅ Data downloaded successfully from cloud');
+        // Reload the page to show updated data
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      } else {
+        this.showMessage('❌ Download failed: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (error) {
+      this.showMessage('❌ Download error: ' + error.message, 'error');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '⬇️ Download from Cloud';
+      }
+    }
   }
 }
 
@@ -1737,11 +2608,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof chrome === "undefined" || !chrome.runtime) {
     console.error("Not running in extension context!");
     document.body.innerHTML = `
-      <div style="padding: 40px; text-align: center; font-family: 'Segoe UI', system-ui, sans-serif;">
-        <h2 style="color: #ea4335;">⚠️ Extension Context Required</h2>
+      <div class="empty-center">
+        <h2 class="empty-title" style="color: #ea4335;">⚠️ Extension Context Required</h2>
         <p>This page must be opened from the AutoFill Pro extension.</p>
         <p>Please open the extension popup and navigate to Options from there.</p>
-        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #4285f4; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        <button onclick="location.reload()" class="btn btn-primary">
           Reload Page
         </button>
       </div>
@@ -1759,22 +2630,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Create error display
     const errorDiv = document.createElement("div");
-    errorDiv.style.cssText = `
-      padding: 20px;
-      background: #f8d7da;
-      color: #721c24;
-      margin: 20px;
-      border-radius: 6px;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-    `;
+    errorDiv.className = "error-panel";
     errorDiv.innerHTML = `
       <h3 style="margin-top: 0;">Initialization Error</h3>
       <p><strong>Error:</strong> ${error.message}</p>
       <p><strong>Stack:</strong> ${error.stack}</p>
-      <button onclick="location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 10px;">
         Reload Page
       </button>
-      <button onclick="chrome.runtime.reload()" style="margin-top: 10px; margin-left: 10px; padding: 8px 16px; background: #34a853; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      <button onclick="chrome.runtime.reload()" class="btn btn-success" style="margin-top: 10px; margin-left: 10px;">
         Reload Extension
       </button>
     `;

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoFill Pro - Login</title>
+  <link rel="stylesheet" href="options.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-header h1 {
+      margin: 0;
+      color: #333;
+      font-size: 28px;
+    }
+
+    .login-header p {
+      color: #666;
+      margin: 10px 0 0 0;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .toggle-form {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .toggle-form a {
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toggle-form a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 12px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .success-message {
+      background: #efe;
+      color: #3c3;
+      padding: 12px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .divider {
+      text-align: center;
+      margin: 20px 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      display: inline-block;
+      width: 45%;
+      height: 1px;
+      background: #ddd;
+      vertical-align: middle;
+    }
+
+    .divider::before {
+      margin-right: 10px;
+    }
+
+    .divider::after {
+      margin-left: 10px;
+    }
+
+    #displayNameField {
+      display: none;
+    }
+
+    .info-box {
+      background: #f5f5f5;
+      border-left: 4px solid #667eea;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 3px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>AutoFill Pro</h1>
+      <p>Cloud Sync - Login to Your Account</p>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+
+    <div class="info-box" id="infoBox">
+      Login to sync your profiles across multiple devices
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="rememberMe" name="rememberMe">
+          Remember me
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="signupToggle">Create Account</button>
+        <button type="submit" class="btn-primary" id="loginBtn">
+          <span>Login</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Signup Form (Hidden by default) -->
+    <form id="signupForm" style="display: none;">
+      <div class="form-group">
+        <label for="displayName">Display Name</label>
+        <input type="text" id="displayName" name="displayName" placeholder="Your Name">
+      </div>
+
+      <div class="form-group">
+        <label for="signupEmail">Email Address</label>
+        <input type="email" id="signupEmail" name="signupEmail" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" name="signupPassword" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="loginToggle">Back to Login</button>
+        <button type="submit" class="btn-primary" id="signupBtn">
+          <span>Create Account</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script src="safe-init.js"></script>
+  <script src="crypto-helper.js"></script>
+  <script src="supabase-auth.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

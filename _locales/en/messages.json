@@ -385,9 +385,17 @@
     "message": "Ctrl+Shift+C - Capture current form",
     "description": "Description for Ctrl+Shift+C shortcut"
   },
-  "shortcutCtrlShiftF": {
-    "message": "Ctrl+Shift+F - Fill active profile",
-    "description": "Description for Ctrl+Shift+F shortcut"
+  "shortcutOpenAutofillList": {
+    "message": "Ctrl+Shift+F - Open autofill list",
+    "description": "Description for Ctrl+Shift+F shortcut to open autofill list"
+  },
+  "shortcutCtrlAltF": {
+    "message": "Ctrl+Shift+Y - Fill active profile",
+    "description": "Description for Ctrl+Shift+Y shortcut"
+  },
+  "commandSelectProfileToFill": {
+    "message": "Select a Profile to Fill",
+    "description": "Description for command to select a profile to fill"
   },
   "shortcutCustom": {
     "message": "Custom - Set custom hotkeys for each profile in Settings",
@@ -440,6 +448,10 @@
   "selectFieldType": {
     "message": "Select",
     "description": "Select field type"
+  },
+  "dateFieldType": {
+    "message": "Date",
+    "description": "Date field type"
   },
   "overwriteFieldMode": {
     "message": "Overwrite",
@@ -946,5 +958,17 @@
   "passwordFieldType": {
     "message": "Password",
     "description": "Password field type"
+  },
+  "languageLabel": {
+    "message": "Language",
+    "description": "Label for language selection"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "English language option"
+  },
+  "languageBengali": {
+    "message": "Bengali",
+    "description": "Bengali language option"
   }
 }

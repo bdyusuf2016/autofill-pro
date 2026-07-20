@@ -1,223 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AutoFill Pro</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <h3 data-i18n="popupTitle">AutoFill Pro</h3>
-        <span class="version" id="versionText">v1.0</span>
-      </div>
-
-      <div class="url-match-info" id="urlMatchInfo" style="display: none">
-        <span class="url-match-icon">🌐</span>
-        <span class="url-match-text" data-i18n="urlMatchInfo"
-          >Auto-selected for this URL</span
-        >
-      </div>
-
-      <div class="section">
-        <div class="profile-selector">
-          <label data-i18n="activeProfileLabel">Active Profile:</label>
-          <div class="select-wrapper">
-            <select id="profileSelect">
-              <option value="" data-i18n="noProfileSelected">
-                No Profile Selected
-              </option>
-            </select>
-            <div class="profile-hotkey" id="profileHotkeyDisplay"></div>
-          </div>
-          <button
-            id="manageProfiles"
-            class="secondary"
-            data-i18n="manageProfilesButton"
-          >
-            Manage
-          </button>
+      <div id="main-container">
+        <div class="header">
+          <h3 data-i18n="popupTitle">AutoFill Pro</h3>
+          <span class="version" id="versionText">v2.0</span>
         </div>
-      </div>
 
-      <div class="section">
-        <h4 data-i18n="profileHotkeysLabel">Profile Hotkeys</h4>
-        <div class="hotkey-list" id="hotkeyList">
-          <!-- Hotkeys will be loaded here -->
-        </div>
-      </div>
-
-      <div class="section">
-        <h4 data-i18n="quickActions">Quick Actions</h4>
-        <div class="actions">
-          <button id="fillForm" class="primary" data-i18n="fillFormButton">
-            <span class="icon">▶</span>
-            <span data-i18n="fillFormButton">Fill Current Form</span>
-          </button>
-          <button
-            id="captureForm"
-            class="secondary"
-            data-i18n="captureFormButton"
-          >
-            <span class="icon">📸</span>
-            <span data-i18n="captureFormButton">Capture Form</span>
-          </button>
-          <button
-            id="quickSettings"
-            class="secondary"
-            data-i18n="quickSettingsButton"
-          >
-            <span class="icon">⚙️</span>
-            <span data-i18n="quickSettingsButton">Quick Settings</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="status" id="status"></div>
-
-      <div class="footer">
-        <button id="options" class="link" data-i18n="settingsButton">
-          Settings
-        </button>
-        <span class="separator">|</span>
-        <button id="shortcutHelp" class="link" data-i18n="shortcutsHelpButton">
-          Shortcuts
-        </button>
-      </div>
-    </div>
-
-    <!-- Quick Settings Modal -->
-    <div class="modal-overlay" id="quickSettingsModal" style="display: none">
-      <div class="modal">
-        <div class="modal-header">
-          <h3 data-i18n="quickSettings">Quick Settings</h3>
-          <button class="close-modal" id="closeQuickSettings">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="setting-item">
-            <label>
-              <input type="checkbox" id="popupEnableHotkeys" checked />
-              <span class="label-text" data-i18n="enableHotkeysLabel"
-                >Enable Profile Hotkeys</span
-              >
-            </label>
-          </div>
-          <div class="setting-item">
-            <label>
-              <input type="checkbox" id="popupAutoSwitchProfile" checked />
-              <span class="label-text" data-i18n="autoSwitchProfileLabel"
-                >Auto-switch Profile by URL</span
-              >
-            </label>
-          </div>
-          <div class="setting-item">
-            <label>
-              <input type="checkbox" id="popupConfirmOverwrite" checked />
-              <span class="label-text" data-i18n="confirmOverwriteLabel"
-                >Confirm Before Overwriting</span
-              >
-            </label>
-          </div>
-          <div class="setting-item">
-            <label data-i18n="defaultFillModeLabel">Default Fill Mode:</label>
-            <select id="popupDefaultMode">
-              <option value="overwrite" data-i18n="overwriteMode">
-                Overwrite Existing
-              </option>
-              <option value="append" data-i18n="appendMode">
-                Append to Existing
-              </option>
-              <option value="smart" data-i18n="smartMode">Smart Fill</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            id="cancelQuickSettings"
-            class="secondary"
-            data-i18n="cancelButton"
-          >
-            Cancel
-          </button>
-          <button id="saveQuickSettings" class="primary" data-i18n="saveButton">
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Shortcut Help Modal -->
-    <div class="modal-overlay" id="shortcutHelpModal" style="display: none">
-      <div class="modal">
-        <div class="modal-header">
-          <h3 data-i18n="shortcutHelpTitle">Keyboard Shortcuts Help</h3>
-          <button class="close-modal" id="closeShortcutHelp">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="shortcut-section">
-            <h4 data-i18n="globalShortcuts">Global Shortcuts:</h4>
-            <ul class="shortcut-list">
-              <li>
-                <span class="shortcut-key">Ctrl+Shift+A</span>
-                <span
-                  class="shortcut-description"
-                  data-i18n="shortcutCtrlShiftA"
-                  >Open extension popup</span
-                >
-              </li>
-              <li>
-                <span class="shortcut-key">Ctrl+Shift+F</span>
-                <span
-                  class="shortcut-description"
-                  data-i18n="shortcutCtrlShiftF"
-                  >Fill active profile</span
-                >
-              </li>
-              <li>
-                <span class="shortcut-key">Ctrl+Shift+C</span>
-                <span
-                  class="shortcut-description"
-                  data-i18n="shortcutCtrlShiftC"
-                  >Capture current form</span
-                >
-              </li>
-            </ul>
-          </div>
-          <div class="shortcut-section">
-            <h4 data-i18n="profileHotkeysList">Profile Hotkeys:</h4>
-            <p data-i18n="shortcutCustom">
-              Set custom hotkeys for each profile in Settings
-            </p>
-            <div class="hotkey-hint" id="profileHotkeysHint">
-              <!-- Profile hotkeys will be loaded here -->
+        <!-- Cloud Login Banner (shown when not logged in) -->
+        <div class="cloud-login-banner" id="cloudLoginBanner" style="display: none;">
+          <div class="banner-content">
+            <span class="banner-icon">☁️</span>
+            <div class="banner-text">
+              <h4>Enable Cloud Sync</h4>
+              <p>Sync your profiles across devices</p>
             </div>
-          </div>
-          <div class="shortcut-section">
-            <h4>Tips:</h4>
-            <ul class="tip-list">
-              <li data-i18n="shortcutTip1">
-                Hotkeys work globally across all tabs
-              </li>
-              <li data-i18n="shortcutTip2">
-                They won't trigger when typing in input fields
-              </li>
-              <li data-i18n="shortcutTip3">
-                Avoid using common browser shortcuts (Ctrl+T, Ctrl+W, etc.)
-              </li>
-            </ul>
+            <button id="popupCloudLogin" class="banner-btn">Login</button>
           </div>
         </div>
-        <div class="modal-footer">
-          <button
-            id="closeShortcutHelpBtn"
-            class="primary"
-            data-i18n="closeButton"
+
+        <div class="url-match-info hidden" id="urlMatchInfo">
+          <span class="url-match-icon">🌐</span>
+          <span class="url-match-text" data-i18n="urlMatchInfo"
+            >Auto-selected for this URL</span
           >
-            Close
+        </div>
+
+        <div class="section">
+          <div class="profile-selector">
+            <label for="profileSelect" data-i18n="activeProfileLabel"
+              >Active Profile:</label
+            >
+            <div class="select-wrapper">
+              <select id="profileSelect">
+                <option value="" data-i18n="noProfileSelected">
+                  No Profile Selected
+                </option>
+              </select>
+              <div class="profile-hotkey" id="profileHotkeyDisplay"></div>
+            </div>
+            <button
+              id="manageProfiles"
+              class="secondary"
+              data-i18n="manageProfilesButton"
+            >
+              Manage
+            </button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="profileHotkeysLabel">Profile Hotkeys</h4>
+          <div class="hotkey-list" id="hotkeyList">
+            <!-- Hotkeys will be loaded here -->
+          </div>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="quickActions">Quick Actions</h4>
+          <div class="actions">
+            <button id="fillForm" class="primary" data-i18n="fillFormButton">
+              <span class="icon">▶</span>
+              <span data-i18n="fillFormButton">Fill Current Form</span>
+            </button>
+            <button
+              id="captureForm"
+              class="secondary"
+              data-i18n="captureFormButton"
+            >
+              <span class="icon">📸</span>
+              <span data-i18n="captureFormButton">Capture Form</span>
+            </button>
+            <button
+              id="visualCapture"
+              class="secondary"
+            >
+              <span class="icon">🎯</span>
+              <span>Visual Capture</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="footer">
+          <button id="options" class="link" data-i18n="settingsButton">
+            Settings
           </button>
+        </div>
+      </div>
+
+      <div id="autofill-container" class="hidden">
+        <div class="header">
+          <h3 data-i18n="autofillTitle">Select a Profile to Fill</h3>
+        </div>
+        <div class="section">
+          <div class="form-group">
+            <input
+              type="text"
+              id="autofillSearch"
+              placeholder="Type to search profiles..."
+              style="width: 100%;"
+            />
+          </div>
+
+          <div
+            class="profiles-list"
+            id="autofillProfileList"
+            style="max-height: 240px; overflow: auto; margin-top: 10px;"
+          >
+            <!-- Profile items populated dynamically -->
+          </div>
+        </div>
+        <div class="footer">
+          <button id="cancelAutofill" class="secondary">Cancel</button>
         </div>
       </div>
     </div>
 
+    <script src="supabase-config.js"></script>
+    <script src="safe-init.js"></script>
+    <script src="url-rule-matcher.js"></script>
+    <script src="crypto-helper.js"></script>
+    <script src="supabase-auth.js"></script>
+    <script src="supabase-sync.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

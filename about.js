@@ -187,15 +187,7 @@ class AboutPage {
       if (avatarDiv && !avatarDiv.querySelector("img")) {
         // Create developer avatar
         const avatarImg = document.createElement("div");
-        avatarImg.style.cssText = `
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 40px;
-          color: #667eea;
-        `;
+        avatarImg.className = "avatar-inner";
         avatarImg.textContent = "👨‍💻";
         avatarDiv.appendChild(avatarImg);
       }
@@ -220,9 +212,7 @@ class AboutPage {
       <div class="developer-info">
         <div class="developer-header">
           <div class="developer-avatar">
-            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #667eea;">
-              👨‍💻
-            </div>
+            <div class="avatar-inner">👨‍💻</div>
           </div>
           <div class="developer-details">
             <h2 data-i18n="developerName">Md. Yusuf Ali</h2>
@@ -236,10 +226,10 @@ class AboutPage {
         </div>
 
         <div class="contact-info">
-          <div class="contact-item">
+              <div class="contact-item">
             <span class="contact-icon">📍</span>
             <div>
-              <div style="font-weight: 500" data-i18n="addressLabel">Address</div>
+                  <div class="contact-label" data-i18n="addressLabel">Address</div>
               <div data-i18n="developerAddress">
                 Customs Bond Commissionerate Dhaka(South), Dhaka, 342/1, Segunbagicha, Dhaka-1000, Bangladesh.
               </div>
@@ -257,14 +247,9 @@ class AboutPage {
           <div class="contact-item">
             <span class="contact-icon">🌐</span>
             <div>
-              <div style="font-weight: 500" data-i18n="websiteLabel">Website</div>
+              <div class="contact-label" data-i18n="websiteLabel">Website</div>
               <div>
-                <a href="https://github.com/bdyusuf2016" 
-                   style="color: white; text-decoration: underline;" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
-                  github.com/bdyusuf2016
-                </a>
+                <a href="https://github.com/bdyusuf2016" class="contact-link" target="_blank" rel="noopener noreferrer">github.com/bdyusuf2016</a>
               </div>
             </div>
           </div>
@@ -272,7 +257,7 @@ class AboutPage {
           <div class="contact-item">
             <span class="contact-icon">💼</span>
             <div>
-              <div style="font-weight: 500" data-i18n="companyLabel">Company</div>
+              <div class="contact-label" data-i18n="companyLabel">Company</div>
               <div data-i18n="developerCompany">Yusuf Computer & IT.</div>
             </div>
           </div>
@@ -374,19 +359,15 @@ class AboutPage {
     }
 
     container.innerHTML = `
-      <div style="text-align: center; padding: 40px; color: #666;">
-        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
-        <h3 style="margin-bottom: 10px; color: #ea4335;">Error Loading Page</h3>
-        <p style="margin-bottom: 20px; color: #666;">${
+      <div class="empty-center">
+        <div class="empty-emoji">⚠️</div>
+        <h3 class="empty-title" style="color: #ea4335;">Error Loading Page</h3>
+        <p class="empty-desc">${
           message || "An error occurred while loading the page."
         }</p>
         <div style="margin-top: 30px;">
-          <button onclick="location.reload()" class="primary" style="margin: 5px; padding: 10px 20px; cursor: pointer;">
-            🔄 Refresh Page
-          </button>
-          <button onclick="chrome.runtime.reload()" class="secondary" style="margin: 5px; padding: 10px 20px; cursor: pointer;">
-            🔧 Reload Extension
-          </button>
+          <button onclick="location.reload()" class="btn btn-primary" style="margin: 5px;">🔄 Refresh Page</button>
+          <button onclick="chrome.runtime.reload()" class="btn" style="margin: 5px;">🔧 Reload Extension</button>
         </div>
         <div style="margin-top: 20px; font-size: 12px; color: #999;">
           <p>If the problem persists, try:</p>
@@ -398,34 +379,6 @@ class AboutPage {
         </div>
       </div>
     `;
-
-    // Add basic styles for buttons
-    const style = document.createElement("style");
-    style.textContent = `
-      .primary {
-        background: linear-gradient(135deg, #1a73e8, #4285f4);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-weight: 500;
-        cursor: pointer;
-      }
-      .primary:hover {
-        background: linear-gradient(135deg, #0d62d9, #3367d6);
-      }
-      .secondary {
-        background: #f1f3f4;
-        color: #3c4043;
-        border: 1px solid #dadce0;
-        border-radius: 6px;
-        font-weight: 500;
-        cursor: pointer;
-      }
-      .secondary:hover {
-        background: #e8eaed;
-      }
-    `;
-    document.head.appendChild(style);
   }
 
   // Helper method to show loading indicator
@@ -433,22 +386,12 @@ class AboutPage {
     const container = document.querySelector(".about-page");
     if (container) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 40px; color: #666;">
-          <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1s linear infinite;">⌛</div>
+        <div class="empty-center">
+          <div class="empty-emoji" style="animation: spin 1s linear infinite;">⌛</div>
           <h3>Loading About Page...</h3>
           <p>Please wait while we load the information.</p>
         </div>
       `;
-
-      // Add spin animation
-      const style = document.createElement("style");
-      style.textContent = `
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `;
-      document.head.appendChild(style);
     }
   }
 }
@@ -502,18 +445,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.search.includes("debug")) {
     const debugBtn = document.createElement("button");
     debugBtn.textContent = "🔄 Debug Refresh";
-    debugBtn.style.cssText = `
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      z-index: 1000;
-      background: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    `;
+    debugBtn.className = "debug-btn";
     debugBtn.onclick = () => {
       chrome.storage.local.clear();
       location.reload();

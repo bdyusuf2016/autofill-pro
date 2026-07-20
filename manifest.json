@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "1.0",
+  "version": "2.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
-  "permissions": ["storage", "activeTab", "scripting", "commands"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "activeTab", "scripting", "commands", "alarms"],
+  "host_permissions": ["<all_urls>", "https://prsghqqtlgkjjmywmvgw.supabase.co/*"],
   "web_accessible_resources": [
     {
-      "resources": ["about.html", "about.js", "options.css"],
+      "resources": ["about.html", "about.js", "options.css", "supabase-config.js", "supabase-auth.js", "supabase-sync.js", "login.html", "login.js", "welcome.html", "welcome.js", "pdf-parser.js", "ocr-parser.js", "teletalk-mapper-v2.js", "crypto-helper.js"],
       "matches": ["<all_urls>"]
     }
   ],
@@ -28,7 +28,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": ["url-rule-matcher.js", "content.js"],
       "run_at": "document_end"
     }
   ],
@@ -39,6 +39,23 @@
         "mac": "Command+Shift+A"
       },
       "description": "__MSG_shortcutCtrlShiftA__"
+    },
+    "open_autofill_list": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "__MSG_shortcutOpenAutofillList__"
+    },
+    "fill_active_profile": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "__MSG_shortcutCtrlAltF__"
+    },
+    "select_profile_to_fill": {
+      "description": "__MSG_commandSelectProfileToFill__"
     }
   }
 }

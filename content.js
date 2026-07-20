@@ -237,8 +237,40 @@ class AutoFillEngine {
     const currentUrl = window.location.hostname;
     let filledCount = 0;
 
+    // Split fields into checkbox/radios (Pass 1) and other fields (Pass 2)
+    const checkboxAndRadios = [];
+    const otherFields = [];
+
     profile.fields.forEach((field) => {
-      // Check site restriction (old method)
+      if (field.type === "checkbox" || field.type === "radio") {
+        checkboxAndRadios.push(field);
+      } else {
+        otherFields.push(field);
+      }
+    });
+
+    // Pass 1: Fill all checkboxes and radios first to trigger visibility/rendering of dynamic elements
+    checkboxAndRadios.forEach((field) => {
+      if (field.site && field.site.trim() !== "") {
+        if (!currentUrl.includes(field.site)) {
+          return;
+        }
+      }
+
+      const elements = this.findFormElements(field);
+      elements.forEach((element) => {
+        if (this.fillElement(element, field, profile.defaultMode)) {
+          filledCount++;
+          this.triggerEvents(element);
+        }
+      });
+    });
+
+    // Give dynamic frontend transitions/JS a brief moment (100ms) to expand and enable hidden fields
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Pass 2: Fill all other fields (text, selects, etc.)
+    otherFields.forEach((field) => {
       if (field.site && field.site.trim() !== "") {
         if (!currentUrl.includes(field.site)) {
           return;
@@ -273,8 +305,14 @@ class AutoFillEngine {
       const isHidden = element.offsetParent === null;
 
       // Skip hidden text inputs to avoid honey pots, but keep hidden selects, checkboxes, or radios
+      // Also don't skip hidden inputs if their name contains educational or common profile keywords (which are dynamic form sub-fields)
       if (isHidden && !isSelect && !isRadioOrCheckbox) {
-        return;
+        const nameLower = (element.name || element.id || "").toLowerCase();
+        const eduKeywords = ["exam", "subject", "univ", "inst", "year", "result", "gpa", "cgpa", "roll", "board", "major", "degree", "grad", "masters", "hsc", "ssc", "class", "division", "passing"];
+        const isEduField = eduKeywords.some(k => nameLower.includes(k));
+        if (!isEduField) {
+          return;
+        }
       }
 
       const name = element.name || element.id || element.placeholder || "";

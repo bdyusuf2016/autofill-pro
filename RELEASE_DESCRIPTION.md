@@ -1,8 +1,8 @@
-# Autofill Pro v2.2 - Release Notes 🚀
+# Autofill Pro v2.3 - Release Notes 🚀
 
 ## 🏷️ Release Details
-- **Tag Version**: `v2.2`
-- **Release Title**: `Autofill Pro v2.2`
+- **Tag Version**: `v2.3`
+- **Release Title**: `Autofill Pro v2.3`
 - **Target Branch**: `main`
 
 ---
@@ -36,7 +36,7 @@
 
 ## 📦 Installation Instructions
 
-1. Download the `autofill-pro-v2.2.zip` archive attached below.
+1. Download the `autofill-pro-v2.3.zip` archive attached below.
 2. Extract the zip file contents to a local folder.
 3. Open Google Chrome and go to `chrome://extensions/`.
 4. Turn on **Developer mode** (top-right toggle).

@@ -1,4 +1,3 @@
-
 # Autofill Pro
 
 This is an advanced autofill extension with profile-based hotkeys and URL rules.

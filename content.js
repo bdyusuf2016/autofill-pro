@@ -237,20 +237,9 @@ class AutoFillEngine {
     const currentUrl = window.location.hostname;
     let filledCount = 0;
 
-    // Split fields into checkbox/radios (Pass 1) and other fields (Pass 2)
-    const checkboxAndRadios = [];
-    const otherFields = [];
-
+    // Collect all elements that need to be filled
+    const itemsToFill = [];
     profile.fields.forEach((field) => {
-      if (field.type === "checkbox" || field.type === "radio") {
-        checkboxAndRadios.push(field);
-      } else {
-        otherFields.push(field);
-      }
-    });
-
-    // Pass 1: Fill all checkboxes and radios first to trigger visibility/rendering of dynamic elements
-    checkboxAndRadios.forEach((field) => {
       if (field.site && field.site.trim() !== "") {
         if (!currentUrl.includes(field.site)) {
           return;
@@ -259,32 +248,33 @@ class AutoFillEngine {
 
       const elements = this.findFormElements(field);
       elements.forEach((element) => {
-        if (this.fillElement(element, field, profile.defaultMode)) {
-          filledCount++;
-          this.triggerEvents(element);
-        }
+        itemsToFill.push({ element, field });
       });
     });
 
-    // Give dynamic frontend transitions/JS a brief moment (100ms) to expand and enable hidden fields
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    // Pass 2: Fill all other fields (text, selects, etc.)
-    otherFields.forEach((field) => {
-      if (field.site && field.site.trim() !== "") {
-        if (!currentUrl.includes(field.site)) {
-          return;
-        }
+    // Sort items by their physical DOM order (top-to-bottom)
+    itemsToFill.sort((a, b) => {
+      if (a.element === b.element) return 0;
+      const position = a.element.compareDocumentPosition(b.element);
+      if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
+        return -1;
       }
-
-      const elements = this.findFormElements(field);
-      elements.forEach((element) => {
-        if (this.fillElement(element, field, profile.defaultMode)) {
-          filledCount++;
-          this.triggerEvents(element);
-        }
-      });
+      if (position & Node.DOCUMENT_POSITION_PRECEDING) {
+        return 1;
+      }
+      return 0;
     });
+
+    // Fill each element sequentially with a 50ms delay
+    for (const item of itemsToFill) {
+      if (this.fillElement(item.element, item.field, profile.defaultMode)) {
+        filledCount++;
+        this.triggerEvents(item.element);
+        
+        // Wait 50ms before filling the next field to allow dynamic frontend scripts to process
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    }
 
     return { success: true, filledCount, profileName: profile.name };
   }
@@ -507,34 +497,52 @@ class AutoFillEngine {
           return true;
 
         case "checkbox":
+          let targetChecked = false;
           const lowerCheckVal = value.toLowerCase().trim();
           if (lowerCheckVal === "true" || value === "1" || lowerCheckVal === "checked") {
-            element.checked = true;
+            targetChecked = true;
           } else if (lowerCheckVal === "false" || value === "0" || lowerCheckVal === "unchecked") {
-            element.checked = false;
+            targetChecked = false;
           } else {
             // Checkbox group matching: check if element's value is in the comma-separated list
             const selectedValues = value.split(',').map(v => v.trim().toLowerCase());
             if (element.value && selectedValues.includes(element.value.toLowerCase())) {
-              element.checked = true;
+              targetChecked = true;
             } else {
-              element.checked = false;
+              targetChecked = false;
+            }
+          }
+          
+          if (element.checked !== targetChecked) {
+            if (typeof element.click === "function") {
+              element.click();
+            } else {
+              element.checked = targetChecked;
             }
           }
           return true;
 
         case "radio":
+          let targetRadioChecked = false;
           const lowerRadioVal = value.toLowerCase().trim();
           if (lowerRadioVal === "true" || value === "1" || lowerRadioVal === "checked") {
-            element.checked = true;
+            targetRadioChecked = true;
           } else if (lowerRadioVal === "false" || value === "0") {
-            element.checked = false;
+            targetRadioChecked = false;
           } else {
             // Value-based matching for radio button groups
             if (element.value && element.value.toLowerCase() === lowerRadioVal) {
-              element.checked = true;
+              targetRadioChecked = true;
             } else {
-              element.checked = false;
+              targetRadioChecked = false;
+            }
+          }
+          
+          if (element.checked !== targetRadioChecked) {
+            if (typeof element.click === "function") {
+              element.click();
+            } else {
+              element.checked = targetRadioChecked;
             }
           }
           return true;
@@ -563,27 +571,31 @@ class AutoFillEngine {
             }
           }
 
-          // 3. Try starts-with match on option text or value
+          // 3. Try starts-with match on option text
           if (matchedIndex === -1) {
             for (let i = 0; i < element.options.length; i++) {
-              const optText = element.options[i].text.toLowerCase().trim();
-              const optVal = element.options[i].value.toLowerCase();
-              if (optText.startsWith(lowerVal) || optVal.startsWith(lowerVal)) {
+              const optText = element.options[i].text.toLowerCase();
+              if (optText.startsWith(lowerVal)) {
                 matchedIndex = i;
                 break;
               }
             }
           }
 
-          // 4. Try substring match (only if search value is longer than 2 characters to avoid false matches)
+          // 4. Try substring match using word boundaries (only if search value is longer than 2 characters)
           if (matchedIndex === -1 && lowerVal.length > 2) {
-            for (let i = 0; i < element.options.length; i++) {
-              const optText = element.options[i].text.toLowerCase();
-              const optVal = element.options[i].value.toLowerCase();
-              if (optText.includes(lowerVal) || optVal.includes(lowerVal)) {
-                matchedIndex = i;
-                break;
+            try {
+              const escapedVal = lowerVal.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+              const boundaryRegex = new RegExp("\\b" + escapedVal + "\\b", "i");
+              
+              for (let i = 0; i < element.options.length; i++) {
+                if (boundaryRegex.test(element.options[i].text)) {
+                  matchedIndex = i;
+                  break;
+                }
               }
+            } catch (e) {
+              console.error("Regex word boundary matching failed:", e);
             }
           }
 
@@ -600,7 +612,19 @@ class AutoFillEngine {
           for (let i = 0; i < element.options.length; i++) {
             const optVal = element.options[i].value.toLowerCase();
             const optText = element.options[i].text.toLowerCase().trim();
-            if (valuesToSelect.some(val => optVal === val || optText === val || optText.includes(val))) {
+            
+            const matches = valuesToSelect.some(val => {
+              if (optVal === val || optText === val) return true;
+              if (val.length > 2) {
+                try {
+                  const escaped = val.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                  return new RegExp("\\b" + escaped + "\\b", "i").test(optText);
+                } catch(e) {}
+              }
+              return false;
+            });
+
+            if (matches) {
               element.options[i].selected = true;
               anySelected = true;
             } else {
@@ -631,12 +655,6 @@ class AutoFillEngine {
       element.dispatchEvent(new Event("focus", { bubbles: true }));
       element.dispatchEvent(new Event("input", { bubbles: true }));
       element.dispatchEvent(new Event("change", { bubbles: true }));
-      
-      // Dispatch click event for checkbox and radio buttons to notify click event listeners
-      if (element.type === "checkbox" || element.type === "radio") {
-        element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      }
-      
       element.dispatchEvent(new Event("blur", { bubbles: true }));
     } catch (e) {
       console.error("Error dispatching events:", e);

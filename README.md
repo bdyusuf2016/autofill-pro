@@ -35,7 +35,7 @@ AutoFill Pro is a premium, secure, and feature-rich Chrome Extension (Manifest V
 ## 🚀 Setup & Installation
 
 ### Developer Installation
-1. Download the latest `autofill-pro-v2.1.zip` from the **Releases** section and extract it.
+1. Download the latest `autofill-pro-v2.2.zip` from the **Releases** section and extract it.
 2. Open Google Chrome and navigate to `chrome://extensions/`.
 3. Toggle the **Developer mode** switch at the top right.
 4. Click **Load unpacked** and select the extracted extension folder.

@@ -1720,43 +1720,138 @@ class OptionsManager {
     chrome.storage.local.get(["capturedFields", "captureUrl"], async (data) => {
       if (data.capturedFields && data.capturedFields.length > 0) {
         console.log("Found captured fields:", data.capturedFields.length);
-        this.openProfileModal();
-
-        // Pre-fill with captured fields
-        try {
-          const siteName = new URL(data.captureUrl).hostname.replace(
-            "www.",
-            ""
-          );
-          const profileNameInput = document.getElementById("profileName");
-          if (profileNameInput) {
-            profileNameInput.value = `Profile from ${siteName}`;
-          }
-
-          const fieldsContainer = document.getElementById("fieldsContainer");
-          if (fieldsContainer) {
-            fieldsContainer.innerHTML = "";
-          }
-
-          data.capturedFields.forEach((field) => {
-            this.addFieldRow({
-              type: field.type,
-              name: field.name,
-              value: field.value,
-              site: field.site,
-              mode: field.mode,
-            });
-          });
-
-          // Clear captured data
-          await chrome.storage.local.remove(["capturedFields", "captureUrl"]);
-        } catch (error) {
-          console.error("Error processing captured fields:", error);
+        
+        const existingProfileIds = Object.keys(this.profiles);
+        if (existingProfileIds.length > 0) {
+          this.showCaptureActionSelector(data.capturedFields, data.captureUrl);
+        } else {
+          this.importCapturedFieldsToProfile(null, data.capturedFields, data.captureUrl);
         }
       } else {
         console.log("No captured fields found");
       }
     });
+  }
+
+  showCaptureActionSelector(capturedFields, captureUrl) {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.id = "captureActionSelectorModal";
+    overlay.style.zIndex = "2000";
+
+    const modal = document.createElement("div");
+    modal.className = "modal";
+    modal.style.maxWidth = "450px";
+    modal.style.padding = "25px";
+
+    let profileOptions = `<option value="new">-- Create New Profile --</option>`;
+    Object.entries(this.profiles).forEach(([id, p]) => {
+      profileOptions += `<option value="${id}">${p.name}</option>`;
+    });
+
+    modal.innerHTML = `
+      <h2 style="font-size: 18px; margin-bottom: 15px;">📸 Captured Form Fields</h2>
+      <p style="font-size: 13px; color: #666; margin-bottom: 20px;">
+        You have captured <strong>${capturedFields.length}</strong> fields from <code>${new URL(captureUrl).hostname}</code>. 
+        Select where to save these fields:
+      </p>
+      <div class="form-group" style="margin-bottom: 25px;">
+        <label for="captureTargetProfile" style="font-weight: 500; font-size: 13px; display: block; margin-bottom: 8px;">Target Profile:</label>
+        <select id="captureTargetProfile" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;">
+          ${profileOptions}
+        </select>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button id="captureCancelBtn" class="secondary" style="padding: 8px 16px;">Discard</button>
+        <button id="captureProceedBtn" class="primary" style="padding: 8px 16px;">Proceed</button>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    document.getElementById("captureCancelBtn").onclick = () => {
+      overlay.remove();
+      chrome.storage.local.remove(["capturedFields", "captureUrl"]);
+    };
+
+    document.getElementById("captureProceedBtn").onclick = () => {
+      const selected = document.getElementById("captureTargetProfile").value;
+      overlay.remove();
+      
+      if (selected === "new") {
+        this.importCapturedFieldsToProfile(null, capturedFields, captureUrl);
+      } else {
+        this.importCapturedFieldsToProfile(selected, capturedFields, captureUrl);
+      }
+      chrome.storage.local.remove(["capturedFields", "captureUrl"]);
+    };
+  }
+
+  importCapturedFieldsToProfile(profileId, capturedFields, captureUrl) {
+    try {
+      const fieldsContainer = document.getElementById("fieldsContainer");
+      if (fieldsContainer) {
+        fieldsContainer.innerHTML = "";
+      }
+
+      if (profileId && this.profiles[profileId]) {
+        const profile = this.profiles[profileId];
+        this.openProfileModal(profileId);
+
+        const merge = confirm(
+          `Do you want to merge these captured fields with the existing fields of "${profile.name}"?\n\n` +
+          `[OK] = Merge fields (updates matching fields, adds new ones)\n` +
+          `[Cancel] = Overwrite entirely (deletes all current fields and uses only the captured ones)`
+        );
+
+        if (merge) {
+          const existingFields = [...profile.fields];
+          capturedFields.forEach(captured => {
+            const index = existingFields.findIndex(f => f.name.toLowerCase() === captured.name.toLowerCase());
+            if (index !== -1) {
+              existingFields[index].value = captured.value;
+              if (captured.cssSelector) existingFields[index].cssSelector = captured.cssSelector;
+              if (captured.xpath) existingFields[index].xpath = captured.xpath;
+            } else {
+              existingFields.push(captured);
+            }
+          });
+
+          if (fieldsContainer) {
+            fieldsContainer.innerHTML = "";
+            existingFields.forEach(f => this.addFieldRow(f));
+          }
+        } else {
+          if (fieldsContainer) {
+            fieldsContainer.innerHTML = "";
+            capturedFields.forEach(f => this.addFieldRow(f));
+          }
+        }
+      } else {
+        this.openProfileModal(null);
+        
+        const siteName = new URL(captureUrl).hostname.replace("www.", "");
+        const profileNameInput = document.getElementById("profileName");
+        if (profileNameInput) {
+          profileNameInput.value = `Profile from ${siteName}`;
+        }
+
+        capturedFields.forEach((field) => {
+          this.addFieldRow({
+            type: field.type,
+            name: field.name,
+            value: field.value,
+            site: field.site,
+            mode: field.mode,
+            cssSelector: field.cssSelector,
+            xpath: field.xpath
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error importing captured fields:", error);
+    }
   }
 
   setupEventListeners() {

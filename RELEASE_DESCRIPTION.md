@@ -22,8 +22,8 @@
 - **Local Encryption**: Secures your database sync payloads. Data is encrypted using AES-GCM 256-bit locally inside your browser before upload.
 - **Key Derivation (PBKDF2)**: Derives keys securely from your private Master Password using PBKDF2 (100,000 iterations + SHA-256).
 
-### ☁️ 4. Supabase Cloud Sync Integration
-- **Cross-device Syncing**: Replaced old backend mechanisms with Supabase database handlers.
+### ☁️ 4. Firebase Cloud Sync Integration
+- **Cross-device Syncing**: Replaced database sync mechanisms with always-on Firebase Realtime Database.
 - **Zero-Knowledge Backup**: Your cloud backups are fully encrypted when client-side encryption is enabled.
 
 ### 🎯 5. Custom CSS & XPath Matching
@@ -41,4 +41,4 @@
 3. Open Google Chrome and go to `chrome://extensions/`.
 4. Turn on **Developer mode** (top-right toggle).
 5. Click **Load unpacked** (top-left button) and select your extracted folder.
-6. Open options, register an account, set a Master Password, and sync!
+6. Rename `firebase-config.example.js` to `firebase-config.js` and add your Firebase credentials (API Key and Database URL). Register an account and sync!

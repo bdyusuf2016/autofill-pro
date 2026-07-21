@@ -1,12 +1,12 @@
 // Safe initialization script
 // Prevents errors when scripts load in different contexts
 
-// 1. Ensure supabaseConfig is defined
-if (typeof supabaseConfig === 'undefined') {
-  console.warn("⚠️ supabaseConfig not loaded - Cloud sync will be disabled");
-  window.supabaseConfig = {
-    supabaseUrl: "",
-    supabaseKey: ""
+// 1. Ensure firebaseConfig is defined
+if (typeof firebaseConfig === 'undefined') {
+  console.warn("⚠️ firebaseConfig not loaded - Cloud sync will be disabled");
+  window.firebaseConfig = {
+    apiKey: "",
+    databaseURL: ""
   };
 }
 

@@ -5,10 +5,15 @@
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "permissions": ["storage", "activeTab", "scripting", "commands", "alarms"],
-  "host_permissions": ["<all_urls>", "https://prsghqqtlgkjjmywmvgw.supabase.co/*"],
+  "host_permissions": [
+    "<all_urls>",
+    "https://identitytoolkit.googleapis.com/*",
+    "https://securetoken.googleapis.com/*",
+    "https://*.firebaseio.com/*"
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["about.html", "about.js", "options.css", "supabase-config.js", "supabase-auth.js", "supabase-sync.js", "login.html", "login.js", "welcome.html", "welcome.js", "pdf-parser.js", "ocr-parser.js", "teletalk-mapper-v2.js", "crypto-helper.js"],
+      "resources": ["about.html", "about.js", "options.css", "firebase-config.js", "firebase-auth.js", "firebase-sync.js", "login.html", "login.js", "welcome.html", "welcome.js", "pdf-parser.js", "ocr-parser.js", "teletalk-mapper-v2.js", "crypto-helper.js"],
       "matches": ["<all_urls>"]
     }
   ],

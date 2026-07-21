@@ -1,13 +1,13 @@
-# Autofill Pro v2.4 - Release Notes 🚀
+# Autofill Pro v2.5 - Release Notes 🚀
 
 ## 🏷️ Release Details
-- **Tag Version**: `v2.4`
-- **Release Title**: `Autofill Pro v2.4`
+- **Tag Version**: `v2.5`
+- **Release Title**: `Autofill Pro v2.5`
 - **Target Branch**: `main`
 
 ---
 
-## ⚡ What's New in Version 2.4
+## ⚡ What's New in Version 2.5
 
 ### 1. 🔄 Existing Profile Overwrite & Merge Options
 - **Profile Selector**: When capturing fields from web forms, you can now choose to save them as a new profile or apply them directly to an existing profile.
@@ -36,7 +36,7 @@
 
 ## 📦 Installation Instructions
 
-1. Download the `autofill-pro-v2.4.zip` archive attached below.
+1. Download the `autofill-pro-v2.5.zip` archive attached below.
 2. Extract the zip file contents to a local folder.
 3. Open Google Chrome and go to `chrome://extensions/`.
 4. Turn on **Developer mode** (top-right toggle).

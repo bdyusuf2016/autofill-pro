@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AutoFill Pro</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="main-container">
+        <div class="header">
+          <h3 data-i18n="popupTitle">AutoFill Pro</h3>
+          <span class="version" id="versionText">v2.6</span>
+        </div>
+
+        <!-- Cloud Login Banner (shown when not logged in) -->
+        <div class="cloud-login-banner" id="cloudLoginBanner" style="display: none;">
+          <div class="banner-content">
+            <span class="banner-icon">☁️</span>
+            <div class="banner-text">
+              <h4>Enable Cloud Sync</h4>
+              <p>Sync your profiles across devices</p>
+            </div>
+            <button id="popupCloudLogin" class="banner-btn">Login</button>
+          </div>
+        </div>
+
+        <div class="url-match-info hidden" id="urlMatchInfo">
+          <span class="url-match-icon">🌐</span>
+          <span class="url-match-text" data-i18n="urlMatchInfo"
+            >Auto-selected for this URL</span
+          >
+        </div>
+
+        <div class="section">
+          <div class="profile-selector">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label for="profileSelect" data-i18n="activeProfileLabel">Active Profile:</label>
+              <button
+                id="manageProfiles"
+                class="secondary"
+                data-i18n="manageProfilesButton"
+                style="padding: 3px 8px; font-size: 11px;"
+              >
+                Manage
+              </button>
+            </div>
+            <input
+              type="text"
+              id="activeProfileSearch"
+              placeholder="🔍 Search profile by name, phone no, nid etc..."
+              style="width: 100%; padding: 6px 10px; border: 1px solid #dadce0; border-radius: 6px; font-size: 12px; box-sizing: border-box; outline: none; transition: border-color 0.2s;"
+            />
+            <div id="activeSearchResults" class="active-search-results hidden"></div>
+            <div class="select-wrapper">
+              <select id="profileSelect">
+                <option value="" data-i18n="noProfileSelected">
+                  No Profile Selected
+                </option>
+              </select>
+              <div class="profile-hotkey" id="profileHotkeyDisplay"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="profileHotkeysLabel">Profile Hotkeys</h4>
+          <div class="hotkey-list" id="hotkeyList">
+            <!-- Hotkeys will be loaded here -->
+          </div>
+        </div>
+
+        <div class="section">
+          <h4 data-i18n="quickActions">Quick Actions</h4>
+          <div class="actions">
+            <button id="fillForm" class="primary" data-i18n="fillFormButton">
+              <span class="icon">▶</span>
+              <span data-i18n="fillFormButton">Fill Current Form</span>
+            </button>
+            <button
+              id="captureForm"
+              class="secondary"
+              data-i18n="captureFormButton"
+            >
+              <span class="icon">📸</span>
+              <span data-i18n="captureFormButton">Capture Form</span>
+            </button>
+            <button
+              id="visualCapture"
+              class="secondary"
+            >
+              <span class="icon">🎯</span>
+              <span>Visual Capture</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="footer">
+          <button id="options" class="link" data-i18n="settingsButton">
+            Settings
+          </button>
+        </div>
+      </div>
+
+      <div id="autofill-container" class="hidden">
+        <div class="header">
+          <h3 data-i18n="autofillTitle">Select a Profile to Fill</h3>
+        </div>
+        <div class="section">
+          <div class="form-group">
+            <input
+              type="text"
+              id="autofillSearch"
+              placeholder="🔍 Search profile by name, phone no, nid etc..."
+              style="width: 100%; padding: 6px 10px; border: 1px solid #dadce0; border-radius: 6px; font-size: 12px; box-sizing: border-box; outline: none;"
+            />
+          </div>
+
+          <div
+            class="profiles-list"
+            id="autofillProfileList"
+            style="max-height: 240px; overflow: auto; margin-top: 10px;"
+          >
+            <!-- Profile items populated dynamically -->
+          </div>
+        </div>
+        <div class="footer">
+          <button id="cancelAutofill" class="secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="safe-init.js"></script>
+    <script src="url-rule-matcher.js"></script>
+    <script src="crypto-helper.js"></script>
+    <script src="firebase-auth.js"></script>
+    <script src="firebase-sync.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

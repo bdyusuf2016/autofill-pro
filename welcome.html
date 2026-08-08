@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - AutoFill Pro</title>
+  <link rel="stylesheet" href="options.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .welcome-container {
+      background: white;
+      padding: 50px;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .welcome-header {
+      margin-bottom: 40px;
+    }
+
+    .welcome-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .welcome-header h1 {
+      margin: 0;
+      color: #333;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .welcome-header p {
+      color: #666;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+    }
+
+    .developer-section {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      text-align: center;
+    }
+
+    .developer-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 15px;
+      color: white;
+    }
+
+    .developer-info h3 {
+      margin: 0 0 5px 0;
+      color: #333;
+      font-size: 18px;
+    }
+
+    .developer-info .title {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .developer-info .bio {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+
+    .developer-contact {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .contact-item {
+      color: #666;
+    }
+
+    .contact-item label {
+      display: block;
+      color: #999;
+      font-size: 11px;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    .contact-item a {
+      color: #667eea;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+
+    .stats-section {
+      margin: 30px 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .stat-item {
+      background: #f0f4ff;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #667eea;
+      margin: 0;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin: 5px 0 0 0;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .version-info {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <div class="welcome-header">
+      <div class="welcome-icon">🎉</div>
+      <h1 data-i18n="welcomeTitle">Welcome!</h1>
+      <p data-i18n="welcomeSubtitle">You're all set to use AutoFill Pro</p>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section" id="statsSection">
+      <div class="stat-item">
+        <p class="stat-number" id="profileCount">0</p>
+        <p class="stat-label" data-i18n="profilesCount">Profiles</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-number" id="hotkeyCount">0</p>
+        <p class="stat-label" data-i18n="hotkeysCount">Hotkeys</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-number" id="ruleCount">0</p>
+        <p class="stat-label" data-i18n="urlRulesCount">URL Rules</p>
+      </div>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="developer-section">
+      <div class="developer-avatar">👨‍💻</div>
+      <div class="developer-info">
+        <h3>Md. Yusuf Ali</h3>
+        <p class="title">Browser Extension Developer</p>
+        <p class="bio" data-i18n="developerBio">Passionate developer creating tools to make your life easier</p>
+
+        <div class="developer-contact">
+          <div class="contact-item">
+            <label>📧 Email</label>
+            <a href="mailto:mdyusufcbc@gmail.com">mdyusufcbc@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <label>🔗 GitHub</label>
+            <a href="https://github.com/mdyusufali" target="_blank">mdyusufali</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn-secondary" id="closeBtn" data-i18n="closeButton">Close</button>
+      <button class="btn-primary" id="settingsBtn" data-i18n="goToSettings">Go to Settings</button>
+    </div>
+
+    <div class="version-info" id="versionInfo">
+      Version <span id="versionNumber">2.6</span>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="safe-init.js"></script>
+  <script src="crypto-helper.js"></script>
+  <script src="firebase-auth.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

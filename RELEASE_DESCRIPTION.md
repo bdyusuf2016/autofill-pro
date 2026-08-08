@@ -1,58 +1,35 @@
-# Autofill Pro v2.6 - Release Notes 🚀
+# ⚡ AutoFill Pro v2.6 Release Notes
 
-## 🏷️ Release Details
-- **Tag Version**: `v2.6`
-- **Release Title**: `Autofill Pro v2.6`
-- **Target Branch**: `main`
+AutoFill Pro v2.6 is here with **1-Click Google Sign-In**, **Phone Number support**, **Real-time Name/Phone/NID Search**, **Built-in Firebase Credentials**, and **Automatic Cloud Sync** fixes!
 
 ---
 
-## ⚡ What's New in Version 2.6
+## 🚀 Key Highlights & What's New in v2.6
 
-### 🔑 1. Built-in Firebase API Key Credentials
-- Built-in API Key and Realtime Database configuration included out-of-the-box. Users no longer need manual setup to access cloud sync features.
+### 🔑 1. 1-Click Google Sign-In & Account Picker
+- **Instant Google Login**: Sign in with Google in 1-click without creating a manual account or password.
+- **Account Selection Modal**: Select any logged-in Chrome profile account or enter your custom Google Email address (`yusuf@gmail.com`).
+- **Account Memory**: Saves used Google accounts locally for quick 1-click switching.
 
-### 📱 2. Phone Number Support in Profile Creation
-- Easily provide and edit a Phone Number (`phone`) when creating or updating any profile.
-- Automatically generates and maps phone/mobile input fields during autofill operations.
-- Phone numbers are clearly displayed with a `📱` badge on profile cards.
+### 📱 2. Phone Number Support & Balanced UI
+- Added **Phone Number (`📱`)** field under Profile Information in Options & Modal editor.
+- Paired Profile Name and Phone Number side-by-side in a responsive 2-column layout.
+- Renders `📱 <phone_number>` badges on profile cards and popup list items.
 
-### 🔍 3. Real-time Profile Search
-- Search bar added to the Options Page and Popup interfaces.
-- Instant fuzzy search filtering across profile names, phone numbers, and form field values/names.
+### 🔍 3. Real-time Search by Name, Phone & NID
+- Search profiles dynamically by **Name**, **Phone Number**, **National ID (NID)**, and form field values/names.
+- Interactive Real-time Search Results dropdown below the Active Profile selector in Popup UI.
 
-
-### 1. 🔄 Existing Profile Overwrite & Merge Options
-- **Profile Selector**: When capturing fields from web forms, you can now choose to save them as a new profile or apply them directly to an existing profile.
-- **Intelligent Merging**: Pick **Merge** to update existing matching fields and add newly captured ones, preserving your profile structure.
-- **Complete Overwrite**: Pick **Overwrite** to replace all fields of the target profile with the newly captured fields.
-
-### 📸 2. Visual Point-and-Click Form Capture
-- **Interactive Element Selector**: Launch visual capture from the popup or options page to hover-highlight elements and record input fields, checkboxes, radios, and selects on click.
-- **Automatic Selector Resolution**: Automatically generates exact CSS Selectors and XPaths to resolve complex or hidden elements.
-
-### 🔐 3. Client-Side End-to-End Encryption (E2EE)
-- **Local Encryption**: Secures your database sync payloads. Data is encrypted using AES-GCM 256-bit locally inside your browser before upload.
-- **Key Derivation (PBKDF2)**: Derives keys securely from your private Master Password using PBKDF2 (100,000 iterations + SHA-256).
-
-### ☁️ 4. Firebase Cloud Sync Integration
-- **Cross-device Syncing**: Replaced database sync mechanisms with always-on Firebase Realtime Database.
-- **Zero-Knowledge Backup**: Your cloud backups are fully encrypted when client-side encryption is enabled.
-
-### 🎯 5. Custom CSS & XPath Matching
-- Configure form fields to match by precise CSS Selectors or XPaths directly in the updated profile editor.
-
-### 🇧🇩 6. Teletalk Portal Optimizations
-- **Captcha Visual Highlights**: Identifies captcha inputs on `*.teletalk.com.bd` domains, programmatically focusing them and overlaying a glowing animated orange border.
+### ☁️ 4. Built-in Firebase Credentials & Auto Cloud Sync Fix
+- Comes with **Built-in Firebase API Key and Database URL** out-of-the-box.
+- Resolved `Download failed: Sync not enabled or user not authenticated` error by auto-enabling sync state and ensuring async user authentication loading.
 
 ---
 
 ## 📦 Installation Instructions
 
-1. Download the `autofill-pro-v2.5.zip` archive attached below.
-2. Extract the zip file contents to a local folder.
-3. Open Google Chrome and go to `chrome://extensions/`.
-4. Turn on **Developer mode** (top-right toggle).
-5. Click **Load unpacked** (top-left button) and select your extracted folder.
-6. Firebase API Key and credentials come built-in out of the box! Simply register an account and sync!
-
+1. Download the `autofill-pro-v2.6.zip` source archive below and extract it.
+2. Open Google Chrome and navigate to `chrome://extensions/`.
+3. Enable **Developer mode** (top-right toggle).
+4. Click **Load unpacked** (top-left button) and select the extracted extension folder.
+5. Firebase credentials and 1-Click Google Sign-In are ready out-of-the-box!

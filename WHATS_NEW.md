@@ -25,6 +25,12 @@
 
 ## 📋 Version History
 
+### v2.6.1 (2026-08-15)
+✅ Fixed public key & OAuth2 Chrome extension client ID support for local unpacked extensions
+✅ Enhanced Google OAuth & native Chrome identity authentication flow with Firebase token exchange
+✅ Modernized Cloud Login & Register UI with sleek tab switching and Bengali localization
+✅ Fixed auto-logout issue during cloud sync and improved token refresh resilience
+
 ### v2.6 (2026-08-08)
 ✅ Built-in Firebase API Key credentials  
 ✅ Phone Number input field during profile creation/editing  

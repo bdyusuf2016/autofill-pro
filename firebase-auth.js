@@ -251,6 +251,12 @@ class FirebaseAuth {
         return null;
       }
 
+      // Local-only Google provider users have mock tokens — skip refresh
+      if (this.currentUser.provider === 'google.local') {
+        console.warn('Token refresh skipped: local-only Google sign-in users do not have refreshable Firebase tokens.');
+        return null;
+      }
+
       if (typeof firebaseConfig === 'undefined' || !firebaseConfig.apiKey) {
         return null;
       }
@@ -282,62 +288,200 @@ class FirebaseAuth {
       return this.currentUser.token;
     } catch (error) {
       console.error('Token refresh error:', error);
-      // If refresh fails, logout
-      await this.logout();
+      // Don't auto-logout on refresh failure — let the caller handle it
       return null;
     }
   }
 
-  // Sign in with Google Account
+  // Sign in with Google Account using real OAuth flow
   async signInWithGoogle(customEmail = null) {
     try {
       console.log('Starting Google Sign-In...');
 
-      let email = customEmail;
-      let displayName = "";
-
-      // 1. Try fetching Chrome profile user info if available
-      if (!email && typeof chrome !== 'undefined' && chrome.identity && chrome.identity.getProfileUserInfo) {
-        try {
-          const profileInfo = await new Promise((resolve) => {
-            chrome.identity.getProfileUserInfo((info) => resolve(info || {}));
-          });
-          if (profileInfo && profileInfo.email) {
-            email = profileInfo.email;
-            displayName = email.split('@')[0];
-          }
-        } catch (e) {
-          console.warn("Could not fetch Chrome profile info:", e);
-        }
+      if (typeof firebaseConfig === 'undefined' || !firebaseConfig.apiKey) {
+        throw new Error('Firebase configuration not loaded');
       }
 
-      // 2. Fallback to default Google account email if not provided
-      if (!email) {
-        email = "user.google@gmail.com";
+      if (typeof chrome !== 'undefined' && chrome.identity && chrome.identity.getAuthToken) {
+        return await this._signInWithGoogleGetToken(customEmail);
       }
 
-      if (!displayName) {
-        const namePart = email.split('@')[0];
-        displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-      }
-
-      const googleUser = {
-        uid: `google_${email.replace(/[^a-zA-Z0-9]/g, '_')}`,
-        email: email,
-        displayName: displayName,
-        provider: 'google',
-        token: `google_token_${Date.now()}`,
-        refreshToken: `google_refresh_${Date.now()}`
-      };
-
-      this.currentUser = googleUser;
-      await chrome.storage.local.set({ user: this.currentUser });
-      this.notifyAuthStateChange();
-      return { success: true, user: this.currentUser };
+      // If chrome.identity is not available at all, use local fallback
+      console.log('Chrome Identity API not available, using local-only Google sign-in');
+      return await this._signInWithGoogleLocal(customEmail);
     } catch (error) {
       console.error('Google sign-in error:', error);
       return { success: false, error: error.message };
     }
+  }
+
+  // Method 1: Google OAuth via launchWebAuthFlow (most reliable)
+  async _signInWithGoogleWebAuth(customEmail = null) {
+    const manifest = chrome.runtime.getManifest();
+    const clientId = manifest.oauth2?.client_id;
+    if (!clientId) {
+      throw new Error('OAuth client_id not found in manifest');
+    }
+
+    const redirectUri = (typeof chrome !== 'undefined' && chrome.identity && chrome.identity.getRedirectURL) 
+      ? chrome.identity.getRedirectURL() 
+      : `https://${chrome.runtime.id}.chromiumapp.org/`;
+    const scopes = (manifest.oauth2?.scopes || [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile'
+    ]).join(' ');
+
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${encodeURIComponent(clientId)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=token` +
+      `&scope=${encodeURIComponent(scopes)}` +
+      (customEmail ? `&login_hint=${encodeURIComponent(customEmail)}` : '') +
+      `&prompt=select_account`;
+
+    console.log('Launching Google OAuth web auth flow...');
+
+    // 1. Open Google consent popup
+    const responseUrl = await new Promise((resolve, reject) => {
+      chrome.identity.launchWebAuthFlow(
+        { url: authUrl, interactive: true },
+        (callbackUrl) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+            return;
+          }
+          if (!callbackUrl) {
+            reject(new Error('Google সাইন-ইন বাতিল করা হয়েছে'));
+            return;
+          }
+          resolve(callbackUrl);
+        }
+      );
+    });
+
+    // 2. Extract access_token from redirect URL
+    const hashParams = new URLSearchParams(responseUrl.split('#')[1] || '');
+    const accessToken = hashParams.get('access_token');
+    if (!accessToken) {
+      throw new Error('Google OAuth থেকে access token পাওয়া যায়নি');
+    }
+
+    console.log('Got Google access token via launchWebAuthFlow');
+
+    // 3. Exchange with Firebase signInWithIdp
+    return await this._exchangeGoogleTokenForFirebase(accessToken, customEmail);
+  }
+
+  // Direct Google OAuth via chrome.identity.getAuthToken (Native Chrome Extension)
+  async _signInWithGoogleGetToken(customEmail = null) {
+    // Clear any previous invalid cached token
+    if (chrome.identity.clearAllCachedAuthTokens) {
+      await new Promise((resolve) => chrome.identity.clearAllCachedAuthTokens(resolve));
+    }
+
+    const googleAccessToken = await new Promise((resolve, reject) => {
+      chrome.identity.getAuthToken({ interactive: true }, (token) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        if (!token) {
+          reject(new Error('Google সাইন-ইন থেকে টোকেন পাওয়া যায়নি'));
+          return;
+        }
+        resolve(token);
+      });
+    });
+
+    console.log('Got Google access token via getAuthToken');
+    return await this._exchangeGoogleTokenForFirebase(googleAccessToken, customEmail);
+  }
+
+  // Exchange Google access token for Firebase ID token
+  async _exchangeGoogleTokenForFirebase(accessToken, customEmail = null) {
+    const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`;
+
+    const idpResponse = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=${firebaseConfig.apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postBody: `access_token=${accessToken}&providerId=google.com`,
+          requestUri: redirectUri,
+          returnIdpCredential: true,
+          returnSecureToken: true
+        })
+      }
+    );
+
+    const idpData = await idpResponse.json();
+
+    if (!idpResponse.ok) {
+      const errorMsg = idpData.error?.message || JSON.stringify(idpData);
+      throw new Error(this.translateError(errorMsg));
+    }
+
+    console.log('Firebase signInWithIdp successful:', idpData.email);
+
+    const firebaseUser = {
+      uid: idpData.localId,
+      email: idpData.email || customEmail,
+      displayName: idpData.displayName || idpData.email?.split('@')[0] || 'User',
+      provider: 'google',
+      token: idpData.idToken,
+      refreshToken: idpData.refreshToken,
+      oauthAccessToken: accessToken
+    };
+
+    this.currentUser = firebaseUser;
+    await chrome.storage.local.set({ user: this.currentUser });
+    this.notifyAuthStateChange();
+    return { success: true, user: this.currentUser };
+  }
+
+  // Fallback: local-only Google sign-in (mock tokens, no cloud sync)
+  async _signInWithGoogleLocal(customEmail = null) {
+    let email = customEmail;
+    let displayName = "";
+
+    // Try fetching Chrome profile user info if available
+    if (!email && typeof chrome !== 'undefined' && chrome.identity && chrome.identity.getProfileUserInfo) {
+      try {
+        const profileInfo = await new Promise((resolve) => {
+          chrome.identity.getProfileUserInfo((info) => resolve(info || {}));
+        });
+        if (profileInfo && profileInfo.email) {
+          email = profileInfo.email;
+          displayName = email.split('@')[0];
+        }
+      } catch (e) {
+        console.warn("Could not fetch Chrome profile info:", e);
+      }
+    }
+
+    if (!email) {
+      email = "user.google@gmail.com";
+    }
+
+    if (!displayName) {
+      const namePart = email.split('@')[0];
+      displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    }
+
+    const googleUser = {
+      uid: `google_${email.replace(/[^a-zA-Z0-9]/g, '_')}`,
+      email: email,
+      displayName: displayName,
+      provider: 'google.local',
+      token: `google_token_${Date.now()}`,
+      refreshToken: `google_refresh_${Date.now()}`
+    };
+
+    this.currentUser = googleUser;
+    await chrome.storage.local.set({ user: this.currentUser });
+    this.notifyAuthStateChange();
+    return { success: true, user: this.currentUser };
   }
 
   // Update user profile display name
@@ -356,8 +500,8 @@ class FirebaseAuth {
         throw new Error('Display Name ফাঁকা রাখা যাবে না');
       }
 
-      // If user is logged in via mock Google, update locally
-      if (this.currentUser.provider === 'google') {
+      // If user is logged in via local-only mock Google, update locally
+      if (this.currentUser.provider === 'google.local') {
         this.currentUser.displayName = trimmedName;
         await chrome.storage.local.set({ user: this.currentUser });
         this.notifyAuthStateChange();
@@ -417,7 +561,7 @@ class FirebaseAuth {
         throw new Error('পাসওয়ার্ড কমপক্ষে ৬ ক্যারেক্টার হতে হবে');
       }
 
-      if (this.currentUser.provider === 'google') {
+      if (this.currentUser.provider === 'google' || this.currentUser.provider === 'google.local') {
         throw new Error('Google দিয়ে সাইন ইন করা অ্যাকাউন্টের পাসওয়ার্ড এখান থেকে পরিবর্তন করা যাবে না');
       }
 

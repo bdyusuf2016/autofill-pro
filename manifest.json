@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "2.6",
+  "version": "2.6.1",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "permissions": ["storage", "activeTab", "scripting", "commands", "alarms", "identity"],
@@ -39,6 +39,14 @@
       "run_at": "document_end"
     }
   ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1vwOS//joMW8v8eVoMMTEGAIJ8yNq1BRaUknKe9s70W4TrJONVrVm00tBk34Rr/mghoFSdbbJkozKzhVBSnhBQHeV1VGGTQ10ZwMS/EK/RJAmE71vt00Nn7a9rGSf7RPt7YPc9wNkW9rgYQ+94QPXTZ3mwVrZZTYeMAsV+aexJH2ccf4jUqbOlwLpEsmwsO/CFLHJQsq5Sqp5YV3WnvjFWRFFqUoSFTZL4wzvRTj0jZ5vsglzHeE4xTLpytVDo89Rfl9qAqtl30DQ4Tx2FpsRIVTQaWAqYzcUR09NOqzZLryCXl2bc67+dOg5krRAbSUAgZ6whM+4an0HRCG7PJtZwIDAQAB",
+  "oauth2": {
+    "client_id": "721814716991-d9u7e2q99ftcgdn9f5ku6mhp4jgum8j9.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
   "commands": {
     "_execute_action": {
       "suggested_key": {

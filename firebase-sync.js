@@ -83,6 +83,12 @@ class FirebaseSync {
       return { success: false, error: 'লগইন করা নেই বা সিঙ্ক নিষ্ক্রিয়। অনুগ্রহ করে লগইন করুন।' };
     }
 
+    // Local-only Google sign-in users don't have real Firebase tokens for RTDB sync
+    const user = firebaseAuth.getCurrentUser();
+    if (user && user.provider === 'google.local') {
+      return { success: false, error: 'Google লোকাল সাইন-ইনে ক্লাউড সিঙ্ক সমর্থিত নয়। অনুগ্রহ করে আবার Google দিয়ে সাইন ইন করুন অথবা ইমেইল/পাসওয়ার্ড ব্যবহার করুন।' };
+    }
+
     if (typeof firebaseConfig === 'undefined' || !firebaseConfig.databaseURL) {
       return { success: false, error: 'Firebase configuration not loaded' };
     }
@@ -175,6 +181,12 @@ class FirebaseSync {
     const active = await this.isSyncActive();
     if (!active) {
       return { success: false, error: 'লগইন করা নেই বা সিঙ্ক নিষ্ক্রিয়। অনুগ্রহ করে লগইন করুন।' };
+    }
+
+    // Local-only Google sign-in users don't have real Firebase tokens for RTDB sync
+    const user = firebaseAuth.getCurrentUser();
+    if (user && user.provider === 'google.local') {
+      return { success: false, error: 'Google লোকাল সাইন-ইনে ক্লাউড সিঙ্ক সমর্থিত নয়। অনুগ্রহ করে আবার Google দিয়ে সাইন ইন করুন অথবা ইমেইল/পাসওয়ার্ড ব্যবহার করুন।' };
     }
 
     if (typeof firebaseConfig === 'undefined' || !firebaseConfig.databaseURL) {

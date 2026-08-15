@@ -201,32 +201,6 @@ class LoginManager {
     }
   }
 
-  async executeGoogleLogin(email) {
-    const modal = document.getElementById('googleAccountModal');
-    if (this.isLoggingIn) return;
-    this.isLoggingIn = true;
-
-    try {
-      this.showSuccess(`⏳ Google অ্যাকাউন্ট (${email}) দিয়ে সাইন ইন করা হচ্ছে...`);
-      const result = await firebaseAuth.signInWithGoogle(email);
-
-      if (result.success) {
-        if (modal) modal.classList.add('hidden');
-        this.showSuccess(`✅ Google অ্যাকাউন্ট (${result.user.email}) দিয়ে সফলভাবে সাইন ইন হয়েছে!`);
-        setTimeout(() => {
-          this.closeLoginPage();
-        }, 800);
-      } else {
-        this.showError('❌ Google সাইন-ইন ব্যর্থ: ' + (result.error || 'Unknown error'));
-      }
-    } catch (error) {
-      console.error('Google execution exception:', error);
-      this.showError('❌ Google সাইন-ইন ত্রুটি: ' + error.message);
-    } finally {
-      this.isLoggingIn = false;
-    }
-  }
-
   toggleForm() {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
@@ -393,13 +367,8 @@ class LoginManager {
   }
 
   closeLoginPage() {
-    // Redirect to welcome page instead of closing
+    // Redirect to welcome page after successful login
     window.location.href = chrome.runtime.getURL('welcome.html');
-
-    // Option 2: Redirect to options page (backup)
-    setTimeout(() => {
-      chrome.runtime.openOptionsPage();
-    }, 100);
   }
 }
 

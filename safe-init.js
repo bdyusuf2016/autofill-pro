@@ -22,6 +22,9 @@ if (typeof firebaseAuth === 'undefined') {
     signin: async () => ({ success: false, error: 'Not available' }),
     signup: async () => ({ success: false, error: 'Not available' }),
     logout: async () => ({ success: false, error: 'Not available' }),
+    updateProfile: async () => ({ success: false, error: 'Not available' }),
+    changePassword: async () => ({ success: false, error: 'Not available' }),
+    sendPasswordResetEmail: async () => ({ success: false, error: 'Not available' }),
     onAuthStateChange: (cb) => cb(null),
     refreshToken: async () => null
   };

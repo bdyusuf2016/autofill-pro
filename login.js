@@ -16,11 +16,25 @@ class LoginManager {
 
     // Login form
     document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
-    document.getElementById('signupToggle').addEventListener('click', () => this.toggleForm());
+    document.getElementById('signupToggle').addEventListener('click', () => this.showView('signup'));
+
+    // Forgot password
+    const forgotLink = document.getElementById('forgotPasswordLink');
+    if (forgotLink) {
+      forgotLink.addEventListener('click', () => this.showView('reset'));
+    }
+    const backFromReset = document.getElementById('backToLoginFromReset');
+    if (backFromReset) {
+      backFromReset.addEventListener('click', () => this.showView('login'));
+    }
+    const resetForm = document.getElementById('forgotPasswordForm');
+    if (resetForm) {
+      resetForm.addEventListener('submit', (e) => this.handleForgotPassword(e));
+    }
 
     // Signup form
     document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
-    document.getElementById('loginToggle').addEventListener('click', () => this.toggleForm());
+    document.getElementById('loginToggle').addEventListener('click', () => this.showView('login'));
 
     // Check password match on signup
     document.getElementById('confirmPassword').addEventListener('input', (e) => {
@@ -201,23 +215,87 @@ class LoginManager {
     }
   }
 
-  toggleForm() {
+  showView(viewName) {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
+    const resetForm = document.getElementById('forgotPasswordForm');
     const infoBox = document.getElementById('infoBox');
+    const googleSection = document.querySelector('.google-auth-section');
+    const divider = document.querySelector('.divider');
+    const headerP = document.querySelector('.login-header p');
 
-    loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
-    signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
+    if (loginForm) loginForm.style.display = 'none';
+    if (signupForm) signupForm.style.display = 'none';
+    if (resetForm) resetForm.style.display = 'none';
 
-    if (loginForm.style.display === 'none') {
-      infoBox.textContent = 'Create a new account to get started';
-      document.querySelector('.login-header p').textContent = 'Sign up for cloud sync';
+    if (viewName === 'signup') {
+      if (signupForm) signupForm.style.display = 'block';
+      if (googleSection) googleSection.style.display = 'none';
+      if (divider) divider.style.display = 'none';
+      if (infoBox) infoBox.textContent = 'নতুন অ্যাকাউন্ট তৈরি করে ক্লাউড সিঙ্ক সুবিধা উপভোগ করুন';
+      if (headerP) headerP.textContent = 'Sign up for cloud sync';
+    } else if (viewName === 'reset') {
+      if (resetForm) resetForm.style.display = 'block';
+      if (googleSection) googleSection.style.display = 'none';
+      if (divider) divider.style.display = 'none';
+      if (infoBox) infoBox.textContent = 'আপনার নিবন্ধিত ইমেইলে পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হবে';
+      if (headerP) headerP.textContent = 'Reset your account password';
     } else {
-      infoBox.textContent = 'Login to sync your profiles across multiple devices';
-      document.querySelector('.login-header p').textContent = 'Cloud Sync - Login to Your Account';
+      // default: login
+      if (loginForm) loginForm.style.display = 'block';
+      if (googleSection) googleSection.style.display = 'block';
+      if (divider) divider.style.display = 'block';
+      if (infoBox) infoBox.textContent = 'লগইন করে আপনার প্রোফাইল ক্লাউডে সিঙ্ক রাখুন';
+      if (headerP) headerP.textContent = 'Cloud Sync - Login to Your Account';
     }
 
     this.clearMessages();
+  }
+
+  toggleForm() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm && loginForm.style.display !== 'none') {
+      this.showView('signup');
+    } else {
+      this.showView('login');
+    }
+  }
+
+  async handleForgotPassword(e) {
+    e.preventDefault();
+    if (this.isLoggingIn) return;
+
+    const email = document.getElementById('resetEmail')?.value.trim();
+    if (!email) {
+      this.showError('অনুগ্রহ করে আপনার নিবন্ধিত ইমেইল এড্রেস প্রবেশ করান');
+      return;
+    }
+
+    if (!this.isValidEmail(email)) {
+      this.showError('ইমেইল ফরম্যাট সঠিক নয়');
+      return;
+    }
+
+    const resetBtn = document.getElementById('resetPasswordBtn');
+    this.isLoggingIn = true;
+    this.setButtonLoading(resetBtn, true);
+
+    try {
+      const result = await firebaseAuth.sendPasswordResetEmail(email);
+      if (result.success) {
+        this.showSuccess(`✅ পাসওয়ার্ড রিসেট লিঙ্ক "${email}"-এ পাঠানো হয়েছে! আপনার ইনবক্স চেক করুন।`);
+        setTimeout(() => {
+          this.showView('login');
+        }, 3500);
+      } else {
+        this.showError('❌ ' + (result.error || 'পাসওয়ার্ড রিসেট ব্যর্থ হয়েছে'));
+      }
+    } catch (error) {
+      this.showError('❌ ত্রুটি: ' + error.message);
+    } finally {
+      this.isLoggingIn = false;
+      this.setButtonLoading(resetBtn, false);
+    }
   }
 
   async checkExistingUser() {

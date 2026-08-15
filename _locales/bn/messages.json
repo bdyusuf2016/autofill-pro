@@ -691,5 +691,41 @@
   "createProfileFromPassportBtn": {
     "message": "✅ পাসপোর্ট ডাটা দিয়ে প্রোফাইল তৈরি করুন",
     "description": "পাসপোর্ট ডাটা থেকে প্রোফাইল তৈরির বাটন"
+  },
+  "editAccountProfileBtn": {
+    "message": "✏️ নাম পরিবর্তন",
+    "description": "ক্লাউড প্রোফাইল নাম এডিট বাটন"
+  },
+  "changeAccountPasswordBtn": {
+    "message": "🔒 পাসওয়ার্ড পরিবর্তন",
+    "description": "ক্লাউড পাসওয়ার্ড পরিবর্তন বাটন"
+  },
+  "editAccountProfileTitle": {
+    "message": "অ্যাকাউন্ট প্রোফাইল নাম পরিবর্তন",
+    "description": "অ্যাকাউন্ট প্রোফাইল এডিট মডাল শিরোনাম"
+  },
+  "accountDisplayNameLabel": {
+    "message": "ডিসপ্লে নাম (Display Name):",
+    "description": "ডিসপ্লে নাম লেবেল"
+  },
+  "changeAccountPasswordTitle": {
+    "message": "অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন",
+    "description": "পাসওয়ার্ড পরিবর্তন মডাল শিরোনাম"
+  },
+  "newPasswordLabel": {
+    "message": "নতুন পাসওয়ার্ড:",
+    "description": "নতুন পাসওয়ার্ড লেবেল"
+  },
+  "confirmNewPasswordLabel": {
+    "message": "নতুন পাসওয়ার্ড নিশ্চিত করুন:",
+    "description": "নতুন পাসওয়ার্ড নিশ্চিতকরণ লেবেল"
+  },
+  "updatePasswordBtn": {
+    "message": "পাসওয়ার্ড আপডেট করুন",
+    "description": "পাসওয়ার্ড আপডেট বাটন"
+  },
+  "saveChanges": {
+    "message": "পরিবর্তন সংরক্ষণ করুন",
+    "description": "পরিবর্তন সংরক্ষণ বাটন"
   }
 }

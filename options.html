@@ -639,10 +639,22 @@
             <div class="status-box">
               <h3>Account Status</h3>
               <div id="syncStatusContent">
-                <p id="syncUserInfo" style="display: none;">
-                  <strong>Logged in as:</strong>
-                  <span id="syncUserEmail"></span>
-                </p>
+                <div id="syncUserInfo" style="display: none;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                    <div>
+                      <div style="font-size: 15px; font-weight: 600; color: #1e293b;" id="syncUserDisplayName"></div>
+                      <div style="font-size: 13px; color: #64748b;" id="syncUserEmail"></div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                      <button id="editCloudProfileBtn" class="secondary" style="padding: 6px 12px; font-size: 13px;">
+                        ✏️ Edit Name
+                      </button>
+                      <button id="changeCloudPasswordBtn" class="secondary" style="padding: 6px 12px; font-size: 13px;">
+                        🔒 Change Password
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 <p id="syncNotLoggedIn">Not logged in</p>
               </div>
               <div class="sync-buttons">
@@ -952,6 +964,50 @@
             >
               Save Hotkey
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Profile Edit Modal -->
+      <div class="modal-overlay hidden" id="accountProfileModal">
+        <div class="modal" style="max-width: 440px;">
+          <div class="modal-header">
+            <h2 data-i18n="editAccountProfileTitle">Edit Account Profile</h2>
+            <button class="close-modal" id="closeAccountProfileModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="accountDisplayNameInput" style="display: block; font-weight: 600; margin-bottom: 8px;" data-i18n="accountDisplayNameLabel">Display Name:</label>
+              <input type="text" id="accountDisplayNameInput" class="form-control" placeholder="Your Name" style="width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="secondary" id="cancelAccountProfileBtn" data-i18n="cancel">Cancel</button>
+            <button class="primary" id="saveAccountProfileBtn" data-i18n="saveChanges">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Password Change Modal -->
+      <div class="modal-overlay hidden" id="accountPasswordModal">
+        <div class="modal" style="max-width: 440px;">
+          <div class="modal-header">
+            <h2 data-i18n="changeAccountPasswordTitle">Change Account Password</h2>
+            <button class="close-modal" id="closeAccountPasswordModal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="accountNewPasswordInput" style="display: block; font-weight: 600; margin-bottom: 8px;" data-i18n="newPasswordLabel">New Password:</label>
+              <input type="password" id="accountNewPasswordInput" class="form-control" placeholder="At least 6 characters" style="width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;" />
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label for="accountConfirmPasswordInput" style="display: block; font-weight: 600; margin-bottom: 8px;" data-i18n="confirmNewPasswordLabel">Confirm New Password:</label>
+              <input type="password" id="accountConfirmPasswordInput" class="form-control" placeholder="Re-enter new password" style="width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="secondary" id="cancelAccountPasswordBtn" data-i18n="cancel">Cancel</button>
+            <button class="primary" id="saveAccountPasswordBtn" data-i18n="updatePasswordBtn">Update Password</button>
           </div>
         </div>
       </div>

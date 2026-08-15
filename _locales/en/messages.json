@@ -998,5 +998,41 @@
   "createProfileFromPassportBtn": {
     "message": "✅ Create Profile from Passport Data",
     "description": "Button to create profile from passport"
+  },
+  "editAccountProfileBtn": {
+    "message": "✏️ Edit Name",
+    "description": "Button to edit cloud profile name"
+  },
+  "changeAccountPasswordBtn": {
+    "message": "🔒 Change Password",
+    "description": "Button to change cloud password"
+  },
+  "editAccountProfileTitle": {
+    "message": "Edit Account Profile",
+    "description": "Title for edit account profile modal"
+  },
+  "accountDisplayNameLabel": {
+    "message": "Display Name:",
+    "description": "Label for display name input"
+  },
+  "changeAccountPasswordTitle": {
+    "message": "Change Account Password",
+    "description": "Title for change password modal"
+  },
+  "newPasswordLabel": {
+    "message": "New Password:",
+    "description": "Label for new password input"
+  },
+  "confirmNewPasswordLabel": {
+    "message": "Confirm New Password:",
+    "description": "Label for confirm new password input"
+  },
+  "updatePasswordBtn": {
+    "message": "Update Password",
+    "description": "Button to update password"
+  },
+  "saveChanges": {
+    "message": "Save Changes",
+    "description": "Button to save changes"
   }
 }

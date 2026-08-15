@@ -62,6 +62,8 @@ class OptionsManager {
     this.handlePassportFileUpload = this.handlePassportFileUpload.bind(this);
     this.displayPassportPreview = this.displayPassportPreview.bind(this);
     this.handleCreateProfileFromPassport = this.handleCreateProfileFromPassport.bind(this);
+    this.handleSaveAccountProfile = this.handleSaveAccountProfile.bind(this);
+    this.handleSaveAccountPassword = this.handleSaveAccountPassword.bind(this);
 
     // Initialize
     this.init();
@@ -3114,6 +3116,7 @@ class OptionsManager {
     const logoutBtn = document.getElementById('syncLogoutBtn');
     const settingsBox = document.getElementById('syncSettingsBox');
     const userEmailSpan = document.getElementById('syncUserEmail');
+    const userDisplayNameEl = document.getElementById('syncUserDisplayName');
 
     const enableCloudSyncCheckbox = document.getElementById('enableCloudSync');
     const autoSyncCheckbox = document.getElementById('autoSyncOnChange');
@@ -3123,6 +3126,9 @@ class OptionsManager {
       if (userInfoDiv) userInfoDiv.style.display = 'block';
       if (notLoggedInDiv) notLoggedInDiv.style.display = 'none';
       if (userEmailSpan) userEmailSpan.textContent = user.email || '';
+      if (userDisplayNameEl) {
+        userDisplayNameEl.textContent = user.displayName || user.email.split('@')[0];
+      }
       if (loginBtn) loginBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-block';
       if (settingsBox) settingsBox.style.display = 'block';
@@ -3169,6 +3175,61 @@ class OptionsManager {
     const enableCloudSyncCheckbox = document.getElementById('enableCloudSync');
     const autoSyncCheckbox = document.getElementById('autoSyncOnChange');
 
+    // Edit Profile button & Modal
+    const editProfileBtn = document.getElementById('editCloudProfileBtn');
+    if (editProfileBtn) {
+      editProfileBtn.addEventListener('click', () => {
+        const user = firebaseAuth?.getCurrentUser();
+        const input = document.getElementById('accountDisplayNameInput');
+        if (input && user) {
+          input.value = user.displayName || '';
+        }
+        const modal = document.getElementById('accountProfileModal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          this.enableModalFocus(modal);
+        }
+      });
+    }
+
+    const closeProfileModalBtn = document.getElementById('closeAccountProfileModal');
+    const cancelProfileBtn = document.getElementById('cancelAccountProfileBtn');
+    [closeProfileModalBtn, cancelProfileBtn].forEach((btn) => {
+      if (btn) btn.addEventListener('click', () => this.closeModal('accountProfileModal'));
+    });
+
+    const saveProfileBtn = document.getElementById('saveAccountProfileBtn');
+    if (saveProfileBtn) {
+      saveProfileBtn.addEventListener('click', () => this.handleSaveAccountProfile());
+    }
+
+    // Change Password button & Modal
+    const changePasswordBtn = document.getElementById('changeCloudPasswordBtn');
+    if (changePasswordBtn) {
+      changePasswordBtn.addEventListener('click', () => {
+        const pInput = document.getElementById('accountNewPasswordInput');
+        const cpInput = document.getElementById('accountConfirmPasswordInput');
+        if (pInput) pInput.value = '';
+        if (cpInput) cpInput.value = '';
+        const modal = document.getElementById('accountPasswordModal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          this.enableModalFocus(modal);
+        }
+      });
+    }
+
+    const closePasswordModalBtn = document.getElementById('closeAccountPasswordModal');
+    const cancelPasswordBtn = document.getElementById('cancelAccountPasswordBtn');
+    [closePasswordModalBtn, cancelPasswordBtn].forEach((btn) => {
+      if (btn) btn.addEventListener('click', () => this.closeModal('accountPasswordModal'));
+    });
+
+    const savePasswordBtn = document.getElementById('saveAccountPasswordBtn');
+    if (savePasswordBtn) {
+      savePasswordBtn.addEventListener('click', () => this.handleSaveAccountPassword());
+    }
+
     if (loginBtn) {
       loginBtn.addEventListener('click', () => this.handleSyncLogin());
     }
@@ -3209,6 +3270,74 @@ class OptionsManager {
         }
         this.showMessage(enabled ? 'Auto-sync enabled' : 'Auto-sync disabled');
       });
+    }
+  }
+
+  async handleSaveAccountProfile() {
+    const input = document.getElementById('accountDisplayNameInput');
+    const newName = (input?.value || '').trim();
+    if (!newName) {
+      this.showMessage('অনুগ্রহ করে Display Name প্রবেশ করান', 'error');
+      return;
+    }
+
+    const saveBtn = document.getElementById('saveAccountProfileBtn');
+    if (saveBtn) saveBtn.disabled = true;
+
+    try {
+      const result = await firebaseAuth.updateProfile(newName);
+      if (result.success) {
+        this.closeModal('accountProfileModal');
+        this.showMessage('✅ প্রোফাইল নাম সফলভাবে আপডেট হয়েছে!', 'success');
+        await this.updateSyncStatus();
+      } else {
+        this.showMessage('❌ আপডেট ব্যর্থ: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (err) {
+      this.showMessage('❌ ত্রুটি: ' + err.message, 'error');
+    } finally {
+      if (saveBtn) saveBtn.disabled = false;
+    }
+  }
+
+  async handleSaveAccountPassword() {
+    const pInput = document.getElementById('accountNewPasswordInput');
+    const cpInput = document.getElementById('accountConfirmPasswordInput');
+    const newPass = pInput?.value || '';
+    const confirmPass = cpInput?.value || '';
+
+    if (!newPass || !confirmPass) {
+      this.showMessage('সব ফিল্ড পূরণ করুন', 'error');
+      return;
+    }
+
+    if (newPass !== confirmPass) {
+      this.showMessage('নতুন পাসওয়ার্ড দুটি মিলছে না', 'error');
+      return;
+    }
+
+    if (newPass.length < 6) {
+      this.showMessage('পাসওয়ার্ড কমপক্ষে ৬ ক্যারেক্টার হতে হবে', 'error');
+      return;
+    }
+
+    const saveBtn = document.getElementById('saveAccountPasswordBtn');
+    if (saveBtn) saveBtn.disabled = true;
+
+    try {
+      const result = await firebaseAuth.changePassword(newPass);
+      if (result.success) {
+        this.closeModal('accountPasswordModal');
+        this.showMessage('✅ অ্যাকাউন্ট পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!', 'success');
+        if (pInput) pInput.value = '';
+        if (cpInput) cpInput.value = '';
+      } else {
+        this.showMessage('❌ পাসওয়ার্ড পরিবর্তন ব্যর্থ: ' + (result.error || 'Unknown error'), 'error');
+      }
+    } catch (err) {
+      this.showMessage('❌ ত্রুটি: ' + err.message, 'error');
+    } finally {
+      if (saveBtn) saveBtn.disabled = false;
     }
   }
 

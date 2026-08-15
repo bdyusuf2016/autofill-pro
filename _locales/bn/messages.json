@@ -663,5 +663,33 @@
   "languageBengali": {
     "message": "বাংলা",
     "description": "বাংলা ভাষা অপশন"
+  },
+  "passportParserTab": {
+    "message": "🛂 পাসপোর্ট পার্সার",
+    "description": "পাসপোর্ট পার্সার ট্যাব শিরোনাম"
+  },
+  "passportParserTitle": {
+    "message": "পাসপোর্ট ইনফরমেশন পার্সার",
+    "description": "পাসপোর্ট পার্সার সেকশন শিরোনাম"
+  },
+  "passportParserSubtitle": {
+    "message": "পাসপোর্টের স্ক্যান কপি (ছবি/পিডিএফ) আপলোড অথবা MRZ কোড পেস্ট করে অটো তথ্য সংগ্রহ করুন",
+    "description": "পাসপোর্ট পার্সার সেকশন সাবটাইটেল"
+  },
+  "passportFileUploadLabel": {
+    "message": "পাসপোর্ট স্ক্যান ফাইল (JPG, PNG, WEBP, PDF):",
+    "description": "পাসপোর্ট ফাইল আপলোড লেবেল"
+  },
+  "passportTextLabel": {
+    "message": "পাসপোর্ট MRZ কোড বা স্ক্যানকৃত OCR টেক্সট:",
+    "description": "MRZ টেক্সট ইনপুট লেবেল"
+  },
+  "parsePassportBtn": {
+    "message": "🔍 পাসপোর্ট তথ্য সংগ্রহ করুন",
+    "description": "পাসপোর্ট তথ্য সংগ্রহ করার বাটন"
+  },
+  "createProfileFromPassportBtn": {
+    "message": "✅ পাসপোর্ট ডাটা দিয়ে প্রোফাইল তৈরি করুন",
+    "description": "পাসপোর্ট ডাটা থেকে প্রোফাইল তৈরির বাটন"
   }
 }

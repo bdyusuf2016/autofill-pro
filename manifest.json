@@ -15,7 +15,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["about.html", "about.js", "options.css", "firebase-config.js", "firebase-auth.js", "firebase-sync.js", "login.html", "login.js", "welcome.html", "welcome.js", "pdf-parser.js", "ocr-parser.js", "teletalk-mapper-v2.js", "crypto-helper.js"],
+      "resources": ["about.html", "about.js", "options.css", "firebase-config.js", "firebase-auth.js", "firebase-sync.js", "login.html", "login.js", "welcome.html", "welcome.js", "pdf-parser.js", "ocr-parser.js", "passport-parser.js", "teletalk-mapper-v2.js", "crypto-helper.js", "tesseract.min.js"],
       "matches": ["<all_urls>"]
     }
   ],

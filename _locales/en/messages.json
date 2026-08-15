@@ -970,5 +970,33 @@
   "languageBengali": {
     "message": "Bengali",
     "description": "Bengali language option"
+  },
+  "passportParserTab": {
+    "message": "🛂 Passport Parser",
+    "description": "Tab title for Passport Parser"
+  },
+  "passportParserTitle": {
+    "message": "Passport Information Parser",
+    "description": "Title for Passport Parser section"
+  },
+  "passportParserSubtitle": {
+    "message": "Upload a passport scan copy (Image/PDF) or paste MRZ code to grab details automatically",
+    "description": "Subtitle for Passport Parser section"
+  },
+  "passportFileUploadLabel": {
+    "message": "Passport Scan File (JPG, PNG, WEBP, PDF):",
+    "description": "Label for passport file upload"
+  },
+  "passportTextLabel": {
+    "message": "Passport MRZ Code or Scanned OCR Text:",
+    "description": "Label for MRZ text input"
+  },
+  "parsePassportBtn": {
+    "message": "🔍 Grab Passport Info",
+    "description": "Button to grab passport info"
+  },
+  "createProfileFromPassportBtn": {
+    "message": "✅ Create Profile from Passport Data",
+    "description": "Button to create profile from passport"
   }
 }

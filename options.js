@@ -58,6 +58,10 @@ class OptionsManager {
     this.handleCreateDssTemplateProfile = this.handleCreateDssTemplateProfile.bind(this);
     this.handleLoadOcrSourceFile = this.handleLoadOcrSourceFile.bind(this);
     this.handleCreateProfileFromOcr = this.handleCreateProfileFromOcr.bind(this);
+    this.handlePassportTextParse = this.handlePassportTextParse.bind(this);
+    this.handlePassportFileUpload = this.handlePassportFileUpload.bind(this);
+    this.displayPassportPreview = this.displayPassportPreview.bind(this);
+    this.handleCreateProfileFromPassport = this.handleCreateProfileFromPassport.bind(this);
 
     // Initialize
     this.init();
@@ -2226,6 +2230,138 @@ class OptionsManager {
       });
     }
 
+    // Passport Parser Listeners
+    const parsePassportBtn = document.getElementById("parsePassportBtn");
+    const passportFileInput = document.getElementById("passportFileInput");
+    const passportDropZone = document.getElementById("passportDropZone");
+    const createProfileFromPassportBtn = document.getElementById("createProfileFromPassportBtn");
+    const clearPassportBtn = document.getElementById("clearPassportBtn");
+
+    const toggleMrzMode = document.getElementById("toggleMrzMode");
+    if (toggleMrzMode) {
+      chrome.storage.local.get("passportMrzEnabled", (res) => {
+        if (res && res.passportMrzEnabled !== undefined) {
+          toggleMrzMode.checked = res.passportMrzEnabled;
+        }
+      });
+      toggleMrzMode.addEventListener("change", (e) => {
+        const isChecked = e.target.checked;
+        chrome.storage.local.set({ passportMrzEnabled: isChecked });
+        this.handlePassportTextParse();
+      });
+    }
+
+    const copyAllPassportDataBtn = document.getElementById("copyAllPassportDataBtn");
+    const copyPassportJsonBtn = document.getElementById("copyPassportJsonBtn");
+
+    if (copyAllPassportDataBtn) {
+      copyAllPassportDataBtn.addEventListener("click", () => {
+        if (!this.currentPassportData) {
+          this.showError("No passport data available to copy.");
+          return;
+        }
+        const d = this.currentPassportData;
+        const textToCopy = [
+          d.passportNo ? `Passport Number: ${d.passportNo}` : "",
+          d.fullName ? `Full Name: ${d.fullName}` : "",
+          d.surname ? `Surname: ${d.surname}` : "",
+          d.givenName ? `Given Name: ${d.givenName}` : "",
+          d.fatherName ? `Father's Name: ${d.fatherName}` : "",
+          d.motherName ? `Mother's Name: ${d.motherName}` : "",
+          d.spouseName ? `Spouse's Name: ${d.spouseName}` : "",
+          d.guardianName ? `Legal Guardian: ${d.guardianName}` : "",
+          d.dob ? `Date of Birth: ${d.dob}` : "",
+          d.gender ? `Gender / Sex: ${d.gender}` : "",
+          d.issueDate ? `Date of Issue: ${d.issueDate}` : "",
+          d.expiryDate ? `Date of Expiry: ${d.expiryDate}` : "",
+          d.issuingAuthority ? `Issuing Authority: ${d.issuingAuthority}` : "",
+          d.placeOfBirth ? `Place of Birth: ${d.placeOfBirth}` : "",
+          d.nationalityName ? `Nationality: ${d.nationalityName}` : "",
+          d.nidNo ? `NID / Personal No: ${d.nidNo}` : "",
+          d.permanentAddress ? `Permanent Address: ${d.permanentAddress}` : "",
+          d.emergencyContactName ? `Emergency Contact Name: ${d.emergencyContactName}` : "",
+          d.emergencyRelationship ? `Relationship: ${d.emergencyRelationship}` : "",
+          d.emergencyAddress ? `Emergency Contact Address: ${d.emergencyAddress}` : "",
+          d.mobile ? `Emergency Phone / Mobile: ${d.mobile}` : "",
+          d.prevPassportNo ? `Previous Passport No: ${d.prevPassportNo}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n");
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          this.showMessage("📋 All organized passport data copied to clipboard!", "success", 4000);
+        });
+      });
+    }
+
+    if (copyPassportJsonBtn) {
+      copyPassportJsonBtn.addEventListener("click", () => {
+        if (!this.currentPassportData) {
+          this.showError("No passport data available to copy.");
+          return;
+        }
+        const jsonStr = JSON.stringify(this.currentPassportData, null, 2);
+        navigator.clipboard.writeText(jsonStr).then(() => {
+          this.showMessage("📄 Extracted passport data copied as JSON!", "success", 4000);
+        });
+      });
+    }
+
+    if (parsePassportBtn) {
+      parsePassportBtn.addEventListener("click", () => {
+        this.handlePassportTextParse();
+      });
+    }
+
+    if (passportFileInput) {
+      passportFileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          this.handlePassportFileUpload(e.target.files[0]);
+        }
+      });
+    }
+
+    if (passportDropZone) {
+      passportDropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        passportDropZone.style.borderColor = "#2563eb";
+        passportDropZone.style.background = "#eff6ff";
+      });
+      passportDropZone.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        passportDropZone.style.borderColor = "#cbd5e1";
+        passportDropZone.style.background = "#f8fafc";
+      });
+      passportDropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        passportDropZone.style.borderColor = "#cbd5e1";
+        passportDropZone.style.background = "#f8fafc";
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          this.handlePassportFileUpload(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    if (createProfileFromPassportBtn) {
+      createProfileFromPassportBtn.addEventListener("click", () => {
+        this.handleCreateProfileFromPassport();
+      });
+    }
+
+    if (clearPassportBtn) {
+      clearPassportBtn.addEventListener("click", () => {
+        const textInput = document.getElementById("passportTextInput");
+        const fileName = document.getElementById("passportFileName");
+        const preview = document.getElementById("passportPreview");
+        const fileInput = document.getElementById("passportFileInput");
+        if (textInput) textInput.value = "";
+        if (fileName) fileName.textContent = "";
+        if (fileInput) fileInput.value = "";
+        if (preview) preview.style.display = "none";
+        this.currentPassportData = null;
+      });
+    }
+
     // E2EE settings checkbox listener
     const encryptionEnabled = document.getElementById("encryptionEnabled");
     if (encryptionEnabled) {
@@ -2390,7 +2526,7 @@ class OptionsManager {
     const file = input && input.files ? input.files[0] : null;
 
     if (!file) {
-      this.showError("Please choose a TXT or HTML file first");
+      this.showError("Please choose a file (Image, TXT, or HTML) first");
       return;
     }
 
@@ -2524,6 +2660,392 @@ class OptionsManager {
     } catch (error) {
       console.error("Error creating OCR/text profile:", error);
       this.showError(`Error creating OCR/Text profile: ${error.message}`);
+    }
+  }
+
+  // ============ Passport Parser Methods ============
+
+  async handlePassportFileUpload(file) {
+    if (!file) return;
+
+    const fileNameEl = document.getElementById("passportFileName");
+    const isImage = file.type.startsWith("image/") || /\.(jpg|jpeg|png|webp|bmp|tiff?)$/i.test(file.name);
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    const isTxt = file.name.toLowerCase().endsWith(".txt");
+
+    if (fileNameEl) {
+      fileNameEl.innerHTML = `Selected File: <strong>${this.escapeHtml(file.name)}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+    }
+
+    const textarea = document.getElementById("passportTextInput");
+
+    // Helper: sanitize text - remove binary garbage, keep only printable chars
+    const sanitizeOcrText = (raw) => {
+      if (!raw) return "";
+      // Remove ALL characters outside basic ASCII printable + Bengali Unicode
+      let cleaned = "";
+      for (let i = 0; i < raw.length; i++) {
+        const code = raw.charCodeAt(i);
+        if (
+          (code >= 0x20 && code <= 0x7E) ||
+          (code >= 0x0980 && code <= 0x09FF) ||
+          code === 0x0A || code === 0x0D || code === 0x09
+        ) {
+          cleaned += raw[i];
+        }
+      }
+      return cleaned.trim();
+    };
+
+    try {
+      // === IMAGE FILES ===
+      if (isImage) {
+        // Show thumbnail preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (fileNameEl) {
+            fileNameEl.innerHTML = `
+              <div style="margin-top: 10px;">
+                <img src="${e.target.result}" style="max-height: 140px; border-radius: 6px; border: 1px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" alt="Passport Preview" /><br/>
+                <span style="color: #059669; font-weight: 600;">📸 Image Loaded: ${this.escapeHtml(file.name)}</span>
+              </div>
+            `;
+          }
+        };
+        reader.readAsDataURL(file);
+
+        this.showMessage(`🔍 Running OCR scan on passport image "${file.name}"...`, "info", 4000);
+
+        const ocrRes = await ocrParser.performImageOCR(file);
+        const cleanText = sanitizeOcrText(ocrRes ? ocrRes.text : "");
+
+        if (cleanText) {
+          if (textarea) textarea.value = cleanText;
+          const testResult = passportParser.parseText(cleanText);
+          if (testResult && testResult.success) {
+            this.handlePassportTextParse();
+            this.showMessage(`✅ Image "${file.name}" scanned and parsed successfully!`, "success", 4000);
+          } else {
+            // Text extracted but partial parsing - attempt parse anyway and inform user
+            this.handlePassportTextParse();
+            if (!this.currentPassportData || !this.currentPassportData.passportNo) {
+              this.showMessage(
+                `📸 Image "${file.name}" loaded! Text extracted into the box below. Please review or complete any missing details and click "Extract Organized OCR Data".`,
+                "info",
+                8000
+              );
+            }
+          }
+        } else {
+          this.showMessage(
+            `📸 Image "${file.name}" loaded! Please check image clarity or manually paste passport details into the box below.`,
+            "info",
+            10000
+          );
+        }
+        return;
+      }
+
+      // === PDF FILES ===
+      if (isPdf) {
+        this.showMessage(`📄 Processing PDF passport file "${file.name}"...`, "info", 4000);
+        let text = "";
+        try {
+          const pdfResult = await pdfParser.parsePDF(file);
+          if (pdfResult && pdfResult.fields && pdfResult.fields.length > 0) {
+            text = pdfResult.fields.map((f) => `${f.name}: ${f.value}`).join("\n");
+          }
+
+          if (!text.trim() && pdfParser.extractTextFromPDF) {
+            text = await pdfParser.extractTextFromPDF(file);
+          }
+        } catch (pErr) {
+          console.warn("Direct PDF text parse failed, attempting image OCR:", pErr);
+        }
+
+        let cleanText = sanitizeOcrText(text);
+
+        // If no plain text in PDF (or scanned PDF), extract embedded image & perform OCR
+        if (!cleanText && pdfParser.extractImagesFromPDF) {
+          this.showMessage(`🔍 PDF text is scanned image. Running OCR on "${file.name}"...`, "info", 4000);
+          const pdfImages = await pdfParser.extractImagesFromPDF(file);
+          if (pdfImages && pdfImages.length > 0) {
+            const ocrRes = await ocrParser.performImageOCR(pdfImages[0]);
+            cleanText = sanitizeOcrText(ocrRes ? ocrRes.text : "");
+          }
+        }
+
+        if (cleanText) {
+          if (textarea) textarea.value = cleanText;
+          this.handlePassportTextParse();
+          this.showMessage(`✅ PDF "${file.name}" scanned and parsed successfully!`, "success", 4000);
+        } else {
+          this.showMessage(
+            `📄 PDF "${file.name}" loaded! If details do not auto-fill, please type/paste passport text into the box below.`,
+            "info",
+            8000
+          );
+        }
+        return;
+      }
+
+      // === PLAIN TEXT FILES (.txt) ===
+      if (isTxt) {
+        const rawText = await file.text();
+        const cleanText = sanitizeOcrText(rawText);
+        if (textarea && cleanText) {
+          textarea.value = cleanText;
+          this.handlePassportTextParse();
+        } else {
+          this.showMessage(
+            `📄 File "${file.name}" loaded but no readable text found. Please paste passport text into the box.`,
+            "info",
+            5000
+          );
+        }
+        return;
+      }
+
+      // === UNKNOWN FILE TYPE: Try as image OCR ===
+      this.showMessage(`🔍 Attempting OCR scan on "${file.name}"...`, "info", 4000);
+      const ocrRes = await ocrParser.performImageOCR(file);
+      const cleanText = sanitizeOcrText(ocrRes ? ocrRes.text : "");
+      if (cleanText) {
+        if (textarea) textarea.value = cleanText;
+        this.handlePassportTextParse();
+        this.showMessage(`✅ "${file.name}" scanned and parsed successfully!`, "success", 4000);
+      } else {
+        this.showMessage(
+          `⚠️ Could not extract text from "${file.name}". Please paste passport text details into the box below.`,
+          "info",
+          7000
+        );
+      }
+    } catch (err) {
+      console.error("Passport file handling error:", err);
+      // Fallback: try extracting embedded JPEG image if direct PDF parse threw
+      if (isPdf && pdfParser.extractImagesFromPDF) {
+        try {
+          const pdfImages = await pdfParser.extractImagesFromPDF(file);
+          if (pdfImages && pdfImages.length > 0) {
+            const ocrRes = await ocrParser.performImageOCR(pdfImages[0]);
+            const cleanText = sanitizeOcrText(ocrRes ? ocrRes.text : "");
+            if (cleanText) {
+              if (textarea) textarea.value = cleanText;
+              this.handlePassportTextParse();
+              this.showMessage(`✅ PDF "${file.name}" scanned via OCR!`, "success", 4000);
+              return;
+            }
+          }
+        } catch (fallbackErr) {
+          console.error("Fallback PDF image OCR error:", fallbackErr);
+        }
+      }
+
+      this.showMessage(
+        `📄 PDF "${file.name}" loaded! Please paste passport text into the box below if fields do not auto-fill.`,
+        "info",
+        7000
+      );
+    }
+  }
+
+  handlePassportTextParse() {
+    const textarea = document.getElementById("passportTextInput");
+    const text = textarea ? textarea.value : "";
+
+    if (!text || !text.trim()) {
+      this.showMessage(
+        "Please paste passport OCR scanned text or key-value details into the box below.",
+        "error"
+      );
+      return;
+    }
+
+    let result = null;
+    try {
+      const pParser = new PassportParser();
+      result = pParser.parseText(text);
+    } catch (err) {
+      console.error("passportParser.parseText error:", err);
+    }
+
+    if (!result || !result.success || !result.data) {
+      const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      const pNoMatch = text.match(/([A-Z]\d{7,8}|\b[A-Z0-9]{8,9}\b)/i);
+      const fallbackData = {
+        documentType: "Passport (Extracted Text)",
+        passportNo: pNoMatch ? pNoMatch[1].toUpperCase() : "",
+        fullName: lines[0] || "Extracted Passport Data",
+        surname: lines[0] ? lines[0].split(/\s+/)[0] : "",
+        givenName: lines[0] ? lines[0].split(/\s+/).slice(1).join(" ") : "",
+        nationality: "BGD",
+        nationalityName: "Bangladesh",
+      };
+
+      result = {
+        success: true,
+        type: "VISUAL_ZONE",
+        isValidChecksum: false,
+        data: fallbackData,
+      };
+    }
+
+    this.currentPassportData = result.data;
+    this.displayPassportPreview(result);
+    this.showMessage("✅ Passport information extracted successfully!", "success");
+  }
+
+  displayPassportPreview(result) {
+    const previewDiv = document.getElementById("passportPreview");
+    const cardsGrid = document.getElementById("passportCardsGrid");
+    const tbody = document.getElementById("passportFieldsTableBody");
+    const badge = document.getElementById("mrzChecksumBadge");
+
+    if (!previewDiv || !cardsGrid || !tbody) return;
+
+    const data = result.data || {};
+
+    if (badge) {
+      if (result.type && result.type.includes("MRZ")) {
+        if (result.isValidChecksum) {
+          badge.className = "status-badge enabled";
+          badge.textContent = "✅ MRZ Verified (Checksum Valid)";
+          badge.style.background = "#dcfce7";
+          badge.style.color = "#15803d";
+        } else {
+          badge.className = "status-badge enabled";
+          badge.textContent = "⚠️ MRZ Recovered (OCR Auto-Corrected)";
+          badge.style.background = "#fef3c7";
+          badge.style.color = "#92400e";
+        }
+      } else {
+        badge.className = "status-badge enabled";
+        badge.textContent = "📄 Visual OCR Extracted";
+        badge.style.background = "#dcfce7";
+        badge.style.color = "#15803d";
+      }
+    }
+
+    cardsGrid.innerHTML = `
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 11px;">PASSPORT NUMBER</small>
+        <div style="font-weight: 700; font-size: 16px; color: #1e293b;">${this.escapeHtml(data.passportNo || "N/A")}</div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 11px;">FULL NAME</small>
+        <div style="font-weight: 700; font-size: 16px; color: #1e293b;">${this.escapeHtml(data.fullName || "N/A")}</div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 11px;">DATE OF BIRTH</small>
+        <div style="font-weight: 700; font-size: 16px; color: #1e293b;">${this.escapeHtml(data.dob || "N/A")}</div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 11px;">NATIONALITY / COUNTRY</small>
+        <div style="font-weight: 700; font-size: 16px; color: #1e293b;">${this.escapeHtml(data.nationalityName || data.nationality || "N/A")}</div>
+      </div>
+    `;
+
+    const tableRows = [
+      { label: "Passport Number", val: data.passportNo || "", key: "passport_no / Passport No" },
+      { label: "Full Name", val: data.fullName || "", key: "name / Full Name" },
+      { label: "Surname", val: data.surname || "", key: "surname / Last Name" },
+      { label: "Given Name", val: data.givenName || "", key: "given_name / First Name" },
+      { label: "Father's Name", val: data.fatherName || "", key: "father / Father's Name" },
+      { label: "Mother's Name", val: data.motherName || "", key: "mother / Mother's Name" },
+      { label: "Spouse's Name", val: data.spouseName || "", key: "spouse_name / Spouse Name" },
+      { label: "Legal Guardian", val: data.guardianName || "", key: "guardian / Guardian Name" },
+      { label: "Date of Birth", val: data.dob || "", key: "dob / Date of Birth" },
+      { label: "Place of Birth", val: data.placeOfBirth || "", key: "place_of_birth" },
+      { label: "Gender / Sex", val: data.gender || "", key: "gender / Sex" },
+      { label: "Date of Issue", val: data.issueDate || "", key: "passport_issue / Issue Date" },
+      { label: "Expiry Date", val: data.expiryDate || "", key: "passport_expiry / Expiry Date" },
+      { label: "Issuing Authority", val: data.issuingAuthority || "", key: "issuing_authority" },
+      { label: "Nationality", val: data.nationalityName || data.nationality || "", key: "nationality / Country" },
+      { label: "NID / Personal No", val: data.nidNo || "", key: "nid_no / National ID" },
+      { label: "Permanent Address", val: data.permanentAddress || "", key: "permanent_village / Address" },
+      { label: "Emergency Contact Name", val: data.emergencyContactName || "", key: "emergency_contact_name" },
+      { label: "Relationship", val: data.emergencyRelationship || "", key: "emergency_relationship" },
+      { label: "Emergency Contact Address", val: data.emergencyAddress || "", key: "emergency_address" },
+      { label: "Emergency Phone", val: data.mobile || "", key: "mobile / Phone" },
+      { label: "Previous Passport No", val: data.prevPassportNo || "", key: "prev_passport_no" },
+    ];
+
+    tbody.innerHTML = tableRows
+      .map(
+        (r) => `
+      <tr style="border-bottom: 1px solid #f1f5f9;">
+        <td style="padding: 10px; font-weight: 600; width: 30%; color: #334155;">${this.escapeHtml(r.label)}</td>
+        <td style="padding: 10px; width: 45%;">
+          ${
+            r.val
+              ? `<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                   <span style="color: #2563eb; font-weight: 600;">${this.escapeHtml(r.val)}</span>
+                   <button class="copy-passport-field-btn" data-val="${this.escapeHtml(r.val)}" style="padding: 2px 8px; font-size: 11px; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 4px; color: #475569; white-space: nowrap;" title="Copy field value">📋 Copy</button>
+                 </div>`
+              : `<span style="color: #94a3b8; font-style: italic;">Not Detected / N/A</span>`
+          }
+        </td>
+        <td style="padding: 10px; font-family: monospace; font-size: 12px; color: #64748b; width: 25%;">${this.escapeHtml(r.key)}</td>
+      </tr>
+    `
+      )
+      .join("");
+
+    // Bind per-field copy buttons
+    const fieldBtns = tbody.querySelectorAll(".copy-passport-field-btn");
+    fieldBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const valToCopy = e.target.getAttribute("data-val");
+        if (valToCopy) {
+          navigator.clipboard.writeText(valToCopy).then(() => {
+            const originalText = e.target.textContent;
+            e.target.textContent = "✅ Copied!";
+            e.target.style.background = "#dcfce7";
+            e.target.style.color = "#15803d";
+            setTimeout(() => {
+              e.target.textContent = originalText;
+              e.target.style.background = "#f8fafc";
+              e.target.style.color = "#475569";
+            }, 2000);
+          });
+        }
+      });
+    });
+
+    previewDiv.style.display = "block";
+    try {
+      previewDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {}
+  }
+
+  async handleCreateProfileFromPassport() {
+    if (!this.currentPassportData) {
+      this.showError("Please parse passport data first");
+      return;
+    }
+
+    try {
+      const profile = teleTalkMapper.createPassportProfile(this.currentPassportData);
+
+      const data = await chrome.storage.local.get("profiles");
+      const profiles = data.profiles || {};
+      profiles[profile.id] = profile;
+
+      await chrome.storage.local.set({ profiles });
+      await this.loadAllData();
+      this.renderProfiles();
+      this.renderHotkeyConfig();
+      this.renderUrlRulesOverview();
+
+      this.showMessage(
+        `✅ Profile "${profile.name}" created successfully from Passport data!`,
+        "success",
+        5000
+      );
+    } catch (error) {
+      console.error("Error creating profile from Passport:", error);
+      this.showError(`Error creating profile: ${error.message}`);
     }
   }
 

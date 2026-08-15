@@ -207,7 +207,98 @@ class PDFParser {
       return new TextDecoder("utf-16le").decode(bytes.slice(2)).trim();
     }
 
+    // Check if hex string is UTF-16 BE without BOM (e.g. 00 43 00 61...)
+    if (bytes.length >= 4 && bytes.length % 2 === 0 && bytes[0] === 0x00 && bytes[2] === 0x00) {
+      try {
+        const decoded = new TextDecoder("utf-16be").decode(bytes).trim();
+        if (decoded && /^[\x20-\x7E\s]+$/.test(decoded)) {
+          return decoded;
+        }
+      } catch (e) {}
+    }
+
     return new TextDecoder("latin1").decode(bytes).trim();
+  }
+
+  async extractTextFromPDF(file) {
+    try {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      const content = this.decodePdfBytes(bytes);
+
+      const textLines = [];
+
+      // Extract text from stream objects
+      const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
+      let match;
+      while ((match = streamRegex.exec(content)) !== null) {
+        const streamData = match[1];
+        const extracted = this.extractTextFromStream(streamData);
+        if (extracted) {
+          textLines.push(extracted);
+        }
+      }
+
+      // Also extract plain literal/hex text elements outside streams (e.g. uncompressed Tj/TJ)
+      const tjRegex = /\(((?:\\.|[^\\)])*)\)\s*Tj/g;
+      while ((match = tjRegex.exec(content)) !== null) {
+        const decoded = this.decodePdfLiteralString(match[1]);
+        if (decoded && !this.isPdfSyntaxNoise(decoded)) {
+          textLines.push(decoded);
+        }
+      }
+
+      const hexTjRegex = /<([0-9A-Fa-f\s]+)>\s*Tj/g;
+      while ((match = hexTjRegex.exec(content)) !== null) {
+        const decoded = this.decodePdfHexString(match[1]);
+        if (decoded && !this.isPdfSyntaxNoise(decoded)) {
+          textLines.push(decoded);
+        }
+      }
+
+      return textLines.join("\n").replace(/\r/g, "");
+    } catch (err) {
+      console.error("Error extracting text from PDF stream:", err);
+      return "";
+    }
+  }
+
+  extractTextFromStream(streamStr) {
+    const lines = [];
+    const textOpRegex = /(?:\(((?:\\.|[^\\)])*)\)|<([0-9A-Fa-f\s]+)>)\s*(?:Tj|'|")/g;
+    let match;
+    while ((match = textOpRegex.exec(streamStr)) !== null) {
+      const str = match[1] ? this.decodePdfLiteralString(match[1]) : this.decodePdfHexString(match[2]);
+      if (str && !this.isPdfSyntaxNoise(str)) {
+        lines.push(str);
+      }
+    }
+
+    const tjArrayRegex = /\[([\s\S]*?)\]\s*TJ/g;
+    while ((match = tjArrayRegex.exec(streamStr)) !== null) {
+      const arrayContent = match[1];
+      const itemRegex = /\(((?:\\.|[^\\)])*)\)|<([0-9A-Fa-f\s]+)>/g;
+      let itemMatch;
+      let segment = "";
+      while ((itemMatch = itemRegex.exec(arrayContent)) !== null) {
+        const str = itemMatch[1] ? this.decodePdfLiteralString(itemMatch[1]) : this.decodePdfHexString(itemMatch[2]);
+        segment += str;
+      }
+      if (segment && !this.isPdfSyntaxNoise(segment)) {
+        lines.push(segment);
+      }
+    }
+
+    return lines.join("\n");
+  }
+
+  isPdfSyntaxNoise(text) {
+    if (!text || text.length < 2) return true;
+    const lower = text.toLowerCase().trim();
+    if (lower.startsWith("/author") || lower.startsWith("/creator") || lower.startsWith("/producer") || lower.startsWith("/title")) return true;
+    if (lower === "obj" || lower === "endobj" || lower === "stream" || lower === "endstream") return true;
+    if (/^\/F\d+$/.test(text) || /^\/DeviceRGB$/.test(text) || /^\/Font$/.test(text)) return true;
+    return false;
   }
 
   decodePdfName(name) {
@@ -263,6 +354,46 @@ class PDFParser {
     return matches ? matches.length : 1;
   }
 
+  async extractImagesFromPDF(file) {
+    try {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      const images = [];
+
+      // Search for JPEG images (SOI: FF D8 FF, EOI: FF D9)
+      let i = 0;
+      while (i < bytes.length - 3) {
+        if (bytes[i] === 0xff && bytes[i + 1] === 0xd8 && bytes[i + 2] === 0xff) {
+          const startIndex = i;
+          let endIndex = -1;
+          for (let j = startIndex + 3; j < bytes.length - 1; j++) {
+            if (bytes[j] === 0xff && bytes[j + 1] === 0xd9) {
+              endIndex = j + 2;
+              break;
+            }
+          }
+
+          if (endIndex > startIndex && (endIndex - startIndex) > 10000) {
+            const jpegBytes = bytes.subarray(startIndex, endIndex);
+            const blob = new Blob([jpegBytes], { type: "image/jpeg" });
+            const imageFile = new File([blob], `extracted_passport_${images.length + 1}.jpg`, {
+              type: "image/jpeg",
+            });
+            images.push(imageFile);
+            i = endIndex;
+            continue;
+          }
+        }
+        i++;
+      }
+
+      return images;
+    } catch (err) {
+      console.error("Error extracting images from PDF:", err);
+      return [];
+    }
+  }
+
   isValidPDF(file) {
     if (!file) return false;
     return (
@@ -277,4 +408,5 @@ class PDFParser {
 }
 
 const pdfParser = new PDFParser();
+
 

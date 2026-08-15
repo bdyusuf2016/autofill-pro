@@ -289,6 +289,43 @@ class TeleTalkMapper {
     };
   }
 
+  createPassportProfile(passportData) {
+    const data = passportData || {};
+    const name = data.fullName || "Passport Holder";
+
+    const fields = [
+      { type: "text", name: "(?:Passport\\s*(?:No|Number|ID)|passport_no|পাসপোর্ট\\s*(?:নম্বর|নং))", value: data.passportNo || "", mode: "overwrite" },
+      { type: "text", name: "(?:Applicant(?:'s)?\\s*Name|Full\\s*Name|Applicant\\s*Name|name|আবেদনকারীর\\s*নাম)", value: data.fullName || "", mode: "overwrite" },
+      { type: "text", name: "(?:Surname|Last\\s*Name|বংশগত\\s*নাম|পদবী)", value: data.surname || "", mode: "overwrite" },
+      { type: "text", name: "(?:Given\\s*Name|First\\s*Name|প্রদত্ত\\s*নাম)", value: data.givenName || "", mode: "overwrite" },
+      { type: "text", name: "(?:Father(?:'s)?\\s*Name|father|পিতার\\s*নাম)", value: data.fatherName || "", mode: "overwrite" },
+      { type: "text", name: "(?:Mother(?:'s)?\\s*Name|mother|মাতার\\s*নাম)", value: data.motherName || "", mode: "overwrite" },
+      { type: "text", name: "(?:Legal\\s*Guardian(?:'s)?\\s*Name|guardian|অভিভাবকের\\s*নাম)", value: data.guardianName || "", mode: "overwrite" },
+      { type: "text", name: "(?:Date\\s*of\\s*Birth|DOB|dob|জন্ম\\s*তারিখ)", value: data.dob || "", mode: "overwrite" },
+      { type: "text", name: "(?:Gender|Sex|gender|লিঙ্গ)", value: data.gender || "", mode: "overwrite" },
+      { type: "text", name: "(?:Passport\\s*Expiry|Expiry\\s*Date|Date\\s*of\\s*Expiry|passport_expiry|মেয়াদের\\s*তারিখ|মেয়াদ)", value: data.expiryDate || "", mode: "overwrite" },
+      { type: "text", name: "(?:Date\\s*of\\s*Issue|Issue\\s*Date|passport_issue|প্রদানের\\s*তারিখ)", value: data.issueDate || "", mode: "overwrite" },
+      { type: "text", name: "(?:Issuing\\s*Authority|issuing_authority|প্রদানকারী\\s*কর্তৃপক্ষ)", value: data.issuingAuthority || "", mode: "overwrite" },
+      { type: "text", name: "(?:Place\\s*of\\s*Birth|District\\s*of\\s*Birth|pob|place_of_birth|জন্মস্থান|জন্ম\\s*জেলা)", value: data.placeOfBirth || "", mode: "overwrite" },
+      { type: "text", name: "(?:Nationality|Country|nationality|জাতীয়তা|দেশ)", value: data.nationalityName || data.nationality || "", mode: "overwrite" },
+      { type: "text", name: "(?:National\\s*ID|NID|NID\\s*No|Personal\\s*No|nid_no|ব্যক্তিগত\\s*নং|জাতীয়\\s*পরিচয়পত্র)", value: data.nidNo || "", mode: "overwrite" },
+      { type: "text", name: "(?:Permanent\\s*Address|Address|permanent_village|স্থায়ী\\s*ঠিকানা|ঠিকানা)", value: data.permanentAddress || "", mode: "overwrite" },
+      { type: "text", name: "(?:Mobile(?:\\s*No)?|Phone(?:\\s*No)?|Telephone(?:\\s*No)?|mobile|মোবাইল|টেলিফোন)", value: data.mobile || "", mode: "overwrite" }
+    ].filter((f) => f.value);
+
+    return {
+      id: this.generateId(),
+      name: `${name} (Passport)`,
+      color: "#2563eb",
+      fields,
+      urlRules: [],
+      defaultMode: "overwrite",
+      created: new Date().toISOString(),
+      updated: new Date().toISOString(),
+      source: "passport_import",
+    };
+  }
+
   applyTeletalkDerivedFields(mappedData) {
     if (!mappedData || !mappedData.mapped || !mappedData.fieldPatterns) {
       return;

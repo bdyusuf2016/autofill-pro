@@ -55,6 +55,9 @@
           <button class="tab" data-tab="pdfImport">
             📄 Import from PDF
           </button>
+          <button class="tab" data-tab="passportParser" data-i18n="passportParserTab">
+            🛂 Passport Parser
+          </button>
           <button class="tab" data-tab="settings" data-i18n="settingsTab">
             Settings
           </button>
@@ -503,6 +506,89 @@
             <button id="importProfileBtn" class="primary" style="display: none; margin-top: 15px;">
               ✅ Create Profile from PDF
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passport Parser Tab -->
+      <div class="tab-content" id="passportParserTab">
+        <div class="settings-sections">
+          <div class="settings-section">
+            <h3 data-i18n="passportParserTitle">Passport Information Parser</h3>
+            <p class="subtitle" data-i18n="passportParserSubtitle">
+              Upload a passport scan copy (Image/PDF) or paste MRZ code to grab details automatically
+            </p>
+
+            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 20px;" id="passportDropZone">
+              <label for="passportFileInput" style="cursor: pointer; display: block;">
+                <div style="font-size: 32px; margin-bottom: 8px;">📑 / 📸</div>
+                <strong style="color: #1e293b; font-size: 15px;" data-i18n="passportFileUploadLabel">Passport Scan File (JPG, PNG, WEBP, PDF):</strong>
+                <p style="color: #64748b; font-size: 13px; margin-top: 4px;">Click to select file or drag & drop scan image/PDF here</p>
+              </label>
+              <input type="file" id="passportFileInput" accept=".jpg,.jpeg,.png,.webp,.pdf,.txt" class="file-input" style="display: none;" />
+              <div id="passportFileName" style="margin-top: 8px; font-weight: bold; color: #2563eb;"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="passportTextInput" style="margin-bottom: 8px; font-weight: 600;" data-i18n="passportTextLabel">Passport OCR Text / Information Input:</label>
+              <textarea
+                id="passportTextInput"
+                class="form-control"
+                rows="5"
+                placeholder="Paste passport OCR text or key-value details (e.g. Passport Number: A17160316, Full Name: MD SHAKIL, Father's Name: MD ABDUL KHALEQUE...)"
+                style="width: 100%; font-family: monospace; font-size: 13px; resize: vertical;"
+              ></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+              <button id="parsePassportBtn" class="primary" data-i18n="parsePassportBtn">
+                🔍 Extract Organized OCR Data
+              </button>
+              <button id="clearPassportBtn" class="secondary">
+                🗑️ Clear
+              </button>
+            </div>
+
+            <!-- Passport Extracted Results Section -->
+            <div id="passportPreview" style="display: none; margin-top: 25px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; border: 1px solid #7dd3fc; padding: 12px 16px; border-radius: 6px; margin-bottom: 15px;">
+                <h4 style="margin: 0; color: #0369a1;">Extracted Organized Passport Data</h4>
+                <span id="mrzChecksumBadge" class="status-badge enabled" style="background: #dcfce7; color: #15803d;">📄 Pure OCR Extracted</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px;" id="passportCardsGrid">
+                <!-- Dynamically populated cards -->
+              </div>
+
+              <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 20px;">
+                <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+                  <thead>
+                    <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+                      <th style="text-align: left; padding: 10px;">Field</th>
+                      <th style="text-align: left; padding: 10px;">Extracted Value</th>
+                      <th style="text-align: left; padding: 10px;">Mapped Profile Key</th>
+                    </tr>
+                  </thead>
+                  <tbody id="passportFieldsTableBody">
+                    <!-- Rows populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <button id="copyAllPassportDataBtn" class="primary" style="background: #059669; border-color: #059669; font-weight: 600;">
+                  📋 Copy All Organized Data
+                </button>
+                <button id="copyPassportJsonBtn" class="secondary" style="border-color: #0284c7; color: #0284c7; font-weight: 600;">
+                  📄 Copy JSON Format
+                </button>
+                <button id="createProfileFromPassportBtn" class="secondary" style="font-weight: 500;" data-i18n="createProfileFromPassportBtn">
+                  ➕ Save as AutoFill Profile
+                </button>
+              </div>
+            </div>
+
+            <div id="passportStatus" style="margin-top: 15px;"></div>
           </div>
         </div>
       </div>
@@ -1112,7 +1198,9 @@
     <script src="safe-init.js"></script>
     <script src="url-rule-matcher.js"></script>
     <script src="pdf-parser.js"></script>
+    <script src="tesseract.min.js"></script>
     <script src="ocr-parser.js"></script>
+    <script src="passport-parser.js"></script>
     <script src="teletalk-mapper-v2.js"></script>
     <script src="crypto-helper.js"></script>
     <script src="firebase-auth.js"></script>
